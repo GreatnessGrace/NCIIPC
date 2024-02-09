@@ -1,0 +1,12 @@
+.background{
+    background: #DCDDDF url(http://cssdeck.com/uploads/media/items/7/7AF2Qzt.png);
+    color: #000;
+    font: 14px Arial;
+    height: 100%;
+}
+
+::ng-deep .mat-tooltip {
+    /* your own custom styles here */ 
+    /* e.g. */
+    color: yellow;
+}

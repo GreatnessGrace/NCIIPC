@@ -1,0 +1,407 @@
+<section class="header-design">
+    <app-header></app-header>
+
+    <div class="container-fluid">
+        <label class="p-2 colo">
+            <h1><b>User Management</b></h1>
+        </label>
+        <div class="row" >
+            <div class="col-md-3">
+                <h2 class="text-black pl-2 pt-4"><b class="colo"> <span *ngIf="isShowDiv1"> Pending</span> <span *ngIf="isShowDiv"> Total</span>  Users:</b><span style="color: black;">{{ user_count || total_user }}
+                </span>    </h2>
+
+            </div>
+            <div class="col-md-5 p-2">
+                <div class="tab-button">
+                    <button (click)=toggleDisplayDiv() class="pending"><i class="fa fa-user colo"
+                            ></i>&nbsp;{{button_text}}</button>
+                    <button *ngIf="!userType" class="pending" (click)="adduser()"><i class="fa fa-user-plus colo"
+                          ></i>&emsp; Add User</button>
+                </div>
+
+            </div>
+            <!-- <div class="col-md-3 p-4">
+
+                <input class="inp" (keyup)="applyFilter($event)" placeholder="Filter" #input>
+
+
+            </div> -->
+
+        </div>
+      
+
+        <div [hidden]="isShowDiv1">
+            <div *ngIf="this.searchloaderxl" class="row lod" >
+                <div class="loader text-black" *ngIf="this.searchloaderxl" >
+                </div>
+            </div>
+         <mat-paginator  [hidden]="istable" #paginatorUser="matPaginator" [pageSizeOptions]="[5,10, 25, 50, 100]"
+            aria-label="Select page of users" showFirstLastButtons>
+        </mat-paginator>
+            <table  [hidden]="istable" mat-table [dataSource]="dataSource" matSort #sortUser="matSort" matSort
+                class="mat-elevation-z8 table">
+
+                <!-- User ID -->
+                <ng-container matColumnDef="position">
+                    <th mat-header-cell *matHeaderCellDef> 
+                        <div class="row " >
+                            <div class="col-12 hedd " >&nbsp;  #</div>
+                            <div class="col-12 hed1 "> 
+                            </div>
+                         </div> 
+
+                    </th>
+                    <td mat-cell *matCellDef="let element; let i = index;">
+                        {{i+1}}
+                        <span class="vis"> {{element.user_id}}</span>
+                    </td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef  class="tab-header"> 
+                        <div class="row " >
+                          <div class="col-12 hedd" mat-sort-header>Name</div>
+                          <div class="col-12 hed1">
+                            <mat-form-field class="filter hed1" floatLabel="never">
+                              <mat-label>Search</mat-label>
+                              <input class="inp1" matInput [formControl]="nameFilter">
+                            </mat-form-field>
+                          </div>
+                        </div>
+                    </th>                    
+                    <td mat-cell *matCellDef="let element">
+                        <span *ngIf="!userType">
+                            <!-- *ngIf="element.user_status=='active'" -->
+                            <mat-form-field floatLabel="never">
+                                <input matInput placeholder="Name" [value]="element.name" [readonly]="userType"
+                                    (change)="getChanges(element,$event,'name')">
+                            </mat-form-field>
+                        </span>
+                        <span *ngIf="userType">
+                            {{element.name}}
+                        </span>
+
+                    </td>
+                </ng-container>
+
+                <!-- User Name Column -->
+                <ng-container matColumnDef="username">
+                  
+                    <th mat-header-cell *matHeaderCellDef  class="tab-header"> 
+                        <div class="row " >
+                          <div class="col-12 hedd" mat-sort-header>User Name</div>
+                          <div class="col-12 hed1">
+                            <mat-form-field class="filter hed1" floatLabel="never">
+                              <mat-label>Search</mat-label>
+                              <input class="inp1" matInput [formControl]="unameFilter">
+                            </mat-form-field>
+                          </div>
+                        </div>
+                    </th> 
+                    <td mat-cell *matCellDef="let element">
+                        <span *ngIf="!userType">
+                            <mat-form-field floatLabel="never">
+                                <input matInput placeholder="username" [value]="element.username" [readonly]="userType"
+                                    (change)="getChanges(element,$event,'username')">
+                            </mat-form-field>
+                        </span>
+                        <span *ngIf="userType">
+                            {{element.username}}
+                        </span>
+
+                    </td>
+                </ng-container>
+
+                <!-- Email ID Column -->
+                <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef  class="tab-header"> 
+                        <div class="row " >
+                          <div class="col-12 hedd" mat-sort-header>User Email</div>
+                          <div class="col-12 hed1 ">
+                            <mat-form-field class="filter hed1" floatLabel="never">
+                              <mat-label>Search</mat-label>
+                              <input class="inp1" matInput [formControl]="emailFilter">
+                            </mat-form-field>
+                          </div>
+                        </div>
+                    </th> 
+                  
+                    <td mat-cell *matCellDef="let element">
+                        <span *ngIf="!userType">
+                            <mat-form-field floatLabel="never">
+                                <input matInput placeholder="email" [value]="element.email" [readonly]="userType"
+                                    (change)="getChanges(element,$event,'email')">
+                            </mat-form-field>
+                        </span>
+                        <span *ngIf="userType">
+                            {{element.email}}
+                        </span>
+                    </td>
+                </ng-container>
+
+                <!-- User Role-->
+
+                <ng-container matColumnDef="role" >
+                    <th mat-header-cell *matHeaderCellDef  class="tab-header"> 
+                        <div class="row " >
+                          <div class="col-12 hedd" mat-sort-header>Role</div>
+                          <div class="col-12 hed1">
+                            <mat-form-field class="filter hed1" floatLabel="never">
+                              <mat-label>Search</mat-label>
+                              <input class="inp1" matInput [formControl]="roleFilter">
+                            </mat-form-field>
+                          </div>
+                        </div>
+                    </th> 
+                   
+                    <td mat-cell *matCellDef="let element">
+                        <span *ngIf="!userType">
+                            <mat-form-field appearance="fill" class="mt-1">
+                                <mat-label>Select User</mat-label>
+                                <mat-select [(value)]="element.role"
+                                    (selectionChange)="getChanges(element,$event,'role')">
+                                    <mat-option value="admin" [disabled]="userType">Admin</mat-option>
+                                    <mat-option value="user" [disabled]="userType">User</mat-option>
+                                    <mat-option value="superadmin" [disabled]="userType">Super Admin</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </span>
+                        <span *ngIf="userType">
+                            {{element.role | titlecase}}
+                        </span>
+
+                    </td>
+                </ng-container>
+           
+
+
+
+                <!-- User Status Column -->
+
+                <ng-container matColumnDef="user_status">
+                    <th mat-header-cell *matHeaderCellDef > 
+                        <div class="row " >
+                            <div class="col-12 " mat-sort-header>User Status</div>
+                            <div class="col-12 hed1 "> 
+                            </div>
+                         </div>        
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span *ngIf="!userType">
+                            <mat-form-field appearance="fill" class="m-1">
+                                <mat-label>User Status</mat-label>
+                                <mat-select [(value)]="element.user_status"
+                                    (selectionChange)="getChanges(element,$event,'user_status')">
+                                    <mat-option value="active" [disabled]="userType">Active</mat-option>
+                                    <mat-option value="inactive" [disabled]="userType">Inactive</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </span>
+                        <span *ngIf="userType">
+                            {{element.user_status}}
+                        </span>
+                    </td>
+                </ng-container>
+
+
+
+                <ng-container matColumnDef="button-save" *ngIf="!userType">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <div class="row " >
+                            <div class="col-12 hedd" >Edit</div>
+                            <div class="col-12 hed1 "> 
+                            </div>
+                         </div>    
+                    </th>
+
+                    <td mat-cell *matCellDef="let element">
+                        <button (click)="setValue(element)" class="btn btn-success text-center">Save</button>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="button-permission" *ngIf="!userType">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <div class="row " >
+                            <div class="col-12 hedd" >Node Access</div>
+                            <div class="col-12 hed1 "> 
+                            </div>
+                         </div>     
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+
+                        <button class="btn edit-btn" (click)="permission(element)"><i
+                                class="fa fa-pencil-square-o "></i> Edit</button>
+
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="button-delete" *ngIf="!userType">
+                    <th mat-header-cell *matHeaderCellDef> 
+                        <div class="row " >
+                            <div class="col-12 hedd" >Delete</div>
+                            <div class="col-12 hed1 "> 
+                            </div>
+                         </div> 
+
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button (click)="deleteUser(element)" class="btn btn-danger text-center"><i
+                                class="fa fa-trash"></i></button>
+                    </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="9">No data found</td>
+                </tr>
+
+            </table>
+            
+        </div>
+<!-- ********************pending user table****************************---------------------------------------------------------------------------------------------------------------------------->
+        <div [hidden]="isShowDiv">
+            <div *ngIf="this.searchloaderxl" class="row lod">
+                <div class="loader text-black" *ngIf="this.searchloaderxl" >
+                </div>
+            </div>
+            <mat-paginator [hidden]="ispentable" #paginatorPending="matPaginator" [pageSizeOptions]="[5,10, 25, 50, 100]"
+            aria-label="Select page of users">
+       </mat-paginator>
+            <table [hidden]="ispentable" mat-table [dataSource]="pendingDataSource" matSort class="mat-elevation-z8 table ">
+
+                <ng-container matColumnDef="position">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+                    <td mat-cell *matCellDef="let element; let i = index;">
+                        {{i+1}}
+                        <span class="vis"> {{element.user_id}}</span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span *ngIf="!userType">
+
+                            <mat-form-field floatLabel="never">
+                                <input matInput placeholder="Name" value="{{element.name}}" [readonly]="userType">
+                            </mat-form-field>
+                        </span>
+                        <span *ngIf="userType">
+                            {{element.name}}
+                        </span>
+
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="username">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> User Name </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span *ngIf="!userType">
+                            <mat-form-field floatLabel="never">
+                                <input matInput placeholder="username" value="{{element.username}}"
+                                    [readonly]="userType">
+                            </mat-form-field>
+                        </span>
+                        <span *ngIf="userType">
+                            {{element.username}}
+                        </span>
+
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Email ID </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span *ngIf="!userType">
+                            <mat-form-field floatLabel="never">
+                                <input matInput placeholder="email" value="{{element.email}}" [readonly]="userType">
+                            </mat-form-field>
+                        </span>
+                        <span *ngIf="userType">
+                            {{element.email}}
+                        </span>
+
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="role">
+                    <th mat-header-cell *matHeaderCellDef> Role </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span *ngIf="!userType">
+                            <mat-form-field appearance="fill" class="mt-1">
+                                <mat-label>Select User</mat-label>
+                                <mat-select [(value)]="element.role">
+                                    <mat-option value="admin" [disabled]="userType">Admin</mat-option>
+                                    <mat-option value="user" [disabled]="userType">User</mat-option>
+                                    <mat-option value="superadmin" [disabled]="userType">Super Admin</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </span>
+                        <span *ngIf="userType">
+                            {{element.role | titlecase}}
+                        </span>
+
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="user_status">
+                    <th mat-header-cell *matHeaderCellDef> User Status </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span *ngIf="!userType">
+                            <mat-form-field appearance="fill" class="m-1">
+                                <mat-label>User Status</mat-label>
+                                <mat-select [(value)]="element.user_status">
+                                    <mat-option value="active" [disabled]="userType">Active</mat-option>
+                                    <mat-option value="inactive" [disabled]="userType">Inactive</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </span>
+                        <span *ngIf="userType">
+                            {{element.user_status}}
+                        </span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="button-save" *ngIf="!userType">
+                    <th mat-header-cell *matHeaderCellDef> Edit </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button (click)="setValue(element)" class="btn btn-success text-center ">Save</button>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="button-permission" *ngIf="!userType">
+                    <th mat-header-cell *matHeaderCellDef> Node Access </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button class="btn edit-btn" (click)="permission(element)"><i
+                                class="fa fa-pencil-square-o "></i> Edit</button>
+
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="button-delete" *ngIf="!userType">
+                    <th mat-header-cell *matHeaderCellDef> Delete </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button (click)="deleteUser(element)" class="btn btn-danger text-center"><i
+                                class="fa fa-trash"></i></button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="9">No data Found</td>
+                </tr>
+
+
+            </table>
+          
+        </div>
+
+
+    </div>
+</section>

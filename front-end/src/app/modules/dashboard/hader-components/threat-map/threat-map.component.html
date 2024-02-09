@@ -1,0 +1,131 @@
+<section class="header-design">
+  <app-header></app-header>
+  <div class="map-div">
+    <div class="panel-heading">
+      <h1 class="panel-title">
+        <b class="colo"> Threat Map (Near Realtime)</b>
+      </h1>
+    </div>
+    <div class="map-frame">
+      <div id="threat-map" class="container-fluid">
+      </div>
+    </div>
+  </div>
+  <hr color="grey" width="96%">
+  <div class="col-sm-12">
+    <div class="panel  container-fluid">
+      <div class="panel-heading">
+        <h2 class="panel-title colo">
+        <b>   Attack Details</b>
+        </h2>
+      </div>
+      <table mat-table [dataSource]="threatData" #sortdashThreat="matSort" matSort class="table" >
+        <ng-container matColumnDef="timpstamp">
+          <th mat-header-cell *matHeaderCellDef> 
+            <div class="row">
+              <div class="col-12 hed " > Timestamp </div>
+              <div class="col-12 hed1"></div>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.timpstamp}} </td>
+        </ng-container>
+        <ng-container matColumnDef="src_ip">
+          <th mat-header-cell *matHeaderCellDef > 
+        
+            <div class="row">
+              <div class="col-12 hed " mat-sort-header > Source IP </div>
+              <div class="col-12 hed1"></div>
+            </div>
+         
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.src_ip}} </td>
+        </ng-container>
+        <ng-container matColumnDef="src_country">
+          <th mat-header-cell *matHeaderCellDef class="tab-header" >
+            <div class="row ">
+                <div class="col-12 hed" mat-sort-header >Source Country </div>
+
+                <div class="col-12 hed1">
+                    <mat-form-field class="filter" floatLabel="never">
+                        <mat-label>Search</mat-label>
+                        <input matInput [formControl]="srcCountryFilter">
+                    </mat-form-field>
+                </div>
+            </div>
+        </th>
+          <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header> Source Country </th> -->
+          <td mat-cell *matCellDef="let element"><img class="flag-img" *ngIf="element.src_country != '' || element.src_country != '-'" src="{{assetPath}}/flags/flag-of-{{element.src_country|countryname}}.jpg"> {{element.src_country}} </td>
+        </ng-container>
+        <ng-container matColumnDef="dest_ip">
+          <th mat-header-cell *matHeaderCellDef class="tab-header" >
+            <div class="row ">
+                <div class="col-12 hed" mat-sort-header >Destination IP</div>
+
+                <div class="col-12 hed1">
+                    <mat-form-field class="filter" floatLabel="never">
+                        <mat-label>Search</mat-label>
+                        <input matInput [formControl]="ipFilter">
+                    </mat-form-field>
+                </div>
+            </div>
+        </th>
+          <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header> Destination IP </th> -->
+          <td mat-cell *matCellDef="let element"> {{element.dest_ip}} </td>
+        </ng-container>
+        <ng-container matColumnDef="src_port">
+          <th mat-header-cell *matHeaderCellDef > 
+            <div class="row">
+              <div class="col-12 hed " mat-sort-header> Source Port </div>
+              <div class="col-12 hed1"></div>
+            </div>  
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.src_port}} </td>
+        </ng-container>
+        <ng-container matColumnDef="dest_port" >
+          <th mat-header-cell *matHeaderCellDef > 
+            <div class="row">
+              <div class="col-12 hed " mat-sort-header > Destination Port </div>
+              <div class="col-12 hed1"></div>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.dest_port}} </td>
+        </ng-container>
+        <ng-container matColumnDef="node_name" >
+          <th mat-header-cell *matHeaderCellDef class="tab-header" >
+            <div class="row ">
+                <div class="col-12 hed" mat-sort-header >Organization</div>
+
+                <div class="col-12 hed1">
+                    <mat-form-field class="filter" floatLabel="never">
+                        <mat-label>Search</mat-label>
+                        <input matInput [formControl]="orgNameFilter">
+                    </mat-form-field>
+                </div>
+            </div>
+        </th>
+          <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header> Organization </th> -->
+          <td mat-cell *matCellDef="let element"> {{element.node_name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="att_type">
+          <th mat-header-cell *matHeaderCellDef >
+            <div class="row">
+              <div class="col-12 hed " mat-sort-header > Attack Type </div>
+              <div class="col-12 hed1"></div>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.att_type}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="8">No Data Found</td>
+      </tr>
+      </table>
+      <mat-paginator #paginator="matPaginator" [pageSizeOptions]="[10, 25, 50, 100]"
+      class="h30" aria-label="Select page of users" showFirstLastButtons>
+  </mat-paginator>
+      <br>
+    </div>
+  </div>
+</section>

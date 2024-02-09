@@ -1,0 +1,226 @@
+$redbtn: Red;
+$grnbtn: #24d424;
+
+.mat-standard-chip {
+    min-height: 80px;
+    width: 279px;
+    margin-left: 20px !important;
+    margin-bottom: 15px !important;
+    // cursor: pointer;
+}
+.chipsDig{
+    // padding-left: 5px !important;
+    padding-right: 5px !important;
+}
+
+.mat-dialog {
+    background: #DCDDDF;
+    color: #000;
+    font: 14px Arial;
+    height: 100%;
+}
+
+.w200{
+    width: 165px !important;
+    display: inline-block !important;
+}
+
+.status-up{
+    color: #016101;
+    font-size: small
+}
+.status-down{
+    color: $redbtn;
+    font-size:small
+}
+
+.chip-block{
+   padding-left: 0px !important;
+    align-items: center;
+          
+}
+.choption{
+    background-color: #fff !important; color: antiqueblack !important
+}
+.content {
+    margin: 0px;
+    padding: 0px 5px;
+    font-size: 12px;
+}
+.imggg{
+    // margin-top: 24px !important;
+    height:40px !important;
+    width:55px !important;
+}
+
+.img_chart{
+    height:25px !important;
+    width:35px !important;
+}
+
+.mat-bg {
+    background: blanchedalmond;
+}
+
+.mat-standard-chip .mat-chip-avatar {
+    height: 40px;
+    width: 30px;
+}
+
+
+
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.bg-filter {
+    background: darkgray;
+}
+
+.example-form-field {
+    margin-left: 20px;
+}
+
+button {
+    width: auto;
+    margin-top: auto;
+  }
+  .chip-data{
+    padding-left: 20px;
+    font-size: 18px;
+    line-height: 30px;
+    text-transform: capitalize;
+  }
+  .tblac{
+    color: black !important;
+    padding-left: 0px !important;
+  }
+  .btn-primary:disabled {
+    // color: #fff;
+    // background-color: grey !important;
+    cursor: not-allowed;
+  }
+  .mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: black !important;
+}
+.red{
+    background: radial-gradient(#1fe4f5, #56c1fa);
+}
+.green{
+    background: radial-gradient(#fbc1cc, #fa6086);
+  
+    
+}
+.yellow{
+    background: radial-gradient(#60efbc, #58d5c9);
+}
+.cadetblue{
+    background: radial-gradient(#f588d8, #c0a3e5);
+  
+}
+.safron{
+    background: radial-gradient(#76b2fe, #794dfb);
+  
+}
+.aquamarine{
+    background: radial-gradient(#ffd1ba, #ff9966);
+  
+}
+.matwrap{
+  margin-left: 40px ;
+  height: 85px !important;
+  overflow: auto !important;
+}
+.matwrap2{
+    margin-left: 40px ;
+    height: 195px !important;
+    overflow: auto !important;
+  }
+  .chipmb{
+    margin-bottom: -20px;
+  }
+  .chipbg{
+    background-color: #fff !important;
+    color: antiqueblack !important
+  }
+  .chipi{
+    padding-top: 25px;
+            border-radius: 7px;
+            margin-right: 180px;
+            font-size: 42px;
+  }
+.btcus{
+    border-radius: 50%;
+    height:25px;
+    width:25px;
+    font-size: 18px;
+    background-color: transparent;
+}
+
+
+::ng-deep .cardz{
+    font-size: 18px;
+    background-color: black;
+    
+    
+    margin-left: 40px ;
+}
+
+
+
+.select-all{
+    background-color: #fff !important;
+    margin-left: 15px;
+}
+.select-all1{
+    width:150px;
+    background-color: #fff !important;
+    margin-left: 15px;
+}
+::ng-deep{
+    .menuu .dropdown-btn{
+        height: 47px;
+        color: black !important;
+        background-color: #fff !important;
+        border-radius: 4px;
+       
+        overflow: auto ;
+    }
+    .menuu .dropdown-list{
+        background-color: #fff !important;
+        color: blacksmoke !important;
+        width:200px !important;
+        word-wrap: break-word;
+        
+    }
+   input{
+    margin:0px !important;
+    padding: 0 0 0 6px;
+   }
+    .menuu .multiselect-item-checkbox input[type=checkbox] + div{
+        color: black !important;
+    }
+    
+    .multiselect-dropdown .dropdown-btn .selected-item-container .selected-item {
+        background: #dcebcc !important;
+        border-color: grey !important;
+    }
+    .menuu .multiselect-item-checkbox:hover {
+        background-color: #dcebcc !important;
+    }
+    .ww{
+        width: 165px;
+    }
+
+}

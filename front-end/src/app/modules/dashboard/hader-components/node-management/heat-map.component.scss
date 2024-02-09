@@ -1,0 +1,186 @@
+.map-container {
+    position: relative;
+    top: 2rem;
+    // border: solid 1px;
+}
+
+.chartcolor {
+    background-color: #fff;
+    padding-left: 10px;
+    height:360px;
+    width: 100%;
+}
+.fa-expand{
+    color: #fff;
+}
+.col-md-6{
+    margin-bottom: 20px;
+}
+::ng-deep {
+    .mat-menu-content {
+        background-color: #fff !important;
+        color: black;
+    }
+
+    .dropdown-item:hover {
+        background-color: black !important;
+        color: black !important;
+    }
+}
+
+.map-frame {
+    height: 100%;
+    width:100%;
+}
+
+#heat-map {
+    height: 736px;
+    width: 100%;
+    border: 2px solid black;
+    float: left;
+    margin-left: 1%;
+}
+
+::ng-deep {
+    .legend {
+        line-height: 18px;
+        color: #555;
+        background: black;
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        padding: 6px 8px;
+    }
+
+    .legend i {
+        width: 18px;
+        height: 18px;
+        float: left;
+        margin-right: 8px;
+        opacity: 0.7;
+    }
+    .table-sec{
+        height: 250px;
+        overflow-y: auto;
+        margin-bottom: 10px;
+        // padding: 0.5rem;
+        // padding-top:0px ;
+        padding: 5px;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+    .imgg{
+        height:18px;
+        width:34px;
+    }
+    .map-popup {
+        padding: 6px 8px;
+        font: 14px/16px Arial, Helvetica, sans-serif;
+        background: black;
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+    }
+
+    .map-popup p {
+        margin: 0 0 5px;
+        color: #777;
+    }
+}
+
+.row {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.table th {
+    color: #000000;
+    background-color: #e7e7e7;
+
+    padding: 10px;
+    vertical-align: middle;
+}
+
+.imgg {
+    height: 18px;
+    width: 34px;
+}
+
+.buttonn {
+    border: 1px solid grey;
+    color: #000000;
+    height: 35px;
+    width: 35px;
+    margin-top: 10px;
+    background-color: transparent;
+    padding: 0px;
+    float: right;
+    margin-right: 12px;
+}
+
+
+.table td,th{
+    border-top:none;
+    padding: 0.25rem;
+
+}
+.table-striped > tbody > tr:nth-child(odd) > td, .table-striped > tbody > tr:nth-child(odd) > th {
+    background-color: #fff;
+    color: black;
+ }
+ .table-striped > tbody > tr:nth-child(even) > td, .table-striped > tbody > tr:nth-child(even) > th {
+    background-color: #dcebcc;
+    color: black;
+ }
+ .backk{ 
+    float: right;
+    position: relative;
+    z-index: 1000;
+    margin-right: 40px;
+    margin-bottom: -100px;
+    background-color: black;
+    padding: 0px 5px 0px 5px !important;
+  }
+  .ccc{
+    z-index: 10005;
+    max-width:1600px;
+  }
+  .chrtt{
+    height: 400px !important;
+  }
+  .pch1{
+    height:20px;
+     width:20px;
+      cursor: pointer;
+}
+.pch2{
+    height:25px;
+     width:25px;
+      cursor: pointer;
+}
+#map-full {
+    height: 720px;
+    width: 100%;
+    border: 2px solid black;
+}
+::ng-deep {
+    
+    .mat-pseudo-checkbox {
+
+        border: 2px solid grey !important;
+    }
+    
+    .mat-checkbox-frame {
+        border: 2px solid grey !important;
+       
+    }
+    .mat-select-panel{
+        background-color: #fff !important;
+    }
+   .mat-option{
+    color: black;
+   }
+}
+.select-all{
+    background-color: #fff !important;
+    margin-left: 15px;
+}

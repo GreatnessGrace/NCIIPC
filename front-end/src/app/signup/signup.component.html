@@ -1,0 +1,122 @@
+<div class="main-design text-center" >
+    <div class="outboxx">
+    <div class="center-box">
+        <div class="row text-center mb-2">
+            <div class="col-md-5 mt-2" > 
+                <img class="mt-1" src="{{assetPath}}/images_and_logos/cdac_logo.png" alt="C-DAC Mohali" height="70px" width="75px">
+                <img  class="mt-1" src="{{assetPath}}/images_and_logos/ctmslogo1.png" alt="C-DAC Mohali" height="70px" width="75px">
+               </div>
+             <div class="col-md-7 mt-2 logo">
+               <img src="{{assetPath}}/images_and_logos/newlogo.png" alt="C-DAC Mohali" height="70px" width="245px">
+               <br>
+             </div>
+                <b class="namm">National Proactive Threat Hunting & Response System</b>
+          </div>
+          <br>
+ 
+
+    
+    <form [formGroup]="signUpForm" #sign="ngForm">
+        <div>
+            <input type="text" placeholder="Name" formControlName="name" autocomplete="off" />
+           
+        </div>
+        <mat-error class="error" *ngIf="(signupSubmitted ) && f.name.errors?.required" >
+            Name is Required
+       </mat-error>
+        <mat-error class="error" *ngIf="f.name.errors?.pattern" >
+            Name should be Alphanumeric only.
+       </mat-error>
+        <div>
+            <input type="text" placeholder="Enter Username" formControlName="username"  autocomplete="off"/>
+           
+        </div>
+        <mat-error class="error" *ngIf="(signupSubmitted || f.username.touched) && f.username.errors?.required">
+            Username is Required
+       </mat-error>
+       <mat-error class="error" *ngIf="f.username.errors?.pattern" >
+        Username should be Alphanumeric only
+   </mat-error>
+        <div>
+            <input type="email" placeholder="Email" formControlName="email"  autocomplete="off"/>
+           
+        </div>
+        <mat-error class="error" *ngIf="(signupSubmitted || f.email.touched) && f.email?.errors?.required">
+            Email is Required
+        </mat-error>
+        
+      <mat-error class="error" *ngIf="f.email.errors?.pattern?.requiredPattern">
+            Invalid Email Pattern  
+       </mat-error>
+       
+      
+       <div>
+        <input #id2change1  type="hidden" id="Password" class="pass-i" name="password" formControlName="password" autocomplete="off"  (change)="myEncryption($event)">
+        <input #id2change type="password" id="orgPassword" class="pass-i"  name="orgPassword" autocomplete="new-password" autocomplete="off"  placeholder="Password" formControlName="orgPassword"   readonly  onfocus="this.removeAttribute('readonly');" (change)="myEncryption($event)">
+
+        <!-- <input type="password" class="pass-i" placeholder="Password" formControlName="password"  autocomplete="off"/> -->
+       <i class="fa fa-info-circle cpointer" title="Must contain min 8 characters and one letter, Must have one uppercase and one lowercase character."></i>
+    </div>
+    <mat-error class="error"  *ngIf="f.orgPassword.errors?.minLength">
+        Password must be more than seven characters long.
+      </mat-error>
+
+    <mat-error class="error" *ngIf="(signupSubmitted || f.password.touched) && f.password?.errors?.required">
+        Password is Required
+   </mat-error>
+   <mat-error class="error" *ngIf="f.password.errors?.pattern?.requiredPattern">
+    Invalid password Pattern  
+    </mat-error>
+    <div>
+        
+        <div>
+            <input #confirmpassword1  type="hidden" id="encCpassword" name="encCpassword" formControlName="encCpassword" autocomplete="off" (change)="encConfirmPassword($event)" >
+            <input #confirmpassword type="password" id="cpassword"   name="cpassword" autocomplete="conf-password" autocomplete="off"  placeholder="Confirm Password" formControlName="cpassword"   readonly  onfocus="this.removeAttribute('readonly');" (change)="encConfirmPassword($event)">
+        <!-- <input type="password" placeholder="Confirm Password" formControlName="cpassword" autocomplete="off"/> -->
+        
+    </div>
+    <mat-error class="error" *ngIf="(signupSubmitted || f.cpassword.touched) && f.cpassword.invalid">
+        Confirm Password is Required
+   </mat-error>
+   <mat-error class="error" *ngIf="f.cpassword.errors?.pattern?.requiredPattern">
+    Invalid Confirm Password Pattern  
+    </mat-error>
+    <mat-error class="error"  *ngIf="f.cpassword.errors?.minLength">
+        Password must be more than seven characters long.
+      </mat-error>
+    </div>
+    <br>
+    <div style="transform:scale(0.75); transform-origin:0 0; margin-left: 23%;">
+        <re-captcha (resolved)="resolved($event)" [siteKey]="siteKey"></re-captcha>
+    </div>
+
+       <div>
+        <button class="btn btn-warning cc1" [disabled]="!sign.valid" (click)="signup()">Sign Up</button>
+        </div>
+        <!-- <button (click)="signup()">Sign Up</button> -->
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <div class="button-class">
+                    Already a member? 
+                </div>
+             
+            </div>
+            <div class="col-md-3">
+                <div  class="button-class colo" (click)="login()" >
+                    <b>Sign In</b>
+                 </div>
+            </div>
+            <div class="col-md-3"></div>
+            
+        </div>
+    </form>
+</div>
+</div>
+    <!-- <div class="register" (click)="login()">
+        Login Here >
+    </div> -->
+    
+<app-footer class="fixed-bottom"></app-footer>
+
+</div>

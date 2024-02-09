@@ -1,0 +1,1394 @@
+<app-header></app-header>
+<section class="content">
+    
+    <div class="flex-container">
+        <div class="flex-item">
+            <div class="small-box bg-new-mazenta" (click)="getHoneypots()">
+                <div class="row">
+                    <div class="col-2">
+                        <div class="icon">
+                            <img class="imggg" src="{{assetPath}}/logos/honeypot.png">
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="text-center">
+                            <h2 class="m-1">Honeypot Profiles</h2>
+                        </div>
+                        <div class="inner float-right">
+                            <h2 class="m-1 float-right">Unique <span class="count">{{uniqueHp}}</span></h2>
+
+                    </div>
+                    <div class="inner float-left">
+                        <h2 class="m-1 float-right">Total <span class="count">{{totalHp}}</span> </h2>
+                    </div>
+                </div>
+                </div>
+                <span class="small-box-footer" (click)="getHoneypots()"> More info <i
+                        class="fa fa-arrow-circle-right"></i> </span>
+            </div>
+        </div>
+       
+        <div class="flex-item">
+            <div class="small-box bg-new-blue" (click)="getMoreDetails('IOT')">
+                <div class="row">
+                    <div class="col-2">
+                        <div class="icon">
+                            <img class="imggg" src="{{assetPath}}/logos/iot.png">
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="text-center">
+                            <h2 class="m-1">IoT Honeypots</h2>
+                        </div>
+                        <div class="inner float-right">
+                            <h2 class="m-1 float-right">Unique <span class="count">{{uniqueIot}}</span></h2>
+
+                    </div>
+                    <div class="inner float-left">
+                        <h2 class="m-1 float-right">Total <span class="count">{{totalIot}}</span> </h2>
+                    </div>
+                    </div>
+                </div>
+                <span class="small-box-footer" (click)="getMoreDetails('IoT')"> More info <i
+                        class="fa fa-arrow-circle-right"></i> </span>
+            </div>
+        </div>
+
+        <div class="flex-item">
+
+            <div class="small-box bg-new-purple" (click)="getMoreDetails('web')">
+                <div class="row">
+                    <div class="col-2">
+                        <div class="icon">
+                            <img class="imggg" src="{{assetPath}}/logos/web.png">
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="text-center">
+                            <h2 class="m-1">WEB Honeypots</h2>
+                        </div>
+                        <div class="inner float-right">
+                            <h2 class="m-1 float-right">Unique <span class="count">{{uniqueWeb}}</span></h2>
+
+                    </div>
+                    <div class="inner float-left">
+                        <h2 class="m-1 float-right">Total <span class="count">{{totalWeb}}</span> </h2>
+                    </div>
+                    </div>
+                </div>
+
+                <span class="small-box-footer" (click)="getMoreDetails('WEB')"> More info <i
+                        class="fa fa-arrow-circle-right"></i></span>
+            </div>
+        </div>
+
+        <div class="flex-item">
+            <div class="small-box bg-new-green" (click)="getMoreDetails('scada')">
+                <div class="row">
+                    <div class="col-2">
+                        <div class="icon">
+                            <img class="imggg" src="{{assetPath}}/logos/scada.png">
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="text-center">
+                            <h2 class="m-1">SCADA Honeypots</h2>
+                        </div>
+                        <div class="inner float-right">
+                            <h2 class="m-1 float-right">Unique <span class="count">{{uniqueScada}}</span></h2>
+
+                    </div>
+                    <div class="inner float-left">
+                        <h2 class="m-1 float-right">Total <span class="count">{{totalScada}}</span> </h2>
+                    </div>
+                    </div>
+                </div>
+
+                <span class="small-box-footer" (click)="getMoreDetails('SCADA')"> More info <i
+                        class="fa fa-arrow-circle-right"></i> </span>
+            </div>
+        </div>
+        <!-- </div>
+        <div class="row"> -->
+        <div class="flex-item">
+            <div class="small-box bg-new-blue" (click)="getHoneypots('HIHP')">
+                <div class="row">
+                    <div class="col-2">
+                        <div class="icon">
+                            <img class="imggg" src="{{assetPath}}/logos/hihp.png">
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <!-- <div class="inner float-right">
+                            <h2 class="m-1">HIHP Honeypots</h2>
+                            <h3 class="m-1 float-right">{{totalHiHp}}</h3>
+
+                        </div> -->
+                        <div class="text-center">
+                            <h2 class="m-0">High Interaction Honeypots</h2>
+                        </div>
+                        <div class="inner float-right">
+                            <h2 class="m-1 float-right">Unique <span class="count">{{uniqueHiHp}}</span></h2>
+
+                    </div>
+                    <div class="inner float-left">
+                        <h2 class="m-2 float-right">Total <span class="count">{{totalHiHp}}</span> </h2>
+                    </div>
+                    </div>
+                </div>
+
+                <span class="small-box-footer"> More info <i class="fa fa-arrow-circle-right"></i> </span>
+            </div>
+        </div>
+
+        <div class="flex-item">
+            <div class="small-box bg-new-mazenta" (click)="getImages()">
+                <div class="row">
+                    <div class="col-2">
+                        <div class="icon">
+                            <img class="imggg" src="{{assetPath}}/logos/honeypot.png">
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="text-center">
+                            <h2 class="m-1">Honeypot Images</h2>
+                        </div>
+                        <div class="inner float-right">
+                            <h2 class="m-1 float-right">Total Images <span class="count">{{uniqueImg}}</span></h2>
+
+                    </div>
+                    <!-- <div class="inner float-left">
+                        <h2 class="m-1 float-right">Total <span class="count">{{totalImg}}</span> </h2>
+                    </div> -->
+                </div>
+                </div>
+                <span class="small-box-footer" (click)="getImages()"> More info <i
+                        class="fa fa-arrow-circle-right"></i> </span>
+            </div>
+        </div>
+
+        <div class="flex-item">
+            <div class="small-box bg-new-blue" (click)="getDevicesTable('type')" [ngClass]="{ 'disabled': disableClick }">
+                <div class="row">
+                    <div class="col-2">
+                        <div class="icon">
+                            <img class="imggg" src="{{assetPath}}/logos/hihp.png">
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="text-center">
+                            <h2 class="m-1">Device Types</h2>
+                        </div>
+                        <div class="inner float-right">
+                            <h2 class="m-1 float-right">Unique <span class="count">{{uniqueDeviceTypes}}</span></h2>
+
+                    </div>
+                    <div class="inner float-left">
+                        <h2 class="m-1 float-right">Total <span class="count">{{totalDeviceType}}</span> </h2>
+                    </div>
+                    </div>
+                </div>
+
+                <span class="small-box-footer"> More info <i class="fa fa-arrow-circle-right"></i> </span>
+            </div>
+        </div>
+
+
+        <div class="flex-item" >
+            <div class="small-box bg-new-blue" (click)="getDevicesTable('name')" [ngClass]="{ 'disabled': disableClick }">
+            <!-- <div class="small-box bg-new-blue" (click)="getDevicesTable('name')"> -->
+                <div class="row">
+                    <div class="col-2">
+                        <div class="icon">
+                            <img class="imggg" src="{{assetPath}}/logos/hihp.png">
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="text-center">
+                            <h2 class="m-1">Device Names</h2>
+                        </div>
+                        <div class="inner float-right">
+                            <h2 class="m-1 float-right">Unique <span class="count">{{uniqueDeviceName}}</span></h2>
+
+                    </div>
+                    <div class="inner float-left">
+                        <h2 class="m-1 float-right">Total <span class="count">{{totalDeviceName}}</span> </h2>
+                    </div>
+                    </div>
+                </div>
+
+                <span class="small-box-footer"> More info <i class="fa fa-arrow-circle-right"></i> </span>
+            </div>
+        </div>
+
+
+
+        <div class="flex-item">
+            <div class="small-box bg-new-mazenta" (click)="protocolTable()">
+                <div class="row">
+                    <div class="col-2">
+                        <div class="icon">
+                            <img class="imggg" src="{{assetPath}}/logos/protocols.png">
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="text-center">
+                            <h2 class="m-1">Emulated Protocols</h2>
+                        </div>
+                        <div class="inner float-right">
+                            <h2 class="m-1 float-right">Unique <span class="count">{{uniqueProtocols}}</span></h2>
+
+                    </div>
+                    <div class="inner float-left">
+                        <h2 class="m-1 float-right">Total <span class="count">{{totalProtocols}}</span> </h2>
+                    </div>
+                    </div>
+                </div>
+
+                <span class="small-box-footer"> More info <i class="fa fa-arrow-circle-right"></i> </span>
+            </div>
+        </div>
+        <div class="flex-item">
+            <div class="small-box  bg-new-green" (click)="totalVulnerabilities()">
+                <div class="row">
+                    <div class="col-2">
+                        <div class="icon">
+                            <img class="imggg" src="{{assetPath}}/logos/vul.png">
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="text-center">
+                            <h2 class="m-0.25">Emulated Vulnerabilities</h2>
+                        </div>
+                        <div class="inner float-right">
+                            <h2 class="m-1 float-right">Unique <span class="count">{{uniqueVul}}</span></h2>
+
+                    </div>
+                    <div class="inner float-left">
+                        <h2 class="m-1 float-right">Total <span class="count">{{totalVul}}</span> </h2>
+                    </div>
+                    </div>
+                </div>
+
+                <span class="small-box-footer"> More info <i class="fa fa-arrow-circle-right"></i> </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- </div> -->
+        <!-- <div class="flex-item">
+            <div class="small-box  bg-new-purple" (click)="totalVulnerabilities()">
+                <div class="row">
+                    <div class="col-2">
+                        <div class="icon">
+                            <img class="imggg" src="{{assetPath}}/logos/port.png">
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="inner float-right">
+                            <h2 class="m-1">Ports</h2>
+                            <h3 class="m-1 float-right">{{totalPorts}}</h3>
+
+                        </div>
+                    </div>
+                </div>
+
+                <span class="small-box-footer"> More info <i class="fa fa-arrow-circle-right"></i> </span>
+            </div>
+        </div> -->
+    <div class="row">
+        <div class="text-center  col-xl-6 p-2 " *ngFor="let chart of chartAllData; let i = index" [hidden]="chartsDiv">
+            <div class="chart-box">
+                <div class="row">
+                    <div class="col-10 ">
+                        <h1 class="colo text-center pt-2"><b>{{chart.message}}</b></h1>
+                    </div>
+                    <div class="flex-item">
+                        <button type="button" [matMenuTriggerFor]="menu1" class="btn buttonn">
+                            <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+                            <mat-menu #menu1="matMenu" class="d1">
+                                <span *ngIf="chartType[i] != 'table'" mat-menu-item (click)="chartToggle(i, 'table')"
+                                    > <img src="{{assetPath}}/images_and_logos/tablepic.png"
+                                        title="Table" class="pch2"> Table</span>
+                                <span *ngIf="chartType[i] != 'pie'" mat-menu-item (click)="chartToggle(i, 'pie')"
+                                   ><img src="{{assetPath}}/images_and_logos/piechart.png"
+                                        title="Chart View" class="pch2"> Pie
+                                    Chart</span>
+                                <span *ngIf="chartType[i] != 'bar'" mat-menu-item 
+                                    (click)="chartToggle(i, 'bar')"> <img
+                                        src="{{assetPath}}/images_and_logos/bar-chart.png" title="Chart View"
+                                        class="pch1"> &nbsp;Bar
+                                    Chart</span>
+                            </mat-menu>
+                        </button>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div *ngIf="chartType[i] == 'table'" class="text-center col-xl-12 ">
+                        <div class="table-sec mb-2">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="text-left">
+                                            Name
+                                        </th>
+                                        <th>
+                                            Count
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let data of chart['data']" ng-repeat-start="action in thing.actions"
+                                        ng-class-odd="odd" ng-class-even="even">
+                                        <td class="text-left">
+
+                                            <span>&emsp;{{data.key}}</span>
+                                        </td>
+                                        <td>
+                                            {{data.doc_count | number}}
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="!chart['data'].length && chart['data']">
+                                        <td colspan="2">No data.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="text-center col-xl-12 ">
+                        <div class="pie" *ngIf="chartType[i] == 'pie'">
+                            <app-child-chart [chartData]="chart" [chartId]="i"></app-child-chart>
+                        </div>
+                        <div class="pie" *ngIf="chartType[i] == 'bar'">
+                            <app-bar-charts [chartData]="chart" [chartId]="i"></app-bar-charts>
+                        </div>
+                    </div>
+
+                    <br>
+                </div>
+            </div>
+        </div>
+        <div class="text-center  col-xl-12 p-2" *ngFor="let chart of pieChartData; let i = index " [hidden]="chartsDiv">
+            <div class="chart-box chart-box1">
+                <div class="row">
+
+                    <div class="col-xl-2"></div>
+                    <div class="col-xl-8">
+                        <h1 class="colo pt-1"><b>{{chart.message}}</b></h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12">
+                        <app-double-pie-chart [lineChart]="chart" [lineId]="i"></app-double-pie-chart>
+                    </div>
+
+                </div>
+              
+            </div>
+        </div>
+
+
+   
+        <!-- <div class="text-center col-xl-12 bg-white">
+            <app-double-pie-chart></app-double-pie-chart>
+        </div> -->
+    </div>
+    
+     <!-- Double Device Chart -->
+     <!-- <div class="text-center  col-xl-12 p-2" *ngFor="let chartt of doublePieChartData; let i = index " [hidden]="doubleDiv">
+        <div class="chart-box chart-box1">
+            <div class="row">
+
+                <div class="col-xl-2"></div>
+                <div class="col-xl-8">
+                    <h1 class="colo pt-1"><b>{{chartt.message}}</b></h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12">
+                    <app-double-pie-chart [lineChart]="chartt" [lineId]="1"></app-double-pie-chart>
+                </div>
+
+            </div>
+
+        </div>
+    </div> -->
+    <!--  -->
+    <div class="tables-div" [hidden]="!chartsDiv">
+        <div class="row">
+            <div class="col-9">
+            </div>
+            <div class="col-2">
+                <div class="float-right" (click)="closeButton()">
+                    <i class="fa fa-close"></i>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="text-center  col-xl-12 p-2" *ngFor="let chartt of doublePieChartData; let i = index " [hidden]="doubleDiv">
+            <div class="chart-box chart-box1">
+                <div class="row">
+    
+                    <div class="col-xl-2"></div>
+                    <div class="col-xl-8">
+                        <h1 class="colo pt-1"><b>{{chartt.message}}</b></h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12">
+                        <app-double-pie-chart [lineChart]="chartt" [lineId]="i"></app-double-pie-chart>
+                    </div>
+    
+                </div>
+    
+            </div>
+        </div> -->
+        <div class="row" [hidden]="tableDiv">
+            <div class="text-center col-xl-9" [hidden]="tableDiv">
+                <div class="text-center  col-xl-12 p-2" *ngFor="let chart of profilesChartData; let i = index ">
+                    <div class="chart-box chart-box1">
+                        <div class="row">
+        
+                            <div class="col-xl-2"></div>
+                            <div class="col-xl-8">
+                                <h1 class="colo pt-1"><b>{{chart.message}}</b></h1>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <app-double-pie-chart [lineChart]="chart" [lineId]="9"></app-double-pie-chart>
+                            </div>
+        
+                        </div>
+        
+                    </div>
+                </div>
+                </div>
+            <div class="col-3">
+                <mat-paginator #paginator="matPaginator" [pageSizeOptions]="[10, 25, 50, 100]"
+                    aria-label="Select page of users" showFirstLastButtons>
+                </mat-paginator>
+                <div class="scrollable-table">
+
+                <table mat-table [dataSource]="dataSource" matSort #profileSort="matSort" class="table-striped table">
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed"># </div>
+                                <div class="col-12 hed1"></div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{i+1}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="device_name">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Device Name</div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="deviceNameFilt">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.device_name}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="device_type">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Device Type</div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="deviceTypeFilt">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.device_type}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="image_name">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Image Name </div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="imageNameFilt">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.image_name}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="image_tag">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Image Tag </div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="imageTagFilt">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.image_tag}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="vm_name">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Docker Image ID</div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="dockerImageIdFilt">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.vm_name}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="snapshot_name">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Honeypot Name </div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="honeypotNameFilt">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.snapshot_name}} </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="6">No data found</td>
+                    </tr>
+                </table>
+            </div>
+            </div>
+            <!-- <br> -->
+            <!-- <div class="col-12">
+                <mat-paginator #paginatorVul="matPaginator" [pageSizeOptions]="[10, 25, 50, 100]"
+                    aria-label="Select page of users" showFirstLastButtons>
+                </mat-paginator>
+
+                <table mat-table [dataSource]="dataSourceVul" matSort #VulSort="matSort" class="table-striped table">
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed"># </div>
+                                <div class="col-12 hed1"></div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{i+1}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="vulnerability">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>vulnerability </div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="vulFilt">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.vulnerability}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="vulnerability_description">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>vulnerability_description </div>
+                                <div class="col-12 hed1"></div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.vulnerability_description}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="package_name">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>package_name </div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="packageNameFilt">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.package_name}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="port">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>port </div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="portFilt">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.port}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="package_version">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>package_version</div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="packageVersionFilt">
+                                    </mat-form-field>
+
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.package_version}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="vm_name">
+                        <th mat-header-cell *matHeaderCellDef class=" tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Docker Image Id</div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="imageIdFilt">
+                                    </mat-form-field>
+
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.vm_name}} </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsVul"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsVul;"></tr>
+
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="6">No data found</td>
+                    </tr>
+                </table>
+            </div> -->
+        </div>
+
+        <div class="row">
+           
+            <div class="text-center col-xl-8" [hidden]="chartsDivv">
+                <div class="text-center  col-xl-12 p-2" *ngFor="let chart of vulChartData; let i = index ">
+                    <div class="chart-box chart-box1">
+                        <div class="row">
+        
+                            <div class="col-xl-2"></div>
+                            <div class="col-xl-8">
+                                <h1 class="colo pt-1"><b>{{chart.message}}</b></h1>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <app-double-pie-chart [lineChart]="chart" [lineId]="i"></app-double-pie-chart>
+                            </div>
+        
+                        </div>
+        
+                    </div>
+                </div>
+                </div>
+                <div class="text-center col-xl-4" [hidden]="chartsDivv">
+
+                <mat-paginator #totalPaginator="matPaginator" [pageSizeOptions]="[10, 25, 50, 100]"
+                    aria-label="Select page of users" showFirstLastButtons>
+                </mat-paginator>
+                <div class="scrollable-table">
+
+                <table mat-table [dataSource]="dataSourceTotalVul" matSort #totalVulSort="matSort"
+                    class="table-striped table">
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed"># </div>
+                                <div class="col-12 hed1"></div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{i+1}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="vulnerability_id">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Vulnerability ID</div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="idFilter">
+                                    </mat-form-field>
+
+                                </div>
+                            </div>
+                        </th>
+                        <td class="text-center" *matCellDef="let row; let i = index; ">{{row.vulnerability_id}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="vulnerability">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Vulnerability</div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="VulnerabilityFilter">
+                                    </mat-form-field>
+
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.vulnerability}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="vulnerability_description">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Vulnerability Description</div>
+                                <div class="col-12 hed1"></div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.vulnerability_description}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="snapshot_name">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Honeypot Name</div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="snapshotNameFilter">
+                                    </mat-form-field>
+
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.snapshot_name}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="honeypot_category">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Honeypot Category</div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="vulHoneypotCategoryFilter">
+                                    </mat-form-field>
+
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.honeypot_category}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="profile_names" >
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Profiles Name</div>
+                                <div class="col-12 hed1"></div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">
+                            <ul>
+                                <li class="profilee" *ngFor="let profile of row.profile_names.split(',')">{{ profile.trim() }}</li>
+                            </ul>
+                        </td>
+
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsTotalVul"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsTotalVul;"></tr>
+
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="6">No data found</td>
+                    </tr>
+                </table>
+                
+            </div>
+            </div>
+            <!-- </div> -->
+        </div>
+
+<!-- Device Type and Device Name Chart and Table -->
+<div class="row">
+           
+    <div class="text-center col-xl-9" [hidden]="doubleDiv">
+        <div class="text-center  col-xl-12 p-2" *ngFor="let chart of doublePieChartData; let i = index ">
+            <div class="chart-box chart-box1">
+                <div class="row">
+
+                    <div class="col-xl-2"></div>
+                    <div class="col-xl-8">
+                        <h1 class="colo pt-1"><b>{{chart.message}}</b></h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12">
+                        <app-double-pie-chart [lineChart]="chart" [lineId]="i"></app-double-pie-chart>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        </div>
+        <div class="text-center col-xl-3" [hidden]="doubleDiv">
+
+        <mat-paginator #devicePaginator="matPaginator" [pageSizeOptions]="[10, 25, 50, 100]"
+            aria-label="Select page of users" showFirstLastButtons>
+        </mat-paginator>
+        <div class="scrollable-table">
+
+        <table mat-table [dataSource]="dataSourceDeviceChips" matSort #deviceSort="matSort"
+            class="table-striped table">
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef class="tab-header">
+                    <div class="row">
+                        <div class="col-12 hed"># </div>
+                        <div class="col-12 hed1"></div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let row; let i = index;">{{i+1}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="device_type">
+                <th mat-header-cell *matHeaderCellDef class="tab-header">
+                    <div class="row">
+                        <div class="col-12 hed" mat-sort-header>Device Type</div>
+                        <div class="col-12 hed1">
+                            <mat-form-field class="filter" floatLabel="never">
+                                <mat-label>Search</mat-label>
+                                <input matInput [formControl]="deviceTypeCFilter">
+                            </mat-form-field>
+
+                        </div>
+                    </div>
+                </th>
+                <td class="text-center" *matCellDef="let row; let i = index; ">{{row.device_type}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="device_name">
+                <th mat-header-cell *matHeaderCellDef class="tab-header">
+                    <div class="row">
+                        <div class="col-12 hed" mat-sort-header>Device Name</div>
+                        <div class="col-12 hed1">
+                            <mat-form-field class="filter" floatLabel="never">
+                                <mat-label>Search</mat-label>
+                                <input matInput [formControl]="deviceNameCFilter">
+                            </mat-form-field>
+
+                        </div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let row; let i = index;">{{row.device_name}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsDeviceChips"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsDeviceChips;"></tr>
+
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="6">No data found</td>
+            </tr>
+        </table>
+        
+    </div>
+    </div>
+    <!-- </div> -->
+</div>
+
+<!--  -->
+        <div class="row ">
+            <!-- <div class="" [hidden]="protocolsDiv"> -->
+                <div class="text-center col-xl-9" [hidden]="protocolsDiv">
+                    <div class="text-center  col-xl-12 p-2" *ngFor="let chart of protocolsChartData; let i = index ">
+                        <div class="chart-box chart-box1">
+                            <div class="row">
+            
+                                <div class="col-xl-2"></div>
+                                <div class="col-xl-8">
+                                    <h1 class="colo pt-1"><b>{{chart.message}}</b></h1>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12">
+                                    <app-double-pie-chart [lineChart]="chart" [lineId]="i"></app-double-pie-chart>
+                                </div>
+            
+                            </div>
+            
+                        </div>
+                    </div>
+                    </div>
+                <!-- <div class="col-6"> -->
+                    <div class="text-center col-xl-3" [hidden]="protocolsDiv" >
+
+                <mat-paginator #protocolsPaginator="matPaginator" [pageSizeOptions]="[10, 25, 50, 100]"
+                    aria-label="Select page of users" showFirstLastButtons>
+                </mat-paginator>
+                <div class="scrollable-table">
+                <table mat-table [dataSource]="dataSourceProtocols" matSort #protocolsSort="matSort"
+                    class="table-striped table">
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed"># </div>
+                                <div class="col-12 hed1"></div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{i+1}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="package_name">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Protocol</div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="protocolFilter">
+                                    </mat-form-field>
+
+                                </div>
+                            </div>
+                        </th>
+                        <td class="text-center" *matCellDef="let row; let i = index; ">{{row.package_name}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="device_name">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Device Name</div>
+                                <div class="col-12 hed1">
+                                    <!-- <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="deviceFilter">
+                                    </mat-form-field> -->
+
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">
+                            <ul>
+                                <li *ngFor="let device_name of row.device_name.split(',')">{{ device_name.trim() }}</li>
+                            </ul>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="device_type">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Device Type</div>
+                                <div class="col-12 hed1"> <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="devTypeFilter">
+                                    </mat-form-field>
+
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.device_type}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="honeypot_name">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Honeypot Name</div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="honeypotNameFilter">
+                                    </mat-form-field>
+
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.honeypot_name}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="honeypot_category">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Honeypot Category</div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="honeypotCategoryFilter">
+                                    </mat-form-field>
+
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.honeypot_category}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="port">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Port</div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="portFilter">
+                                    </mat-form-field>
+
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.port}} </td>
+                    </ng-container>
+
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsProtocols"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsProtocols;"></tr>
+
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="6">No data found</td>
+                    </tr>
+                </table>
+            </div>
+            </div>
+            <!-- </div> -->
+        </div>
+        <div class="row ">
+            <div class="" [hidden]="honeypotDiv">
+                <!-- <div class="col-6"> -->
+                <mat-paginator #honeypotPaginator="matPaginator" [pageSizeOptions]="[10, 25, 50, 100]"
+                    aria-label="Select page of users" showFirstLastButtons>
+                </mat-paginator>
+                <table mat-table [dataSource]="dataSourceHoenypots" matSort #honeypotSort="matSort"
+                    class="table-striped table ">
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed"># </div>
+                                <div class="col-12 hed1"></div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{i+1}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="snapshot_name">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Honeypot Name</div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="snapshotFilter">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </th>
+                        <td class="text-center" *matCellDef="let row; let i = index; ">{{row.snapshot_name}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="vm_name">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Docker Image ID</div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="vmFilter">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.vm_name}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="device_name">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Device Name</div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="deviceNameFilter">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.device_name}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="device_type">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Device Type</div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="deviceTypeFilter">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.device_type}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="honeypot_type">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Honeypot Type</div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="typeFilter">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.honeypot_type}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="honeypot_category">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Honeypot Category</div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="categoryFilter">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.honeypot_category}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="image_name">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Image Name</div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="imageFilter">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.image_name}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="image_tag">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header">
+                            <div class="row">
+                                <div class="col-12 hed" mat-sort-header>Image Tag</div>
+                                <div class="col-12 hed1">
+                                    <mat-form-field class="filter" floatLabel="never">
+                                        <mat-label>Search</mat-label>
+                                        <input matInput [formControl]="imageTaggFilter">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{row.image_tag}} </td>
+                    </ng-container>
+
+
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsHoenypots"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsHoenypots;"></tr>
+
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="12">No data found</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Image Table -->
+    <div class="row ">
+        <div class="" [hidden]="imageDiv">
+            <mat-paginator #imagesPaginator="matPaginator" [pageSizeOptions]="[10, 25, 50, 100]"
+                aria-label="Select page of users" showFirstLastButtons>
+            </mat-paginator>
+            <table mat-table [dataSource]="dataSourceImages" matSort #imagesSort="matSort"
+                class="table-striped table ">
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef class="tab-header">
+                        <div class="row">
+                            <div class="col-12 hed"># </div>
+                            <div class="col-12 hed1"></div>
+                        </div>
+                    </th>
+                    <td mat-cell *matCellDef="let row; let i = index;">{{i+1}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="os_name">
+                    <th mat-header-cell *matHeaderCellDef class="tab-header">
+                        <div class="row">
+                            <div class="col-12 hed" mat-sort-header>Operating System</div>
+                            <div class="col-12 hed1">
+                                <mat-form-field class="filter" floatLabel="never">
+                                    <mat-label>Search</mat-label>
+                                    <input matInput [formControl]="iOsFilter">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </th>
+                    <td class="text-center" *matCellDef="let row; let i = index; ">{{row.os_name}} </td>
+                </ng-container>
+                <ng-container matColumnDef="vm_name">
+                    <th mat-header-cell *matHeaderCellDef class="tab-header">
+                        <div class="row">
+                            <div class="col-12 hed" mat-sort-header>Docker Image ID</div>
+                            <div class="col-12 hed1">
+                                <mat-form-field class="filter" floatLabel="never">
+                                    <mat-label>Search</mat-label>
+                                    <input matInput [formControl]="iVmFilter">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </th>
+                    <td mat-cell *matCellDef="let row; let i = index;">{{row.vm_name}} </td>
+                </ng-container>
+                <ng-container matColumnDef="os_type">
+                    <th mat-header-cell *matHeaderCellDef class="tab-header">
+                        <div class="row">
+                            <div class="col-12 hed" mat-sort-header>Operating System Type</div>
+                            <div class="col-12 hed1">
+                                <mat-form-field class="filter" floatLabel="never">
+                                    <mat-label>Search</mat-label>
+                                    <input matInput [formControl]="iOsTFilter">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </th>
+                    <td mat-cell *matCellDef="let row; let i = index;">{{row.os_type}} </td>
+                </ng-container>
+                <ng-container matColumnDef="vm_type">
+                    <th mat-header-cell *matHeaderCellDef class="tab-header">
+                        <div class="row">
+                            <div class="col-12 hed" mat-sort-header>Environment</div>
+                            <div class="col-12 hed1">
+                                <mat-form-field class="filter" floatLabel="never">
+                                    <mat-label>Search</mat-label>
+                                    <input matInput [formControl]="iVmTFilter">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </th>
+                    <td mat-cell *matCellDef="let row; let i = index;">{{row.vm_type}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="image_name">
+                    <th mat-header-cell *matHeaderCellDef class="tab-header">
+                        <div class="row">
+                            <div class="col-12 hed" mat-sort-header>Image Name</div>
+                            <div class="col-12 hed1">
+                                <mat-form-field class="filter" floatLabel="never">
+                                    <mat-label>Search</mat-label>
+                                    <input matInput [formControl]="iImFilter">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </th>
+                    <td mat-cell *matCellDef="let row; let i = index;">{{row.image_name}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="image_tag">
+                    <th mat-header-cell *matHeaderCellDef class="tab-header">
+                        <div class="row">
+                            <div class="col-12 hed" mat-sort-header>Image Tag</div>
+                            <div class="col-12 hed1">
+                                <mat-form-field class="filter" floatLabel="never">
+                                    <mat-label>Search</mat-label>
+                                    <input matInput [formControl]="iImTFilter">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </th>
+                    <td mat-cell *matCellDef="let row; let i = index;">{{row.image_tag}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="node_hardware">
+                    <th mat-header-cell *matHeaderCellDef class="tab-header">
+                        <div class="row">
+                            <div class="col-12 hed" mat-sort-header>Node Hardware</div>
+                            <div class="col-12 hed1">
+                                <mat-form-field class="filter" floatLabel="never">
+                                    <mat-label>Search</mat-label>
+                                    <input matInput [formControl]="iNhFilter">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </th>
+                    <td mat-cell *matCellDef="let row; let i = index;">{{row.node_hardware}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="hp_profiles">
+                    <th mat-header-cell *matHeaderCellDef class="tab-header">
+                        <div class="row">
+                            <div class="col-12 hed" mat-sort-header>Honeypot Profiles</div>
+                            <div class="col-12 hed1">
+                               
+                            </div>
+                        </div>
+                    </th>
+                    <td mat-cell *matCellDef="let row;"><button class="evt"
+                        (click)="getProfileImages(row.vm_name)">Profiles</button></td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsImages"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsImages;"></tr>
+
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="12">No data found</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <!-- <div class="row  ">
+        <div class="col-xl-12 " *ngIf="!timegraph">
+            <app-chart>                   
+            </app-chart>                   
+                 </div>
+
+    </div> -->
+    
+    <div class="row ">
+        <div class="chart-box chart-box1" style="width: 100%;"> 
+
+        <div class="col-xl-12 " *ngIf="!timegraph">
+            <h1 class="colo pt-1" style="text-align: center;"><b>Honeypot Insertion Stats</b></h1> 
+
+            <app-chart>                   
+            </app-chart>                   
+                 </div>
+                 </div>
+
+    </div>
+<br>
+
+<!-- </div> -->
+</section>

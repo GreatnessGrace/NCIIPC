@@ -1,0 +1,122 @@
+<div class="panel">
+    <div class="panel-heading mt-3 ml-3">
+        <h1 class="panel-title">
+            <b *ngIf="userType" class="colo">Attacks on {{ orgHeading }}</b>
+            <b *ngIf="!userType" class="colo">Attacks on Organizations</b>
+        </h1>
+    </div>
+</div>
+<div *ngIf="this.searchloader" class="row lod">
+    <div class="loader text-black" *ngIf="this.searchloader">
+    </div>
+</div>
+<div class="row">
+    
+    <div class="text-center  col-xl-3 p-2 " *ngFor="let chart of chartAllData; let i = index">
+        <div class="chart-box">
+            <div class="row">
+
+
+                <div class="col-10 ">
+                    <h1 class="colo text-center pt-2"><b>{{chart.message}}</b></h1>
+                </div>
+                <div class="col-2">
+                    <button type="button" [matMenuTriggerFor]="menu1" class="btn buttonn">
+                        <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+                        <mat-menu #menu1="matMenu" class="d1">
+                            <span *ngIf="chartType[i] != 'table'" mat-menu-item (click)="chartToggle(i, 'table')"
+                                class="text-black"> <img src="{{assetPath}}/images_and_logos/tablepic.png" title="Table"
+                                    class="pch2"> Table</span>
+                            <span *ngIf="chartType[i] != 'pie'" mat-menu-item (click)="chartToggle(i, 'pie')"
+                                class="text-black"><img src="{{assetPath}}/images_and_logos/piechart.png"
+                                    title="Chart View" class="pch2"> Pie
+                                Chart</span>
+                            <span *ngIf="chartType[i] != 'bar'" mat-menu-item class="text-black"
+                                (click)="chartToggle(i, 'bar')"> <img src="{{assetPath}}/images_and_logos/bar-chart.png"
+                                    title="Chart View" class="pch1"> &nbsp;Bar
+                                Chart</span>
+                        </mat-menu>
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div *ngIf="chartType[i] == 'table'" class="text-center col-xl-12 ">
+                    <div class="table-sec mb-2">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="text-left">
+                                        Name
+                                    </th>
+                                    <th>
+                                        Count
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let data of chart['data']" ng-repeat-start="action in thing.actions"
+                                    ng-class-odd="odd" ng-class-even="even">
+                                    <td class="text-left">
+                                        <ng-container
+                                            *ngIf="chart.message == 'Source of Attack - Country' && data.key != '' && data.key != '-' ">
+                                            <img class="imgg" *ngIf="data.key != '' || data.key != '-'"
+                                                src="{{assetPath}}/flags/flag-of-{{data.hits.hits.hits[0]._source.ip2location_data.country_long|countryname}}.jpg">
+                                        </ng-container>
+                                        <ng-container
+                                            *ngIf="chart.message == 'Attacker IP\'s' && data.hits.hits.hits[0]._source.ip2location_data.country_long != '' ">
+                                            <img class="imgg"
+                                                *ngIf="data.hits.hits.hits[0]._source.ip2location_data.country_long != '' || data.hits.hits.hits[0]._source.ip2location_data.country_long != '-'"
+                                                src="{{assetPath}}/flags/flag-of-{{data.hits.hits.hits[0]._source.ip2location_data.country_long|countryname}}.jpg">
+                                        </ng-container>
+
+                                        <span
+                                            *ngIf="chart.message == 'Source of Attack - Country'">&emsp;{{data.hits.hits.hits[0]._source.ip2location_data.country_long}}</span>
+                                        <span
+                                            *ngIf="chart.message != 'Source of Attack - Country'">&emsp;{{data.key}}</span>
+                                    </td>
+                                    <td>
+                                        {{data.doc_count | number}}
+                                    </td>
+                                </tr>
+                                <tr *ngIf="!chart['data'].length && chart['data']">
+                                    <td colspan="2">No data.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="text-center col-xl-12 ">
+                    <div class="pie" *ngIf="chartType[i] == 'pie'">
+                        <app-child-chart [chartData]="chart" [chartId]="i"></app-child-chart>
+                    </div>
+                    <div class="pie" *ngIf="chartType[i] == 'bar'">
+                        <app-bar-charts [chartData]="chart" [chartId]="i"></app-bar-charts>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+    <div class="text-center  col-xl-6 p-2" *ngFor="let chart of lineChartData; let i = index">
+        <div class="chart-box chart-box1">
+            <div class="row">
+
+                <div class="col-xl-2"></div>
+                <div class="col-xl-8">
+                    <h1 class="colo pt-1"><b>{{chart.message}}</b></h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12">
+                    <app-line-chart [lineChart]="chart" [lineId]="i"></app-line-chart>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <br>
+    <hr color="grey" width="98%">
+</div>

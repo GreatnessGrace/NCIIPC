@@ -1,0 +1,23 @@
+table{
+    min-width: -webkit-fill-available;
+}
+.table th{
+    color: #000000;
+    background-color: black;
+    border: none;
+    padding: 10px;
+   text-align: left;
+    vertical-align: middle;
+  }
+  .table td{
+    color: black;
+    background-color: #dcebcc;
+    padding: 10px;
+    font-size: 15px;
+    border:none;
+    align-items: center !important;
+    border-bottom: 1px solid grey;
+  }
+  .floww{
+    height:500px !important; overflow:auto;
+  }

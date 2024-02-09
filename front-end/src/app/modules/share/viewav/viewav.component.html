@@ -1,0 +1,87 @@
+<!-- <div class="">
+    <div class="row">
+        <div class="col-9">
+            <h2><b class="colo">AV Details</b></h2>
+        </div>
+        <div class="col-3">
+            <div class="float-right" (click)="closeButton('simple')">
+                <i class="fa fa-close text-black"></i>
+            </div>
+        </div>
+    </div> -->
+
+<!-- <div class="floww">
+        <table class="table ">
+            <thead class="text-black">
+                <th>Anti-Virus</th>
+                <th>VirusTotal Classification</th>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let template of  data._source.bin_vt_av_labels | keyvalue">
+                    <td class="text-black">
+                        {{template.key}}
+                    </td>
+                    <td class="text-black">
+                        {{template.value}}
+                    </td> -->
+<!-- <td>
+                        null
+                    </td> -->
+<!-- </tr>
+
+            </tbody>
+
+
+        </table>
+    </div>
+</div> -->
+
+<div>
+    <div class="row">
+        <div class="col-9">
+            <h2><b class="colo">AV Details</b></h2>
+        </div>
+        <div class="col-3">
+            <div class="float-right" (click)="closeButton('simple')">
+                <i class="fa fa-close"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="floww">
+        <table class="table ">
+            <thead class="text-white">
+                <th class="text-white">Anti-Virus</th>
+                <th class="text-white">VirusTotal Classification</th>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let template of  data">
+                    <td>
+                        {{template.av_name}}
+                    </td>
+                    <td>
+                        {{template.av_classification}}
+                    </td>
+                    <!-- <td>
+                        null
+                    </td> -->
+                </tr>
+                <!-- uncomment for elastic search -->
+                <!-- <tr *ngFor="let template of  data._source.bin_vt_av_labels | keyvalue">
+                    <td class="text-white">
+                        {{template.key}}
+                    </td>
+                    <td class="text-white">
+                        {{template.value}}
+                    </td>
+                
+                </tr> -->
+
+            </tbody>
+
+
+        </table>
+    </div>
+</div>

@@ -1,0 +1,469 @@
+<section class="header-design">
+    <app-header></app-header>
+    <div class="container">
+        <div class="backg">
+            <div class="panel">
+                <br>
+                <div class="panel-heading">
+                    <h2 class=" colo">
+                        <b> Threat Intel Events Data Search</b>
+                    </h2>
+                </div>
+
+                <div class="panel-body">
+                    <div class="box-body col-lg-12">
+                        <form class="inline-form" [formGroup]="threatIntelForm" (ngSubmit)="onSubmit()">
+                            <div class="form-group col-lg-2">
+                                <label for="eventType">Select Criteria Type:</label>
+                                <select class="form-control" id="searchtype" required=""
+                                    formControlName="organization_type" #device
+                                    (change)="getCriteriatype(device.value)" [attr.disabled]="userState ? '' : null">
+                                    <option  *ngIf="!userType" value="">-- Select Criteria Type --</option>
+                                    <option  *ngIf="!userType" value="organization_region.keyword">Organization Region</option>
+                                    <!-- <option *ngIf="!userType" value="organization_sector.keyword">Organization Sector</option> -->
+                                    <option value="organization.keyword">Organization Name</option>
+                                </select>
+                            </div>
+
+                            <!-- <div *ngIf="showLoader" class="loader"></div> -->
+
+                            <div class="form-group col-lg-2 slee">
+                                <label for="eventType">Select Value: <i *ngIf="this.searchloaderOrg"
+                                        class="fa fa-spinner fa-spin smol"></i></label>
+                                        <!-- <mat-select multiple class="form-control pt-2 mat-select-dnld" formControlName="organization_name">
+                                 <select class="form-control pt-2" formControlName="organization_name" "
+                                    required=""> 
+                                    <div class="select-all">
+                                        <mat-checkbox [(ngModel)]="allFilterSelected"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (change)="toggleAllSelection()" >Select All</mat-checkbox>
+                                      </div>
+                                      <mat-option *ngFor="let index of organization" [value]="index">
+                                        <span class="input-value"> {{index.key}} </span>
+                                      </mat-option>
+                                     <option value="" class="">-- Select Value --</option>
+                                    <option *ngFor="let index of organization"> {{index.key}}</option> -->
+                                <!-- </select> 
+                            </mat-select> -->
+                            <ng-multiselect-dropdown formControlName="organization_name" id="searchValue" [settings]="dropdownSettings"
+                                [data]="organization" [(ngModel)]="selectedItems" 
+                                (onSelectAll)="onSelectAll($event)"  [disabled]="isDropdownDisabled">
+                            </ng-multiselect-dropdown>
+                            </div>
+                            
+                            <div class="form-group col-lg-2">
+                                <label for="startdate">Select Date</label>
+                                <select class="form-control" formControlName="date_filter" #dateFilter
+                                    (change)="onDateFilterChange(dateFilter.value)">
+                                    <option value="" class="">-- Select Date --</option>
+                                    <option *ngFor="let filter of dateFilterArray" [value]="filter.key">{{filter.value}}
+                                    </option>
+                                </select>
+                            </div>
+                                
+                            <ng-container *ngIf="threatIntelForm.get('date_filter').value == 5">
+                                <div class="form-group col-lg-2">
+                                    <label for="startdate">Start Date</label>
+                                    <div class="input-group date-picker">
+                                        <input matInput [matDatepicker]="picker" class="form-control cal mat-input-d"
+                                            formControlName="start_date" placeholder="DD/MM/YYYY" [max]="currentDate">
+                                        <mat-datepicker-toggle matIconSuffix [for]="picker"
+                                            class="mat-datepicker-t"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker></mat-datepicker>
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-2">
+                                    <label for="startdate">End Date</label>
+                                    <div class="input-group date-picker">
+                                        <input matInput [matDatepicker]="endpicker" class="form-control cal mat-input-d"
+                                            formControlName="end_date" placeholder="DD/MM/YYYY" [max]="currentDate">
+                                        <mat-datepicker-toggle matIconSuffix [for]="endpicker"
+                                            class="mat-datepicker-t"></mat-datepicker-toggle>
+                                        <mat-datepicker #endpicker></mat-datepicker>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <div class="form-group col-lg-2 mrt-1" >
+                                <button id="submit" type="submit" class="btn">
+                                    <span class="fa fa-search"></span> Search
+                                </button>
+                                <i *ngIf="this.searchloader" class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <hr color="grey" >
+        </div>
+        <div class="row">
+            <div class="background upper-div" [hidden]="!showEvent">
+                <div class="org col-xl-6">
+                    <div class="panel-heading">
+                        <h2>
+                            <b  > Organizations</b>
+                        </h2>
+                    </div>
+
+
+                    <table mat-table [dataSource]="dataSource" #sortOrg="matSort" matSort class="table-striped table">
+
+                        <!-- Node ID -->
+                        <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef class="tab-header">
+                                <div class="row">
+                                    <div class="col-12 hed"># </div>
+                                    <div class="col-12 hed1"></div>
+                                </div>
+                            </th>
+                            <td mat-cell *matCellDef="let row; let i = index;">{{i+1}} </td>
+                        </ng-container>
+                      
+                        <!-- Organization -->
+                        <ng-container matColumnDef="key">
+                            <th mat-header-cell *matHeaderCellDef class="tab-header">
+                                <div class="row ">
+                                    <div class="col-12 hed" mat-sort-header>Organization Name </div>
+
+                                    <div class="col-12 hed1">
+                                        <mat-form-field class="filter" floatLabel="never">
+                                            <mat-label>Search</mat-label>
+                                            <input matInput [formControl]="orgFilter">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </th>
+
+                            <td mat-cell *matCellDef="let row"> {{row.key}} </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="count">
+                            <th mat-header-cell *matHeaderCellDef class="tab-header">
+                                <div class="row">
+                                    <div class="col-12 hed"> Unique Event Labels</div>
+                                    <div class="col-12 hed1"></div>
+                                </div>
+                            </th>
+
+                            <td mat-cell *matCellDef="let row;"> <button class="evt"
+                                    (click)="EventType(row)">{{row.bucketcount.count}}</button></td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="3">No Data Found</td>
+                        </tr>
+                    </table>
+                    <mat-paginator class="hhh" #paginatorOrg="matPaginator" [pageSizeOptions]="[10, 25, 50, 100]"
+                         aria-label="Select page of users" showFirstLastButtons>
+                    </mat-paginator>
+                </div>
+
+
+                <div class="event col-xl-6 custom-event" [hidden]="!showEventType">
+                    <div class="panel-heading">
+                        <h2>
+                            <b> Events Captured</b>
+
+                        </h2>
+                    </div>
+
+
+                    <table mat-table [dataSource]="eventCount" #sortEvent="matSort" matSort
+                        class="table-striped table ">
+                        <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef class="tab-header">
+                                <div class="row">
+                                    <div class="col-12 hed"># </div>
+                                    <div class="col-12 hed1"></div>
+                                </div>
+                            </th>
+                            <!-- <th mat-header-cell *matHeaderCellDef>#</th> -->
+                            <td mat-cell *matCellDef="let row;let i = index;">{{i+1}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="key">
+                            <th mat-header-cell *matHeaderCellDef class="tab-header">
+                                <div class="row ">
+                                    <div class="col-12 hed" mat-sort-header>Event Category </div>
+
+                                    <div class="col-12 hed1">
+                                        <mat-form-field class="filter" floatLabel="never">
+                                            <mat-label>Search</mat-label>
+                                            <input matInput [formControl]="eventFilter">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </th>
+                            <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header> Event Category</th> -->
+                            <td mat-cell *matCellDef="let row;"> {{row.key}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="count">
+                            <th mat-header-cell *matHeaderCellDef>Total Event Counts </th>
+                            <td mat-cell *matCellDef="let row;"><button class="evt" for="ipdiv"
+                                    (click)="getAllIps(row)">{{row.doc_count}}</button></td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="3">No data found</td>
+                        </tr>
+                    </table>
+                    <mat-paginator #paginatorEvent="matPaginator" [pageSizeOptions]="[10, 25, 50, 100]" [length]="2000"
+                        aria-label="Select page of users" showFirstLastButtons>
+                    </mat-paginator>
+
+                </div>
+            </div>
+        </div>
+        <div class=" row" id="ipdiv">
+            <div *ngIf="this.searchloaderxl" class="col-12 lod" >
+                <div class="loader text-black" *ngIf="this.searchloaderxl">
+                </div>
+            </div>
+            <div class="background" [hidden]="showEventIps">
+                <h2 class="colo">
+                    <b>Indicators related to {{currentOrgEvent}} Event</b>
+                </h2>
+                <hr color="grey">
+                <div *ngIf="this.searchloaderxl" class="row lod1" >
+                    <div class="loader text-black" *ngIf="this.searchloaderxl" >
+                    </div>
+                </div>
+                <div class="col-12">
+                    <h3 style="color: black;"><b>Top IP Address</b></h3>
+                    <div class="evtip table-sec">
+                    
+
+                        <table mat-table [dataSource]="IpsJson" #sortIp="matSort" matSort class="table table-striped">
+                            <ng-container matColumnDef="key">
+                                <th mat-header-cell *matHeaderCellDef  class="tab-header"> 
+                                <div class="row">
+                              <div class="col-12 hedd" mat-sort-header>IP Address</div>
+                              <div class="col-12 hed1">
+                                <mat-form-field class="filter hed1" floatLabel="never">
+                                  <mat-label>Search</mat-label>
+                                  <input class="inp1" matInput [formControl]="ipFilter">
+                                </mat-form-field>
+                              </div>
+                            </div>
+                            </th>
+                              <td mat-cell *matCellDef="let data" class="cp" (click)="ShowJson(data)">{{ data.key }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="count">
+                              <th mat-header-cell *matHeaderCellDef mat-sort-header>Events</th>
+                              <td mat-cell *matCellDef="let data">{{ data.doc_count }}</td>
+                            </ng-container>
+
+                                   <tr mat-header-row *matHeaderRowDef="displayedColumnsIpJson"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsIpJson;"></tr>
+                          </table>
+                    </div>
+                    <hr color="grey">
+                    <br>
+                </div>
+            </div>
+
+        </div>
+        <div class=" row">
+            <div *ngIf="this.searchloaderxl1 " class="col-12 lod1" >
+                <div class="loader text-black" *ngIf="this.searchloaderxl1">
+                </div>
+            </div>
+            <div class="background he1 " [hidden]="!showEventIpsJson" >
+                <h2 class="colo">
+                    <b> Attack Data</b>
+                </h2>
+                <hr color="grey">
+                <h2 class="panel-title" style="color: black;">
+                    <b>Indicator :</b> {{event_ips}}
+                </h2>
+                <div class="row">
+
+                    <div class="col-1 side-table" >
+                        <table class="filterr">
+                            <ng-container *ngFor="let colum of displayedColumnsData">
+                                <tr [hidden]="colum.columnVal == 'id' || colum.columnVal == 'view_json'">
+                                    <td><input type="checkbox" [id]="colum.columnVal" [checked]=true class="bigbox" name="colum.columnVal" (change)="getAllChecked($event)" [value]="colum.columnVal"></td>
+                                    <td class="checkbox-cl"><label for="{{colum.columnVal}}">{{colum.columnName}}</label> </td>
+                                </tr>
+                            </ng-container>
+                        
+                        </table>
+                       
+                    </div>
+                    <div class="col-11 add-scroll-x">
+                        
+                        <mat-paginator #paginatorJson="matPaginator" [pageSizeOptions]="[10, 25, 50, 100]"
+                            [length]="JsonTotalCount">
+                        </mat-paginator>
+                        <div style="overflow-x: scroll;">
+                        <table mat-table [dataSource]="eventJson" matSort #sortJson="matSort" class="mat-elevation-z8 table" [hidden]="searchloader">
+                            <ng-container matColumnDef="id">
+                                <th mat-header-cell *matHeaderCellDef class="">#</th>
+                                <td mat-cell class="text-black" *matCellDef="let row; let i = index;" >{{i+1}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="node_id">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="row ">
+                                        <div class="col-12 hed" mat-sort-header>NODE ID</div>
+                                        <div class="col-12 hed1">
+                                            <mat-form-field class="filter" floatLabel="never"> 
+                                                <mat-label>Search</mat-label>
+                                                <input matInput [formControl]="nodeFilter">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </th>
+                                <td mat-cell class="text-black"  *matCellDef="let row; let i = index;" > {{row._source.node_id}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="organization">
+                                <th mat-header-cell *matHeaderCellDef> 
+                                    <div class="row ">
+                                        <div class="col-12 hed" mat-sort-header>Organization</div>
+                                        <div class="col-12 hed1">
+                                            <mat-form-field class="filter" floatLabel="never"> 
+                                                <mat-label>Search</mat-label>
+                                                <input matInput [formControl]="org2Filter">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let row" class="text-black" > {{row._source.organization}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="organization_region">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="row ">
+                                        <div class="col-12 hed" mat-sort-header>Region</div>
+                                        <div class="col-12 hed1">
+                                            <mat-form-field class="filter" floatLabel="never"> 
+                                                <mat-label>Search</mat-label>
+                                                <input matInput [formControl]="regFilter">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let row;"class="text-black" >
+                                    {{row._source.organization_region}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="event_label">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="row ">
+                                        <div class="col-12 hed" mat-sort-header>Event Label</div>
+                                        <div class="col-12 hed1">
+                                            <mat-form-field class="filter" floatLabel="never"> 
+                                                <mat-label>Search</mat-label>
+                                                <input matInput [formControl]="eventlabelFilter">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let row;" class="text-black" >
+                                    {{row._source.event_label}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="session_id">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Session ID</th>
+                                <td mat-cell *matCellDef="let row;" class="text-black" >
+                                    {{row._source.event_data.session_id}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="remote_ip">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Remote IP</th>
+                                <td mat-cell *matCellDef="let row;"class="text-black" >
+                                    {{row._source.event_data.remote_ip}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="local_ip">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Local IP</th>
+                                <td mat-cell *matCellDef="let row;" class="text-black" >
+                                    {{row._source.event_data.local_ip}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="target_profile">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Target Profile</th>
+                                <td mat-cell *matCellDef="let row;" class="text-black" >
+                                    {{row._source.event_data.target_profile}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="service">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Service</th>
+                                <td mat-cell *matCellDef="let row;" class="text-black" >
+                                    {{row._source.event_data.service}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="country_long">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="row ">
+                                        <div class="col-12 hed" mat-sort-header>Country</div>
+                                        <div class="col-12 hed1">
+                                            <mat-form-field class="filter" floatLabel="never"> 
+                                                <mat-label>Search</mat-label>
+                                                <input matInput [formControl]="countryFilter">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let row;" class="text-black" >
+                                    {{row._source.ip2location_data.country_long}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="latitude">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Latitude</th>
+                                <td mat-cell *matCellDef="let row;" class="text-black" >
+                                    {{row._source.ip2location_data.latitude}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="longitude">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Longitude</th>
+                                <td mat-cell *matCellDef="let row;" class="text-black" >
+                                    {{row._source.ip2location_data.longitude}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="city">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="row ">
+                                        <div class="col-12 hed" mat-sort-header>City</div>
+                                        <div class="col-12 hed1">
+                                            <mat-form-field class="filter" floatLabel="never"> 
+                                                <mat-label>Search</mat-label>
+                                                <input matInput [formControl]="cityFilter">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let row;"class="text-black" >
+                                    {{row._source.ip2location_data.city}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="event_timestamp">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>TimeStamp</th>
+                                <td mat-cell *matCellDef="let row;"class="text-black" >
+                                    {{row._source.event_timestamp}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="view_json">
+                                <th mat-header-cell *matHeaderCellDef>View </th>
+                                <td mat-cell *matCellDef="let row;"><button class="evt"
+                                        (click)="showJsonData(row._source)">JSON
+                                        Data </button></td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsJson"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsJson;"></tr>
+
+                            <tr class="mat-row" *matNoDataRow>
+                                <td class="mat-cell" colspan="16">No data found</td>
+                            </tr>
+                        </table>
+                    </div>
+                        <br>
+                        <br>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

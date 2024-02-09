@@ -1,0 +1,447 @@
+<div *ngIf="isLoading" class="loading-overlay">
+    <div class="loading-spinner"></div>
+  </div>
+<section>
+    <app-header></app-header>
+    <div class="formbold-main-wrapper">
+        <div class="formbold-form-wrapper">
+            <label for="fileInput" class="file-input" [class.selected]="fileSelected">
+                {{ fileSelected ? selectedFileName : 'Choose xml File' }}
+                <i class="fa fa-upload"></i>
+            </label>
+            <input type="file" id="fileInput" class="file-input" (change)="onFileSelected($event)" accept=".xml"
+                style="display: none;">
+            <button class="formbold-btn" (click)="parseXML()">Upload file</button>
+
+            <!-- <input type="file" (change)="onFileSelected($event)" accept=".xml">
+            <button class="formbold-btn btn-warning" (click)="parseXML()">Submit</button> -->
+            <form #blueprint="ngForm" [formGroup]="blueprintForm" (ngSubmit)="onSubmit(blueprint.value)" ><br>
+                <!-- (ngSubmit)="onSubmit(blueprint.value)"  -->
+
+                <div class="formbold-mb-3 row">
+                    <div class="col-xl-4">
+                        <label for="vm_type" class="formbold-form-label"> Environment Type<span
+                                class="star">*</span></label>
+                        <select formControlName="vm_type" id="vm_type" class="formbold-form-input"
+                            (change)="getvmtype($event)">
+                            <option class="formbold-form-input" value="vbox">Virtual Box</option>
+                            <option class="formbold-form-input" value="docker" selected="selected">Docker</option>
+                        </select>
+                        <mat-error
+                            *ngIf="blueprintForm.get('vm_type')?.touched && blueprintForm.get('vm_type')?.hasError('required')">
+                            Please select from above.
+                        </mat-error>
+
+
+                    </div>
+                    <div class="col-xl-4">
+                        <label for="base_system" class="formbold-form-label"> Node Base System<span
+                                class="star">*</span> </label>
+                        <select formControlName="base_system" id="base_system" class="formbold-form-input">
+                            <option class="formbold-form-input" value="null" selected="selected" disabled>Select Base
+                                System</option>
+                            <option class="formbold-form-input" value="raspberry">Raspberry</option>
+                            <option class="formbold-form-input" value="desktop">Desktop/Server</option>
+
+                        </select>
+                        <mat-error
+                            *ngIf="blueprintForm.get('base_system')?.touched && blueprintForm.get('base_system')?.hasError('required')">
+                            Please select from above.
+                        </mat-error>
+                    </div>
+
+                    <div class="col-xl-4">
+                        <label for="vm_name" class="formbold-form-label"> {{virtualLabel}}<span
+                                class="star">*</span></label>
+                        <input type="text" formControlName="vm_name" id="vm_name" placeholder="Enter {{virtualLabel}}"
+                            class="formbold-form-input" />
+                        <mat-error
+                            *ngIf="blueprintForm.get('vm_name')?.touched && blueprintForm.get('vm_name')?.hasError('required')">
+                            Please fill out this field.
+                        </mat-error>
+                        <mat-error *ngIf="blueprintForm.get('vm_name')?.hasError('pattern')">
+                            Please enter only alphanumeric values or it may include '_'
+                        </mat-error>
+                    </div>
+
+                </div>
+
+                <div class="formbold-mb-3 row" [hidden]="vboxForm">
+                    <!-- <div class="col-xl-4">
+                        <label for="imageid" class="formbold-form-label"> Image ID </label>
+                        <input type="text" formControlName="imageid" id="imageid" placeholder="Enter Image ID"
+                            class="formbold-form-input" required />
+                    </div> -->
+                    <div class="col-xl-6">
+                        <label for="image_name" class="formbold-form-label"> Image Name </label>
+                        <input type="text" formControlName="image_name" id="image_name" placeholder="Enter Image Name"
+                            class="formbold-form-input"                              (change)="imageCheck($event)"
+                            />
+                        <mat-error *ngIf="blueprintForm.get('image_name')?.hasError('pattern')">
+                            Please enter only alphanumeric values or it can contain underscore
+                        </mat-error>
+                    </div>
+                    <div class="col-xl-6">
+                        <label for="image_tag" class="formbold-form-label"> Image Tag </label>
+                        <input type="text" formControlName="image_tag" id="image_tag" placeholder="Enter Image Tag"
+                            class="formbold-form-input" />
+                        <mat-error *ngIf="blueprintForm.get('image_tag')?.hasError('pattern')">
+                            Please enter only numeric values
+                        </mat-error>
+                    </div>
+                </div>
+
+
+                <div class="formbold-mb-3 row">
+                    <div class="col-xl-6">
+                        <label for="os_type" class="formbold-form-label"> Operating System Type<span
+                                class="star">*</span> </label>
+                        <select formControlName="os_type" id="os_type" class="formbold-form-input">
+                            <option class="formbold-form-input" value="null" selected="selected" disabled>Select
+                                Operating System Type</option>
+                            <option class="formbold-form-input" value="Linux">Linux</option>
+                            <option class="formbold-form-input" value="Windows">Windows</option>
+                        </select>
+                        <mat-error
+                            *ngIf="blueprintForm.get('os_type')?.touched && blueprintForm.get('os_type')?.hasError('required')">
+                            Please select from above.
+                        </mat-error>
+                    </div>
+                    <div class="col-xl-6">
+                        <label for="os_name" class="formbold-form-label"> Operating System Name<span
+                                class="star">*</span> </label>
+                        <input type="text" formControlName="os_name" id="os_name"
+                            placeholder="Enter Operating System  Name" class="formbold-form-input" />
+                        <mat-error
+                            *ngIf="blueprintForm.get('os_name')?.touched && blueprintForm.get('os_name')?.hasError('required')">
+                            Please fill out this field.
+                        </mat-error>
+                        <mat-error *ngIf="blueprintForm.get('os_name')?.hasError('pattern')">
+                            Please enter only alphanumeric values or it may contain '_'
+                        </mat-error>
+                    </div>
+
+                </div>
+
+                <div class="formbold-mb-3 row" [hidden]="!vboxForm">
+                    <div class="col-xl-6">
+                        <label for="node_id" class="formbold-form-label"> Node ID </label>
+                        <select formControlName="node_id" id="node_id" class="formbold-form-input">
+                            <option class="formbold-form-input" value="null" selected="selected" disabled>Select Node ID
+                            </option>
+                            <option class="formbold-form-input" *ngFor="let id of nodes" [value]="id">{{ id }}</option>
+
+                        </select>
+                    </div>
+                    <div class="col-xl-6">
+                        <label for="snap_name" class="formbold-form-label"> Snapshot Name </label>
+                        <input type="text" formControlName="snap_name" id="snap_name" placeholder="Enter Snapshot Name"
+                            class="formbold-form-input" />
+                    </div>
+
+
+                </div>
+
+                <div class="formbold-mb-3 row">
+                    <div class="col-xl-4">
+                        <label for="honeypot_name" class="formbold-form-label"> Honeypot Name<span class="star">*</span>
+                        </label>
+                        <input type="text" formControlName="honeypot_name" id="honeypot_name"
+                            placeholder="Enter Honeypot Name" class="formbold-form-input" />
+                        <mat-error
+                            *ngIf="blueprintForm.get('honeypot_name')?.touched && blueprintForm.get('honeypot_name')?.hasError('required')">
+                            Please fill out this field.
+                        </mat-error>
+                        <mat-error *ngIf="blueprintForm.get('honeypot_name')?.hasError('pattern')">
+                            Please enter only alphanumeric values or it can contain underscore
+                        </mat-error>
+
+                    </div>
+                    <div class="col-xl-4">
+                        <label for="honeypot_cat" class="formbold-form-label"> Honeypot Category<span
+                                class="star">*</span> </label>
+                        <select formControlName="honeypot_cat" id="honeypot_cat" class="formbold-form-input">
+                            <option class="formbold-form-input" value="null" selected="selected" disabled>Select
+                                Honeypot
+                                Category</option>
+                            <option class="formbold-form-input" value="IoT">IoT</option>
+                            <option class="formbold-form-input" value="WEB">WEB</option>
+                            <option class="formbold-form-input" value="SCADA">SCADA</option>
+                            <option class="formbold-form-input" 
+                            value="WINDOWS" [disabled]="blueprintForm.get('vm_type')?.value === 'docker'" >Windows</option>
+                            <option class="formbold-form-input" value="LINUX" [disabled]="blueprintForm.get('vm_type')?.value === 'docker'">LINUX</option>
+                        </select>
+                        <mat-error
+                            *ngIf="blueprintForm.get('honeypot_cat')?.touched && blueprintForm.get('honeypot_cat')?.hasError('required')">
+                            Please select from above.
+                        </mat-error>
+                        <mat-error *ngIf="blueprintForm.get('honeypot_cat')?.hasError('pattern')">
+                            Please enter only alphabetic values
+                        </mat-error>
+                    </div>
+                    <div class="col-xl-4">
+                        <label for="honeypot_type" class="formbold-form-label"> Honeypot Type<span class="star">*</span>
+                        </label>
+                        <select formControlName="honeypot_type" id="honeypot_type" class="formbold-form-input">
+                            <option class="formbold-form-input" value="null" selected="selected" disabled>Select
+                                Honeypot
+                                Type</option>
+                            <option class="formbold-form-input" value="LIHP">LIHP</option>
+                            <option class="formbold-form-input" value="HIHP"
+                                [disabled]="blueprintForm.get('vm_type')?.value === 'docker'">HIHP</option>
+                        </select>
+                        <mat-error
+                            *ngIf="blueprintForm.get('honeypot_type')?.touched && blueprintForm.get('honeypot_type')?.hasError('required')">
+                            Please select from above.
+                        </mat-error>
+                        <mat-error *ngIf="blueprintForm.get('honeypot_type')?.hasError('pattern')">
+                            Please enter only alphabetic values
+                        </mat-error>
+                    </div>
+                </div>
+                <br><br>
+
+                <!-- first sub form -->
+
+                <div formArrayName="honeypot_profiles">
+
+                    <div class="sub-div mt-2"
+                        *ngFor="let honeypot_profile of honeypot_profiles().controls; let hpIndex=index"
+                        style="padding: 20px ">
+                        <div class="row" *ngIf="isshow[hpIndex]">
+                            <p style="margin-top: 1%;">{{hpIndex+1}}</p>
+                            <button type="button" class="btn btcus" (click)="maximize(hpIndex)"><i
+                                    class="fa fa-plus-circle colo"></i></button>
+                            <mat-error *ngIf="blueprintForm.get('honeypot_profiles.'+hpIndex+'')?.invalid">
+                                <strong>##</strong>
+                            </mat-error>
+                            <div class="profile"><b>Profile name:
+                                </b>{{blueprintForm.get('honeypot_profiles.'+hpIndex+'')?.get('profile_name')?.value}}
+                            </div>
+                        </div>
+                        <div [formGroupName]="hpIndex" *ngIf="!isshow[hpIndex]">
+                            <button type="button" class="btn btcus" (click)="minimize(hpIndex)"><i
+                                    class="fa fa-minus-circle colo"></i></button>
+                            <div class="row">
+                                <div class="col-10">
+                                    <label for="profile_name" class="formbold-form-label"> Profile Name<span
+                                            class="star">*</span> </label>
+                                    <input type="text" formControlName="profile_name" id="profile_name"
+                                        placeholder="Enter Profile Name" class="formbold-form-input" />
+                                    <mat-error
+                                        *ngIf="getFormControl('honeypot_profiles', 'profile_name', hpIndex)?.hasError('required') && getFormControl('honeypot_profiles', 'profile_name', hpIndex)?.touched">
+                                        Please fill out this field.
+                                    </mat-error>
+                                    <mat-error
+                                        *ngIf="getFormControl('honeypot_profiles', 'profile_name', hpIndex)?.hasError('pattern')">
+                                        Please enter only alphanumeric values or it can contain colon
+                                    </mat-error>
+                                </div>
+                                <div class="col-2">
+                                    <button (click)="removehoneypot_profile(hpIndex)" class="btn-danger"><i
+                                            class="fa fa-trash"></i></button>
+                                </div>
+
+                            </div>
+
+                            <!-- second sub form -->
+                            <br><br>
+
+                            <div formArrayName="service">
+                                <div class="sub-div mt-2"
+                                    *ngFor="let service of service(hpIndex).controls; let serviceIndex=index"
+                                    style="padding: 20px">
+                                    <div class="row" *ngIf="isShowService[hpIndex][serviceIndex]">
+                                        <p style="margin-top: 1%;">{{hpIndex+1}}.{{serviceIndex+1}}</p>
+                                        <button type="button" class="btn btcus"
+                                            (click)="maxservice(hpIndex,serviceIndex)"><i
+                                                class="fa fa-plus-circle colo"></i></button>
+                                        <mat-error
+                                            *ngIf="blueprintForm.get('honeypot_profiles.'+hpIndex+'')?.get('service.'+serviceIndex+'')?.invalid">
+                                            <strong>##</strong>
+                                        </mat-error>
+                                        <div class="service"><b>Service name:
+                                            </b>{{blueprintForm.get('honeypot_profiles.'+hpIndex+'')?.get('service.'+serviceIndex+'')?.get('name')?.value}}
+                                            <br>
+                                            <b>PORT:
+                                            </b>{{blueprintForm.get('honeypot_profiles.'+hpIndex+'')?.get('service.'+serviceIndex+'')?.get('port')?.value}}
+                                        </div>
+                                    </div>
+
+
+                                    <div [formGroupName]="serviceIndex" *ngIf="!isShowService[hpIndex][serviceIndex]">
+                                        <button type="button" class="btn btcus"
+                                            (click)="miniservice(hpIndex,serviceIndex)"><i
+                                                class="fa fa-minus-circle colo"></i></button>
+                                        <div class="row">
+                                            <div class="col-10"></div>
+                                            <div class="col-2">
+                                                <button (click)="removeService(hpIndex,serviceIndex)"
+                                                    class="btn-danger"><i class="fa fa-trash"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <label for="name" class="formbold-form-label"> Name<span
+                                                        class="star">*</span> </label>
+                                                <input type="text" formControlName="name" id="name"
+                                                    placeholder="Enter Service Name" class="formbold-form-input" />
+
+                                                <mat-error
+                                                    *ngIf="getServiceFormControl('name', hpIndex,serviceIndex)?.hasError('required') && getServiceFormControl('name', hpIndex,serviceIndex)?.touched">
+                                                    Please fill out this field.
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="getServiceFormControl('name', hpIndex,serviceIndex)?.hasError('pattern')">
+                                                    Please enter only alphanumeric , '-' or '_' or whitespace
+                                                </mat-error>
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="port" class="formbold-form-label"> Port <span
+                                                        class="star">*</span></label>
+                                                <input type="number" formControlName="port" id="port"
+                                                    placeholder="Enter Port Number" class="formbold-form-input" />
+                                                <mat-error
+                                                    *ngIf="getServiceFormControl('port', hpIndex,serviceIndex)?.touched && getServiceFormControl('port', hpIndex,serviceIndex)?.hasError('required')">
+                                                    Please select from above.
+                                                </mat-error>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label for="version" class="formbold-form-label"> Version </label>
+                                                <input type="text" formControlName="version" id="version"
+                                                    placeholder="Enter Version" class="formbold-form-input" />
+                                                <!-- <mat-error
+                                                    *ngIf="getServiceFormControl('name', serviceIndex)?.hasError('required') && getServiceFormControl('name', serviceIndex)?.touched">
+                                                    Please fill out this field.
+                                                </mat-error> -->
+                                                <!-- <mat-error
+                                                    *ngIf="getServiceFormControl('version', serviceIndex)?.hasError('required') && getServiceFormControl('version', serviceIndex)?.touched">
+                                                    Please fill out this field
+                                                </mat-error> -->
+                                                <mat-error
+                                                    *ngIf="getServiceFormControl('version', hpIndex,serviceIndex)?.hasError('pattern')">
+                                                    Please enter only alphanumeric values or it may contain '-', '_',
+                                                    '.' and space.
+                                                </mat-error>
+                                            </div>
+                                            <div class="col-4">
+                                                <label for="protocol" class="formbold-form-label"> Protocol<span
+                                                        class="star">*</span> </label>
+                                                <input type="text" formControlName="protocol" id="protocol"
+                                                    placeholder="Enter Protocol" class="formbold-form-input" />
+                                                <!-- <mat-error
+                                                    *ngIf="getServiceFormControl('protocol', hpIndex,serviceIndex)?.touched && getServiceFormControl('protocol', hpIndex,serviceIndex)?.hasError('required')">
+                                                    Please fill out this field.
+                                                </mat-error> -->
+                                                <mat-error
+                                                    *ngIf="getServiceFormControl('protocol', hpIndex,serviceIndex)?.hasError('pattern')">
+                                                    Please enter only alphabetic values
+                                                </mat-error>
+                                            </div>
+                                            <div class="col-4">
+                                                <label for="description" class="formbold-form-label"> Description<span
+                                                        class="star">*</span>
+                                                </label>
+                                                <input type="text" formControlName="description" id="description"
+                                                    placeholder="Enter Description" class="formbold-form-input" />
+                                                <!-- <mat-error
+                                                    *ngIf="getServiceFormControl('description', hpIndex,serviceIndex)?.touched && getServiceFormControl('description', hpIndex,serviceIndex)?.hasError('required')">
+                                                    Please fill out this field.
+                                                </mat-error> -->
+                                                <mat-error
+                                                    *ngIf="getServiceFormControl('description', hpIndex,serviceIndex)?.hasError('pattern')">
+                                                    Please enter only alphabetic or it can contain space, '&' and
+                                                    unerscore.
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <br><br>
+                                        <!-- third sub form -->
+
+
+                                        <div formArrayName="vulnerability">
+                                            <div class="sub-div mt-2"
+                                                *ngFor="let vulnerability of vulnerability(hpIndex,serviceIndex).controls; let vulIndex=index"
+                                                style="padding: 20px">
+                                                <div [formGroupName]="vulIndex">
+                                                    <div class="row">
+                                                        <div class="col-5">
+                                                            <label for="vulnerability_name" class="formbold-form-label">
+                                                                Vulnerability Name<span class="star">*</span>
+                                                            </label>
+                                                            <input type="text" formControlName="vulnerability_name"
+                                                                id="vulnerability_name"
+                                                                placeholder="Enter Vulnerability Name"
+                                                                class="formbold-form-input" />
+                                                            <mat-error
+                                                                *ngIf="getVulnerabilityFormControl('vulnerability_name', hpIndex, serviceIndex, vulIndex)?.hasError('required') && getVulnerabilityFormControl('vulnerability_name', hpIndex, serviceIndex, vulIndex)?.touched">
+                                                                Please fill out this field.
+                                                            </mat-error>
+                                                            <mat-error
+                                                                *ngIf="getVulnerabilityFormControl('vulnerability_name', hpIndex, serviceIndex, vulIndex)?.hasError('pattern') && getVulnerabilityFormControl('vulnerability_name', hpIndex, serviceIndex, vulIndex)?.touched">
+                                                                Please fill only alphanumeric values or it can contain
+                                                                hyphon.
+                                                            </mat-error>
+                                                        </div>
+                                                        <div class="col-5">
+                                                            <label for="vulnerability_description"
+                                                                class="formbold-form-label">
+                                                                Vulnerability Description<span class="star">*</span>
+                                                            </label>
+                                                            <input type="text"
+                                                                formControlName="vulnerability_description"
+                                                                id="vulnerability_description"
+                                                                placeholder="Enter Vulnerability_Description"
+                                                                class="formbold-form-input" />
+                                                            <!-- <mat-error
+                                                                *ngIf="getVulnerabilityFormControl('vulnerability_description', hpIndex, serviceIndex, vulIndex)?.hasError('required') && getVulnerabilityFormControl('vulnerability_description', hpIndex, serviceIndex, vulIndex)?.touched">
+                                                                Please fill out this field.
+                                                            </mat-error> -->
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <button
+                                                                (click)="removeVulnerability(hpIndex,serviceIndex,vulIndex)"
+                                                                class="btn-danger"><i class="fa fa-trash"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="formbold-mb-3 row">
+                                            <!-- <label for="vulnerability"
+                                                class="formbold-form-label col-2">Vulnerability</label> -->
+                                            <button type="button" class="add-btn m-3"
+                                                (click)="addVulnerability(hpIndex,serviceIndex)">+ Add Vulnerability
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="formbold-mb-3 row mt-2">
+                                <!-- <label for="service" class="formbold-form-label col-2"></label> -->
+                                <button type="button" class="add-btn m-3" (click)="addService(hpIndex)">+ Add
+                                    Service</button>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="formbold-mb-3 row">
+                    <label for="profile" class="formbold-form-label"></label>
+                    <button type="button" class="add-btn m-3" (click)="addhoneypot_profile()">+ Add Honeypot
+                        Profile</button>
+                </div>
+                <hr color="grey" width="99%">
+                <button class="formbold-btn btn-warning" type="submit"
+                    [disabled]="blueprintForm.invalid || imageDiabled ">
+                    <!-- < || imageDiabled> -->
+                    Submit</button>
+            </form>
+        </div>
+    </div>
+</section>

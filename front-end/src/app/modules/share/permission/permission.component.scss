@@ -1,0 +1,50 @@
+.fa-close{
+    font-size: 24px; 
+    color:red; 
+     float: right;
+}
+.btn-right {
+    text-align: -webkit-right;
+}
+.usermenu-tab{
+  height: 50px;  
+  float:  left;
+  width: 96%;
+  margin-left: 4%;
+
+}
+
+.select-all{
+  margin: 5px 17px;
+}
+
+.mat-checkbox{
+  color:black
+}
+::ng-deep .mrgt{
+  margin-top:10px !important;
+}
+
+.ellipsis {
+  height: 20px;
+  width: 250px;
+  padding: 0;
+
+  overflow: hidden;
+  position: relative;
+  display: inline-block;
+
+  text-align: left;
+  text-decoration: none;
+  text-overflow: ellipsis !important;
+  black-space: nowrap;
+//   color: #000;
+}
+.fa-spin {
+  color: #000000;
+  font-size: 20px;
+  margin-left: 20px;
+  --fa-animation-duration: 2s;
+  margin-bottom: -10px;
+  background-color: transparent;
+}

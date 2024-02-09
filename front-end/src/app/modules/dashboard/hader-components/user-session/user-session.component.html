@@ -1,0 +1,87 @@
+<section class="header-design">
+    <app-header></app-header>
+    <div class=" container-fluid">
+        <label class="p-1 colo"><h1><b>User Session Logs</b></h1></label>
+        </div>
+        <div class="mat-elevation-z8 container-fluid">
+
+            <div  *ngIf="searchloaderxl" class="row lod" >
+              <div class="loader text-black"  *ngIf="searchloaderxl" >
+            </div>
+           </div> 
+           <div [hidden]="isShowDiv" ><h2><b  class="colo">Total Logs:</b> <span style="color: black;">{{total_logs}}</span></h2></div>
+ <mat-paginator  [hidden]="isShowDiv" [pageSizeOptions]="[10, 25, 50, 100]" #paginatorSession="matPaginator" aria-label="Select page of users" showFirstLastButtons>
+</mat-paginator>
+
+<table [hidden]="isShowDiv" mat-table [dataSource]="dataSource" matSort #sortSession="matSort" class="mat-elevation-z8 table ">
+
+    <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+         <td mat-cell *matCellDef="let row; let i = index;">
+            {{i+1}}
+            <span class="vis"> {{row.id}}</span>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="datetime">
+        <th mat-header-cell *matHeaderCellDef  > 
+            <div class="row " >
+                <div class="col-12 hedd" mat-sort-header>Date </div>
+                <div class="col-12 hed1">
+                  
+                </div>
+              </div>
+        </th>
+        
+        <td mat-cell *matCellDef="let row; let i = index;">
+            {{row.datetime | date :'medium' }}
+        
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef >  
+            <div class="row " >
+                <div class="col-12 hedd" mat-sort-header>Updated By</div>
+                <div class="col-12 hed1">
+                  <mat-form-field class="filter hed1" floatLabel="never">
+                    <mat-label>Search</mat-label>
+                    <input class="inp1" matInput [formControl]="nameFilter">
+                  </mat-form-field>
+                </div>
+              </div>
+
+            
+        </th>
+        <td mat-cell *matCellDef="let row; let i = index;">
+            {{ row.user_superadmin[0].name}}
+           
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef > 
+            <div class="row " >
+                <div class="col-12 hedd" mat-sort-header>Action </div>
+                <div class="col-12 hed1">
+                  
+                </div>
+              </div>    
+        </th>
+        <td mat-cell *matCellDef="let row; let i = index;">
+            {{ row.action}} ->  {{ row.users[0]?.name}}
+           
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="9">No data Found</td>
+                </tr>
+</table>
+
+           </div>
+    </section>
+

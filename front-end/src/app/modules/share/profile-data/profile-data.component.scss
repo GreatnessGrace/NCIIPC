@@ -1,0 +1,37 @@
+table, th, td {
+    margin-top: inherit;
+    width: -webkit-fill-available;
+  }
+
+  .table-striped > tbody > tr:nth-child(odd) > td, .table-striped > tbody > tr:nth-child(odd) > th {
+    background-color: #0a0d16;
+  }
+  .table-striped > tbody > tr:nth-child(even) > td, .table-striped > tbody > tr:nth-child(even) > th {
+    background-color: #181F32;
+  }
+  ::ng-deep .table-striped > tbody > tr:nth-child(even) > td {
+    background-color: transparent !important;
+    color: black !important;
+
+  }
+  ::ng-deep .table-striped > tbody > tr:nth-child(odd) > td {
+    background-color: white !important;
+    color: black !important;
+
+  }
+  .table td{
+    // color: #fff !important;
+  }
+
+  .table th{
+    color: #fdb927;
+    // background-color: black;
+    
+    padding: 10px;
+    vertical-align: middle;
+}
+
+.sect {
+  max-height: 750px;
+  overflow-y: scroll;
+}

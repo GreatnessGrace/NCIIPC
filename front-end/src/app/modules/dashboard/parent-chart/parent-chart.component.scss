@@ -1,0 +1,122 @@
+.rounded-circle{
+    border-radius: 2% !important;
+}
+
+.float-lt{
+    float:left;
+}
+
+.chart-box{
+    padding-right: 15px;
+    
+}
+
+.float-rt{
+    float: right;
+}
+
+.loader {
+    border: 20px solid #000000;
+    border-radius: 50%;
+    border-top: 20px solid grey;
+    width: 110px;
+    height: 110px;
+    margin-left:45% !important;
+    margin-top:80px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+  }
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .load{
+    padding:10px;
+     height:700px;
+  }
+table, th, td {
+    margin-top: inherit;
+    width: -webkit-fill-available;
+  }
+  .mt-5, .my-5{
+     margin-top: 1rem!important
+ }
+.pch1{
+    height:20px;
+     width:20px;
+      cursor: pointer;
+}
+.pch2{
+    height:25px;
+     width:25px;
+      cursor: pointer;
+}
+.table-sec{
+    height: 250px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    // padding: 0.5rem;
+    // padding-top:0px ;
+    padding: 5px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+
+
+.table td,th{
+    border-top:none;
+    padding: 0.35rem;
+
+}
+.pie{
+    margin-left: auto;
+    margin-right: auto; 
+    padding: 0px;
+}
+.row{
+    margin-left: auto;
+    margin-right: auto;  
+}
+.table th{
+    color: #000000;
+    background-color: #e7e7e7;
+    
+    padding: 10px;
+    vertical-align: middle;
+}
+.imgg{
+    height:18px;
+    width:34px;
+}
+.buttonn{
+    border: 1px solid grey;
+    color: #000000;
+    height:35px;
+    width:35px;
+    margin-top: 10px;
+    background-color: transparent;
+    padding: 0px;
+    float: right;
+}
+::ng-deep .mat-button{
+    padding:0px !important;
+}
+::ng-deep .d1{
+    background-color: #dcebcc;
+    color:black !important;
+}
+.table-striped > tbody > tr:nth-child(odd) > td, .table-striped > tbody > tr:nth-child(odd) > th {
+    background-color: #fff;
+    color: black;
+ }
+ .table-striped > tbody > tr:nth-child(even) > td, .table-striped > tbody > tr:nth-child(even) > th {
+    background-color: #dcebcc;
+    color: black;
+ }

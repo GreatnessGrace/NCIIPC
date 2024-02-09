@@ -1,0 +1,245 @@
+<section class="header-design">
+    <app-header></app-header>
+
+    <div class="col-sm-12  background">
+        <div class="panel">
+            <div class="panel-heading">
+                <h2 class=" colo">
+                    <b>Download PCAP Data Related to Captured Binary</b>
+                </h2>
+            </div>
+
+            <div class="panel-body">
+                <form role="form" [formGroup]="pcapForm">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="startdate">Start Date</label>
+                                <div class="input-group">
+                                    <div class="input-group date-picker">
+                                        <input matInput [matDatepicker]="startdate"
+                                            (dateChange)="orgValueChange($event,'start')" formControlName="start_date"
+                                            class="form-control cal mat-input-d" placeholder="Select Start Date"
+                                            id="startdate">
+                                        <mat-datepicker-toggle matIconSuffix [for]="startdate"
+                                            class="mat-datepicker-t"></mat-datepicker-toggle>
+                                        <mat-datepicker #startdate></mat-datepicker>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="enddate">End Date</label>
+                                <div class="input-group date-picker">
+                                    <input matInput [matDatepicker]="picker2" [(ngModel)]="endDate" standAlone="true"
+                                        (dateChange)="orgValueChange($event,'end')" formControlName="end_date"
+                                        class="form-control cal mat-input-d" placeholder="Select End Date" id="enddate">
+                                    <mat-datepicker-toggle matIconSuffix [for]="picker2"
+                                        class="mat-datepicker-t"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker2></mat-datepicker>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="node">Select Binary ID <i *ngIf="this.searchloaderxs"
+                                        class="fa fa-spinner fa-spin sml"></i></label>
+                                <select class="form-control h38" id="node" formControlName="pcap"
+                                    (change)="getBinaryPcap($event)">
+                                    <option value="" class="">-- Select Binary ID--</option>
+                                    <option *ngFor="let bin of Binaries" [value]="bin.key">{{bin.key}}</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+                <hr color="grey" class="hrw">
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid contwid">
+
+        <div *ngIf="this.searchloaderxl" class="row lod">
+            <div class="loader text-white" *ngIf="this.searchloaderxl">
+            </div>
+        </div>
+    </div>
+    <!-- <div class="background table-div" [hidden]="this.showSnort">
+        <mat-paginator #paginatorEvent="matPaginator" [pageSizeOptions]="[10, 25, 50, 100]" 
+        aria-label="Select page of users" showFirstLastButtons>
+    </mat-paginator>
+        <table mat-table [dataSource]="dataSource" #sort="matSort" matSort class="table-striped table" >
+
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef class="tab-header">
+                    <div class="row">
+                        <div class="col-12 hed"># </div>
+                        <div class="col-12 hed1"></div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let row; let i = index;">{{i+1}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="node_id">
+                <th mat-header-cell *matHeaderCellDef class="tab-header">
+                    <div class="row">
+                        <div class="col-12 hed" mat-sort-header>Node</div>
+                        <div class="col-12 hed1">
+                            <mat-form-field class="filter" floatLabel="never">
+                                <mat-label>Search</mat-label>
+                                <input matInput [formControl]="nodeFilter">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let row;">{{row._source.node_id}} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="vul_name">
+                <th mat-header-cell *matHeaderCellDef class="tab-header">
+                    <div class="row">
+                        <div class="col-12 hed" mat-sort-header>Vulnerability Name</div>
+                        <div class="col-12 hed1">
+                            <mat-form-field class="filter" floatLabel="never">
+                                <mat-label>Search</mat-label>
+                                <input matInput [formControl]="vulFilter">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let row;">{{row._source.event_data.vul_name}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="severity">
+                <th mat-header-cell *matHeaderCellDef class="tab-header">
+                    <div class="row">
+                        <div class="col-12 hed" mat-sort-header>Severity</div>
+                        <div class="col-12 hed1">
+                            <mat-form-field class="filter" floatLabel="never">
+                                <mat-label>Search</mat-label>
+                                <input matInput [formControl]="severityFilter">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let row;">{{row._source.event_data.nvd_reference.severity}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="remote_ip">
+                <th mat-header-cell *matHeaderCellDef class="tab-header">
+                    <div class="row">
+                        <div class="col-12 hed" mat-sort-header>Attacker IP</div>
+                        <div class="col-12 hed1">
+                            <mat-form-field class="filter" floatLabel="never">
+                                <mat-label>Search</mat-label>
+                                <input matInput [formControl]="remoteIPFilter">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let row;">{{row._source.event_data.remote_ip}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="remote_port">
+                <th mat-header-cell *matHeaderCellDef class="tab-header">
+                    <div class="row">
+                        <div class="col-12 hed" mat-sort-header>Attacker Port</div>
+                        <div class="col-12 hed1">
+                            <mat-form-field class="filter" floatLabel="never">
+                                <mat-label>Search</mat-label>
+                                <input matInput [formControl]="remotePortFilter">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let row;">{{row._source.event_data.remote_port}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="local_ip">
+                <th mat-header-cell *matHeaderCellDef class="tab-header">
+                    <div class="row">
+                        <div class="col-12 hed"  mat-sort-header>Sensor IP</div>
+                        <div class="col-12 hed1">
+                            <mat-form-field class="filter" floatLabel="never">
+                                <mat-label>Search</mat-label>
+                                <input matInput [formControl]="localIPFilter">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let row;">{{row._source.event_data.local_ip}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="local_port">
+                <th mat-header-cell *matHeaderCellDef class="tab-header">
+                    <div class="row">
+                        <div class="col-12 hed"  mat-sort-header>Sensor Port</div>
+                        <div class="col-12 hed1">
+                            <mat-form-field class="filter" floatLabel="never">
+                                <mat-label>Search</mat-label>
+                                <input matInput [formControl]="localPortFilter">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let row;">{{row._source.event_data.local_port }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="basescore">
+                <th mat-header-cell *matHeaderCellDef class="tab-header">
+                    <div class="row">
+                        <div class="col-12 hed"  mat-sort-header>NVD Base Score</div>
+                        <div class="col-12 hed1">
+                            <mat-form-field class="filter" floatLabel="never">
+                                <mat-label>Search</mat-label>
+                                <input matInput [formControl]="basescoreFilter">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let row;">{{row._source.event_data.nvd_reference.basescore }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="protocol">
+                <th mat-header-cell *matHeaderCellDef class="tab-header">
+                    <div class="row">
+                        <div class="col-12 hed"  mat-sort-header>Protocol</div>
+                        <div class="col-12 hed1">
+                            <mat-form-field class="filter" floatLabel="never">
+                                <mat-label>Search</mat-label>
+                                <input matInput [formControl]="protocolFilter">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let row;">{{row._source.event_data.protocol }} </td>
+            </ng-container>
+
+           
+
+            <ng-container matColumnDef="download">
+                <th mat-header-cell *matHeaderCellDef class="tab-header">
+                    <div class="row">
+                        <div class="col-12 hed">Download</div>
+                        <div class="col-12 hed1"></div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let row;"> <button class="evt" (click)="node_pcap(row._source.event_data.file_path)"><i class="fa fa-file-pdf-o"></i> Download</button></td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="13">No data found</td>
+            </tr>
+        </table>
+    </div> -->
+
+</section>

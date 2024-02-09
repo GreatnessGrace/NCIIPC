@@ -1,0 +1,183 @@
+<section>
+  <div *ngIf="this.showsearch" class="text-center row chipmb">
+    <div class="col-xl-1"></div>
+    <div class="col-xl-10">
+      <form [formGroup]="chipsForm">
+        <div class="row menuu">
+          <div class="col-xl-2">
+            <mat-form-field appearance="fill" class="ml-3 mt-3 ww" *ngIf="userType !== 'user'">
+              <mat-label class="hint-color">Region</mat-label>
+              <mat-select multiple formControlName="region">
+                <div class="select-all">
+                  <mat-checkbox [(ngModel)]="allRegionSelected" [ngModelOptions]="{standalone: true}"
+                    (change)="toggleAllSelection('region')">Select All</mat-checkbox>
+                </div>
+                <mat-option *ngFor="let regoin of regions" class="chipbg" [value]="regoin" (click)="selectedRegions()">
+                  <span class="input-value"> {{regoin.key}} </span>
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <i *ngIf="this.searchloaderReg"
+            class="fa fa-spinner fa-spin smol"></i>
+          </div>
+          <div class="col-xl-2">
+            <mat-form-field appearance="fill" class="ml-3 mt-3 ww" *ngIf="userType !== 'user'">
+              <mat-label class="redd">Sector</mat-label>
+              <mat-select multiple formControlName="sector" #sectorSelect>
+                <div class="select-all">
+                  <mat-checkbox [(ngModel)]="allSectorSelected" [ngModelOptions]="{standalone: true}"
+                    (change)="toggleAllSelection('sector')">Select All</mat-checkbox>
+                </div>
+                <mat-option class="chipbg" *ngFor="let topping of finalSectorList; let i =  index"
+                  (click)="selectedSector()" [value]="topping">
+                  {{topping.key}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <i *ngIf="this.searchloaderSec"
+            class="fa fa-spinner fa-spin smol"></i>
+          </div>
+          <div class="col-xl-2">
+            <div class="select-all ml-3 mt-3 w200">
+              <ng-multiselect-dropdown formControlName="organization" placeholder="Organizations" id="searchValue"
+                [settings]="dropdownSettings" [data]="finalOrganizationList" [(ngModel)]="selectedItems"
+                (onSelectAll)="onSelectAll($event)">
+              </ng-multiselect-dropdown>
+            </div>
+            <i *ngIf="this.searchloaderOrg"
+            class="fa fa-spinner fa-spin smol"></i>
+          </div>
+          <div class="col-xl-2">
+
+            <mat-form-field appearance="fill" class="ml-3 mt-3 ww">
+              <mat-label>Select Filter</mat-label>
+              <mat-select formControlName="dateFilter" (selectionChange)="onDateFilterChange($event)">
+                <mat-option class="choption" *ngFor="let filter of dateFilterArray"
+                  [value]="filter.key">{{filter.value}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-xl-2" *ngIf="showDateFilter">
+            <mat-form-field appearance="fill" class="ml-3 mt-3 ww">
+              <mat-label class="hint-color"> Date Range</mat-label>
+              <mat-date-range-input [rangePicker]="rangePicker">
+                <input #min formControlName="StartDate" matStartDate placeholder="Start date">
+                <input #max formControlName="EndDate" matEndDate placeholder="End date">
+              </mat-date-range-input>
+              <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+              <mat-date-range-picker #rangePicker>
+                <mat-date-range-picker-actions>
+                  <button class="btn mr-2" matDateRangePickerCancel>Cancel</button>
+                  <button class="btn btn-primary" (click)="dateRange(min.value, max.value)"
+                    matDateRangePickerApply>Apply</button>
+                </mat-date-range-picker-actions>
+              </mat-date-range-picker>
+            </mat-form-field>
+          </div>
+          <div class="col-xl-2">
+            <button class="btn btn-warning ml-3 mt-4" (click)="submitbutton('call')"
+              [disabled]="isDisabled">Submit</button>
+            <i *ngIf="this.searchloader" class="fa fa-spinner fa-spin"></i>
+          </div>
+        </div>
+
+
+
+
+
+
+
+        <!-- 
+        <mat-form-field appearance="fill" class="ml-3 mt-3" >
+          <mat-label class="redd">Organization</mat-label>
+          <mat-select multiple formControlName="organization" #oranizationSelect>
+             <div class="select-all" >
+              <mat-checkbox [(ngModel)]="allOrganisationSelected"
+                [ngModelOptions]="{standalone: true}"
+                (change)="toggleAllSelection('organization')">Select All</mat-checkbox>
+            </div>
+            <mat-option style="background-color: #fff !important; color: antiqueblack !important" *ngFor="let topping of finalOrganizationList; let i =  index"
+              (click)="selectedOrganization()" [value]="topping">
+              {{topping.key}}</mat-option>
+          </mat-select>
+        </mat-form-field> -->
+
+
+
+
+
+
+        <!-- <mat-form-field appearance="fill" class="ml-3 mt-3"  >
+          <mat-label class="redd">Node ID</mat-label>
+          <mat-select multiple formControlName="node" #nodeSelect>
+            <div class="select-all" style="background-color: #fff !important; color: antiqueblack !important;">
+              <mat-checkbox [(ngModel)]="allNodeSelected"
+                [ngModelOptions]="{standalone: true}"
+                (change)="toggleAllSelection('nodes')">Select All</mat-checkbox>
+            </div>
+            <mat-option style="background-color: #fff !important; color: antiqueblack !important" *ngFor="let topping of finalNodeList; let i =  index" (click)="nodeAccess()" [value]="topping">
+              {{topping.id}}</mat-option>
+          </mat-select>
+        </mat-form-field> -->
+
+
+
+
+
+
+
+      </form>
+    </div>
+    <div class="col-xl-1"></div>
+
+  </div>
+  <button *ngIf="!this.showsearch" title="Toggle Search" class="btn btcus" (click)="togsearch()"><i
+      class="fa fa-search-plus colo"></i>
+  </button>
+  <button *ngIf="this.showsearch" title="Hide Search" class="btn btcus" (click)="togsearch()"><i
+      class="fa fa-search-minus colo " (click)="togsearch()"></i>
+  </button>
+  <button *ngIf="!this.togchips" [hidden]="chipsDataDiv" title="Toggle Chips" class="btn btcus" (click)="togchip()"><i
+      class="fa fa-plus-circle colo"></i>
+  </button>
+  <button *ngIf="this.togchips" [hidden]="chipsDataDiv" title="Hide Chips" class="btn btcus" (click)="togchip()"><i
+      class="fa fa-minus-circle colo"></i>
+  </button>
+
+  <div class="background" [hidden]="chipsDataDiv">
+    <div class="matwrap" [ngClass]="{ 'matwrap2': togchips }">
+      <mat-chip-list class="mb-5">
+
+        <mat-chip *ngFor="let data of chipsData;" class="mt-1 d-flex " [class]="data.color">
+
+          <div class="col-3 chip-block">
+            <img class="imggg" src="{{assetPath}}/logos/{{data?.key}}.png">
+          </div>
+          <div class="col-9 chip-data ">
+            <div class="row">
+              <div class="col-md-12 pt-3 tblac">
+                <span *ngIf="data?.key == 'attack_log'">Payload Dropped</span>
+                <span *ngIf="data?.key != 'attack_log'">{{data?.key}}</span>
+              </div>
+              <div class="col-md-12 chipsDig">
+                <h3 *ngIf="!showCommaSeperate" [countUp]="data?.doc_count" [duration]="5000"></h3>
+                <h3 *ngIf="showCommaSeperate">{{data?.doc_count | number}}  <img class="img_chart" src="{{assetPath}}/images_and_logos/{{data?.status}}.png"> <br>
+                  <span  [ngClass]="data.status == 'up' ? 'status-up' : 'status-down'">
+                   <span *ngIf="data.status == 'up'">+</span>
+                  <!-- <i [ngClass]="data.status == 'up' ? 'fa fa-long-arrow-up' : 'fa fa-long-arrow-down'"></i>  -->
+              {{data?.difference}} (  {{data?.diffPercentage}} )
+                  </span>
+
+
+                </h3>
+              </div>
+            </div>
+
+
+
+        </div>
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+
+  </div>
+</section>

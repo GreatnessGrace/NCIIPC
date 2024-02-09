@@ -1,0 +1,20 @@
+<INIT>
+    <server_ip>::1</server_ip>
+    <network_type>Public</network_type>
+    <interface>en2</interface>
+    <node_ip>10.2.3.2</node_ip>
+    <subnet>9.36.36.0/2</subnet>
+    <netmask>2.3.3.3</netmask>
+    <gateway>5.9.0.5</gateway>
+    <dns>8.8.8.8</dns>
+    <virtual_tech>Docker</virtual_tech>
+    <image_path>/images/os</image_path>
+    <conf_timer>300</conf_timer>
+    <data_timer>14400</data_timer>
+    <pcap_timer>3600</pcap_timer>
+    <organization>SAS</organization>
+    <organization_sector>Government</organization_sector>
+    <organization_region>North</organization_region>
+    <longitude>2.3</longitude>
+    <latitude>1.2</latitude>
+</INIT>

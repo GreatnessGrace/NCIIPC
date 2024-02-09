@@ -1,0 +1,168 @@
+<section class="header-design">
+    <app-header></app-header>
+    <div class="col-lg-12 ">
+        <div class="panel">
+            <div class="panel-heading">
+                <h1 class=" colo">
+                    <b>Search by Indicator</b>
+                </h1>
+            </div>
+            <br>
+            <div>
+                <ng-container *ngIf="!isImportScreen; else import_screen;">
+                    <div class="box-body col-lg-12">
+                        <form class="inline-form" [formGroup]="indicatorForm" (ngSubmit)="onSubmit()">
+                            <div class="form-group col-lg-2">
+                                <label for="type">Select Indicator Type:</label>
+                                <select class="form-control h32" id="searchtype"  required=""
+                                    formControlName="type" (change)="selectionChange($event)">
+                                    <option value="" class="">-- Select Indicator Type --</option>
+                                    <option value="ip" class="">IP Address</option>
+                                    <option value="hash" class="">Hash</option>
+                                    <option value="url" class="">URL</option>
+                                </select>
+                                <mat-error class="error"
+                                    *ngIf="(formSubmitted || f['type'].touched) && f['type']?.errors?.['required']">
+                                    Please select indicator type.
+                                </mat-error>
+                            </div>
+                            <div class="form-group col-lg-3">
+                                <label for="value">Enter Indicator Value:</label>
+                                <input type="text" class="form-control" id="searchValue" 
+                                    required="" formControlName="value" />
+                                <mat-error class="error"
+                                    *ngIf="(formSubmitted || f['value'].touched) && f['value']?.errors?.['required']">
+                                    Please select value.
+                                </mat-error>
+                                <mat-error class="error"
+                                    *ngIf="(formSubmitted || f['value'].touched) && f['value']?.errors?.['pattern']">
+                                    Please enter valid value.
+                                </mat-error>
+                            </div>
+                            <div class="form-group col-lg-2 mt-3" >
+                                <button id="submit" type="submit" class="btn">
+                                    <span class="fa fa-search"></span> Search
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <hr color="grey" class="hrw">
+                    <div *ngIf="searchloader" class="row lod4">
+                        <div class="loader text-black" *ngIf="searchloader">
+                        </div>
+                    </div>
+                    <div class="col-lg-12" *ngIf="!searchloader">
+                        <textarea name="data" class="text-area-ntw"
+                            [(ngModel)]="textData"></textarea>
+                        <button type="button" class="btn ml-1" data-toggle="modal" data-target="#exampleVisModal"
+                            (click)="graphView('mainData')">Data Visualization</button>
+                        <button type="button" class="btn ml-4" (click)="download()">Download</button>
+                        <button type="button" class="btn ml-4" (click)="isImportScreen = true">Import</button>
+                    </div>
+                </ng-container>
+                <ng-template #import_screen>
+                    <div class="col-lg-12">
+                        <div class="col-lg-7 left-align">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <textarea name="data" class="text-area-import" placeholder="Enter STIX Data" [(ngModel)]="importDta"></textarea>
+                                </div>
+                                <div class="col-md-12">
+                                    
+                            <button type="button" class="btn ml-1" (click)="searchData()">Search</button>
+                            <button type="button" class="btn ml-4" (click)="changeView()">Back</button>
+                            <button type="button" class="btn ml-4" data-toggle="modal" data-target="#exampleVisModal"
+                            (click)="graphView('importedData')"  *ngIf="this.showtable">Data Visualization</button>
+                                </div>
+                            </div>
+                       
+                        </div>
+                        <div class="col-lg-5 left-align">
+                           <span class="pagin" *ngIf="this.showtable"> Total : {{totalIndicatorTypes}}</span>
+                            <table *ngIf="this.showtable" class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Indicator</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of indicatorTypes;let i = index">
+                                        <td>{{ i+1 }}</td>
+                                        <td>{{item.key}}</td>
+                                        <td>{{item.value}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                      
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleVisModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl w1200" role="document" >
+            <div class="modal-content stic">
+                <div class="modal-header border-0">
+                    <h1 class="modal-title colo">Stix Visualization Graph </h1>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body container-fluid">
+                    <div class="modal-body stixv">
+                        <div id="canvas-container" class="hidden din" >
+                            <div id="canvas-wrapper">
+                                <svg id="canvas" class="svgg"></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!----------------Modal Info ---------------------->
+    <div class="modal fade" id="exampleInfoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        [ngStyle]="{'display':display}" aria-hidden="true" [ngClass]="{'show':display == 'block'}">
+        <div class="modal-dialog modal-s mmt " role="document" >
+            <div class="modal-content backk ">
+                <div class="modal-header border-0">
+                    <h1 class="modal-title colo">Selected Node Detailed Relationship
+                        Information </h1>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body w500">
+                    <div class="modal-body dbo"
+                        >
+                        <table class="table-rec">
+                            <tr *ngFor="let item of infoData | keyvalue">
+                                <ng-container *ngIf="item.key == 'Source:' || item.key == 'Target:';else other_content">
+                                    <td class="w20"> {{item.key}}</td>
+                                    <td class="w80"> {{item.value | json }}</td>
+                                </ng-container>
+                                <ng-template #other_content>
+                                    <td class="w20"> {{item.key}}</td>
+                                    <td class="w80"> {{item.value}}</td>
+                                </ng-template>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal"
+                        (click)="closeModal()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

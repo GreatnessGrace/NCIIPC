@@ -1,0 +1,299 @@
+<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-xl ccc" role="document">
+    <div class="modal-content backk">
+      <div class="modal-header border-0">
+        <h1 class="modal-title colo">Attack on Node </h1>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="map-full" class="container-fluid"></div>
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<section class="header-design">
+  <app-header></app-header>
+  <div class="map-div">
+    <div class="panel-heading">
+      <h1 class="panel-title m-3">
+        <span class="colo"><b> Node Dashboard</b></span>
+      </h1>
+    </div>
+    <!-- <hr color="grey" class="hrw"> -->
+    <div class="text-center">
+      <form [formGroup]="chipsForm">
+        <mat-form-field appearance="fill" class="ml-3 mt-3">
+          <mat-label class="hint-color">Region</mat-label>
+          <mat-select multiple formControlName="region">
+            <div class="select-all">
+              <mat-checkbox [(ngModel)]="allRegionSelected" [ngModelOptions]="{standalone: true}"
+                (change)="toggleAllSelection('region')">Select All</mat-checkbox>
+            </div>
+            <mat-option *ngFor="let regoin of regions" [value]="regoin" (click)="selectedRegions()">
+              <span class="input-value"> {{regoin.key}} </span>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <!-- <mat-form-field appearance="fill" class="ml-3 mt-3">
+          <mat-label class="redd">Sector</mat-label>
+          <mat-select multiple formControlName="sector" #sectorSelect>
+            <div class="select-all">
+              <mat-checkbox [(ngModel)]="allSectorSelected" [ngModelOptions]="{standalone: true}"
+                (change)="toggleAllSelection('sector')">Select All</mat-checkbox>
+            </div>
+            <mat-option *ngFor="let topping of finalSectorList; let i =  index" (click)="selectedSector()"
+              [value]="topping">
+              {{topping.key}}</mat-option>
+          </mat-select>
+        </mat-form-field> -->
+        <mat-form-field appearance="fill" class="ml-3 mt-3">
+          <mat-label class="redd">Organization</mat-label>
+          <mat-select multiple formControlName="organization" #oranizationSelect>
+            <div class="select-all">
+              <mat-checkbox [(ngModel)]="allOrganisationSelected" [ngModelOptions]="{standalone: true}"
+                (change)="toggleAllSelection('organization')">Select All</mat-checkbox>
+            </div>
+            <mat-option *ngFor="let topping of finalOrganizationList; let i =  index" (click)="selectedOrganization()"
+              [value]="topping">
+              {{topping.key}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button class="btn btn-warning ml-4 mb-3" (click)="submitbutton('call')"
+          [disabled]="chipsForm.invalid">Submit</button>
+        <i *ngIf="this.searchloader" class="fa fa-spinner fa-spin"></i>
+      </form>
+    </div>
+
+    <!-- <hr color="grey" width="96%"> -->
+    <br>
+    <div class="row">
+      <div class="col-xl-5">
+        <div class="map-frame">
+          <div>
+            <button type="button" class="btn colo backk p-0 ml-2" data-toggle="modal" data-target="#exampleModal1"
+              title="Full screen view" (click)="invalidateSize()">
+              <i class="fa fa-expand" aria-hidden="true"></i>
+            </button>
+            <div id="heat-map" class="container-fluid">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-7">
+        <div class="row">
+          <div class="col-xl-6  sidechart" *ngFor="let chart of chartMapData; let i = index">
+            <div class="chartcolor mb-3">
+              <div class="row">
+                <div class="col-1"></div>
+                <div class="col-9 text-center pt-2">
+                  <h1 class="ml-1 colo">{{chart.message}}</h1>
+                </div>
+                <div class="col-2">
+                  <button type="button" [matMenuTriggerFor]="menu2" class="btn buttonn">
+                    <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+                    <mat-menu #menu2="matMenu" class="d1">
+                      <span *ngIf="chartType[i] != 'table'" mat-menu-item (click)="chartToggle(i, 'table')"
+                        class="text-white">
+                        <img src="{{assetPath}}/images_and_logos/tablepic.png" title="Table" class="pch2">
+
+                        Table</span>
+                      <span *ngIf="chartType[i] != 'pie'" mat-menu-item (click)="chartToggle(i, 'pie')"
+                        class="text-white">
+                        <img src="{{assetPath}}/images_and_logos/piechart.png" title="Chart View" class="pch2">
+                        Pie
+                        Chart</span>
+                      <span *ngIf="chartType[i] != 'bar'" mat-menu-item class="text-white"
+                        (click)="chartToggle(i, 'bar')">
+                        <img src="{{assetPath}}/images_and_logos/bar-chart.png" title="Chart View" class="pch1">
+                        Bar
+                        Chart</span>
+                    </mat-menu>
+                  </button>
+                </div>
+              </div>
+              <!-- <div class="col-xl-3"> -->
+
+
+              <div class="row">
+                <div *ngIf="chartType[i] == 'table'" class="text-center col-xl-12 ">
+                  <div class="table-sec mt-3">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th class="text-left">
+                            Status
+                          </th>
+                          <th>
+                            Total Nodes
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let data of chart['data']" ng-repeat-start="action in thing.actions"
+                          ng-class-odd="odd" ng-class-even="even">
+                          <td class="text-left">
+
+                            {{data.key}}
+                          </td>
+                          <td>
+                            {{data.doc_count}}
+                          </td>
+                        </tr>
+                        <tr *ngIf="!chart['data'].length && chart['data']">
+                          <td colspan="2">No data.</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="text-center col-xl-12 ">
+                  <div class="pie" *ngIf="chartType[i] == 'pie'">
+                    <app-child-chart [chartData]="chart" [chartId]="i+1" class="chrtt"></app-child-chart>
+                  </div>
+                  <div class="pie" *ngIf="chartType[i] == 'bar'">
+                    <app-bar-charts [chartData]="chart" [chartId]="i+1"></app-bar-charts>
+                  </div>
+                </div>
+                <div class="text-center col-xl-12 ">
+
+                  <h3 class="ml-1 colo" *ngIf="chart.message == 'Node Status'">{{nodesTotal}}</h3>
+                  <h3 class="ml-1 colo" *ngIf="chart.message == 'Honeypot Status'">{{ honeypotTotal}}</h3>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+<br>
+<!--  -->
+<div class="col-xl-12">
+  <div class="row">
+    <div class="col-xl-4  sidechart" *ngFor="let chart of chartAllData; let i = index">
+      <div class="chartcolor mb-3">
+        <div class="row">
+          <div class="col-1"></div>
+          <div class="col-9 text-center pt-2">
+            <h1 class="ml-1 colo">{{chart.message}}</h1>
+          </div>
+          <div class="col-2">
+            <button type="button" [matMenuTriggerFor]="menu2" class="btn buttonn">
+              <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+              <mat-menu #menu2="matMenu" class="d1">
+                <span *ngIf="chartType[i] != 'table'" mat-menu-item (click)="chartToggle(i, 'table')"
+                  class="text-white">
+                  <img src="{{assetPath}}/images_and_logos/tablepic.png" title="Table" class="pch2">
+
+                  Table</span>
+                <span *ngIf="chartType[i] != 'pie'" mat-menu-item (click)="chartToggle(i, 'pie')"
+                  class="text-white">
+                  <img src="{{assetPath}}/images_and_logos/piechart.png" title="Chart View" class="pch2">
+                  Pie
+                  Chart</span>
+                <span *ngIf="chartType[i] != 'bar'" mat-menu-item class="text-white"
+                  (click)="chartToggle(i, 'bar')">
+                  <img src="{{assetPath}}/images_and_logos/bar-chart.png" title="Chart View" class="pch1">
+                  Bar
+                  Chart</span>
+              </mat-menu>
+            </button>
+          </div>
+        </div>
+        <!-- <div class="col-xl-3"> -->
+
+
+        <div class="row">
+          <div *ngIf="chartType[i] == 'table'" class="text-center col-xl-12 ">
+            <div class="table-sec mt-3">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th class="text-left">
+                      Honeypot
+                    </th>
+                    <th>
+                      Total Count
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of chart['data']" ng-repeat-start="action in thing.actions"
+                    ng-class-odd="odd" ng-class-even="even">
+                    <td class="text-left">
+
+                      {{data.key}}
+                    </td>
+                    <td>
+                      {{data.doc_count}}
+                    </td>
+                  </tr>
+                  <tr *ngIf="!chart['data'].length && chart['data']">
+                    <td colspan="2">No data.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="text-center col-xl-12 ">
+            <div class="pie" *ngIf="chartType[i] == 'pie'">
+              <app-child-chart [chartData]="chart" [chartId]="i +1" class="chrtt"></app-child-chart>
+            </div>
+            <div class="pie" *ngIf="chartType[i] == 'bar'">
+              <app-bar-charts [chartData]="chart" [chartId]="i"></app-bar-charts>
+            </div>
+          </div>
+          <div class="text-center col-xl-12 ">
+
+            <h3 class="ml-1 colo" *ngIf="chart.message == 'Node Status'">{{nodesTotal}}</h3>
+            <h3 class="ml-1 colo" *ngIf="chart.message == 'Honeypot Status'">{{ honeypotTotal}}</h3>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+<!--  -->
+  <br>
+  <div class="text-center  col-xl-12 p-2" *ngFor="let chart of pieChartData; let i = index ">
+    <div class="chart-box chart-box1">
+      <div class="row">
+
+        <div class="col-xl-2"></div>
+        <div class="col-xl-8">
+          <h1 class="colo pt-1"><b>{{chart.message}}</b></h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12">
+          <app-double-pie-chart [lineChart]="chart" [lineId]="i"></app-double-pie-chart>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+  <div class="row  ">
+    <div class="chart-box chart-box1" style="width: 100%;">
+
+    <div class="col-xl-12 ">
+      <h1 class="colo pt-1" style="text-align: center;"><b>Node Deployement</b></h1>
+      <app-time-graph></app-time-graph>                 
+             </div>
+            </div>
+</div>
+  <br>
+  <br>
+</section>

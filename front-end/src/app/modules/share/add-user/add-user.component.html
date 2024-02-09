@@ -1,0 +1,196 @@
+<div>
+
+  <h3 class="text-black">
+    <b><i class="fa fa-user-plus text-warning" aria-hidden="true"></i>&nbsp;Add User</b>
+    <div class="float-right" (click)="closeButton('simple')">
+      <i class="fa fa-close"></i>
+    </div>
+  </h3>
+  <hr color="grey">
+</div>
+<div class="main-design text-center">
+
+
+
+  <form [formGroup]="signUpForm" #sign="ngForm">
+    <div class="row">
+      <div class="col-6">
+        <label class="label-sec">Full Name</label>
+        <input type="text" placeholder="Enter Full Name" formControlName="name" autocomplete="off" />
+        <mat-error class="error" *ngIf="(signupSubmitted || f.name.touched) && f.name?.errors?.required">
+          Full Name is Required
+        </mat-error>
+        <mat-error class="error" *ngIf="f.name.errors?.pattern">
+          Only alphanumeric Name is Required
+        </mat-error>
+      </div>
+      <div class="col-6">
+        <label class="label-sec">Username</label>
+        <input type="text" placeholder="Enter Username" formControlName="username" autocomplete="off" />
+        <mat-error class="error" *ngIf="(signupSubmitted || f.username.touched) && f.username?.errors?.required">
+          Username is Required
+        </mat-error>
+        <mat-error class="error" *ngIf="f.username.errors?.pattern">
+          Only alphanumeric Username is Required
+        </mat-error>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <label class=" label-sec">Email</label>
+        <input type="email" placeholder="Email" formControlName="email" autocomplete="off" />
+        <mat-error class="error" *ngIf="(signupSubmitted || f.email.touched) && f.email?.errors?.required">
+          Email is Required
+        </mat-error>
+
+        <mat-error class="error" *ngIf="f.email.errors?.pattern?.requiredPattern">
+          Invalid Email Pattern
+        </mat-error>
+      </div>
+      <div class="col-6">
+        <label class="label-sec">Select Role</label>
+        <mat-form-field appearance="fill" class="sele1">
+          <mat-label class="redd">Role</mat-label>
+          <mat-select formControlName="role">
+            <mat-option value="superadmin">Administrator</mat-option>
+            <mat-option value="admin">Node Administrator</mat-option>
+            <mat-option value="user">Node User</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <!-- <label class=" label-sec">Select Role</label>
+
+        <select formControlName="role"  class="sele2">
+          <option selected="selected" value="" disabled> Select Role</option>
+          <option value="superadmin"> Administrator</option>
+          <option value="admin"> Node Administrator</option>
+          <option value="user"> Node User</option>
+        </select> -->
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <label class="label-sec">Select Region</label>
+        <mat-form-field appearance="fill" class="sele1">
+          <mat-label class="redd">Region</mat-label>
+          <mat-select multiple formControlName="region">
+            <div class="select-all">
+              <mat-checkbox [(ngModel)]="allRegionSelected" [ngModelOptions]="{standalone: true}"
+                (change)="toggleAllSelection('region')">Select All</mat-checkbox>
+            </div>
+            <mat-option *ngFor="let topping of finalRegionList; let i =  index" (click)="selectedRegions()"
+              [value]="topping">
+              {{topping.region}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-6">
+        <label class="label-sec">Select Sector</label>
+
+        <mat-form-field appearance="fill" class="sele1">
+          <mat-label class="redd">Sector</mat-label>
+          <mat-select multiple formControlName="sector" #sectorSelect>
+            <div class="select-all">
+              <mat-checkbox [(ngModel)]="allSectorSelected" [ngModelOptions]="{standalone: true}"
+                (change)="toggleAllSelection('sector')">Select All</mat-checkbox>
+            </div>
+            <mat-option *ngFor="let topping of finalSectorList; let i =  index" (click)="selectedSector()"
+              [value]="topping">
+              {{topping.key}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+    </div>
+
+
+    <div class="row  ">
+      <div class="col-6">
+        <label class="label-sec">Select Organization</label>
+        <mat-form-field appearance="fill" class="sele1">
+          <mat-label class="redd">Organization</mat-label>
+          <mat-select multiple formControlName="organization" #oranizationSelect>
+            <div class="select-all">
+              <mat-checkbox [(ngModel)]="allOrganisationSelected" [ngModelOptions]="{standalone: true}"
+                (change)="toggleAllSelection('organization')">Select All</mat-checkbox>
+            </div>
+            <mat-option *ngFor="let topping of finalOrganizationList; let i =  index" (click)="selectedOrganization()"
+              [value]="topping">
+              {{topping.key}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-6">
+        <label class="label-sec">Select Node</label>
+        <mat-form-field appearance="fill" class="sele1">
+          <mat-label class="redd">Node ID</mat-label>
+          <mat-select multiple formControlName="node" #nodeSelect>
+            <div class="select-all">
+              <mat-checkbox [(ngModel)]="allNodeSelected" [ngModelOptions]="{standalone: true}"
+                (change)="toggleAllSelection('nodes')">Select All</mat-checkbox>
+            </div>
+            <mat-option *ngFor="let topping of finalNodeList; let i =  index" (click)="nodeAccess()" [value]="topping">
+              {{topping.id}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+
+    </div>
+
+
+    <div class="row">
+      <div class="col-6">
+        <label class="label-sec">Password <i class="fa fa-info-circle  ciri"
+            title="Must contain min 8 Characters.Must have one capital and one small character.Must contain one letter."
+            aria-hidden="true"></i></label>
+        <input #id2change1 type="hidden" id="Password" name="password" formControlName="password" autocomplete="off"
+          (change)="myEncryption($event)">
+        <input #id2change type="password" id="orgPassword" name="orgPassword" autocomplete="new-password"
+          autocomplete="off" placeholder="Password" formControlName="orgPassword" readonly
+          onfocus="this.removeAttribute('readonly');" (change)="myEncryption($event)">
+
+        <mat-error class="error" *ngIf="(signupSubmitted || f.password.touched) && f.password?.errors?.required">
+          Password is Required
+        </mat-error>
+        <mat-error class="error" *ngIf="f.orgPassword.errors?.minLength">
+          Password must be more than seven characters long.
+        </mat-error>
+        <mat-error class="error" *ngIf="f.password.errors?.pattern?.requiredPattern">
+          Invalid password Pattern
+        </mat-error>
+      </div>
+      <div class="col-6">
+        <label class="label-sec">Confirm Password</label>
+        <input #confirmpassword1 type="hidden" id="encCpassword" name="encCpassword" formControlName="encCpassword"
+          autocomplete="off" (change)="encConfirmPassword($event)">
+        <input #confirmpassword type="password" id="cpassword" name="cpassword" autocomplete="conf-password"
+          autocomplete="off" placeholder="Confirm Password" formControlName="cpassword" readonly
+          onfocus="this.removeAttribute('readonly');" (change)="encConfirmPassword($event)">
+
+
+        <mat-error class="error" *ngIf="f.cpassword.errors?.minLength">
+          Password must be more than seven characters long.
+        </mat-error>
+        <mat-error class="error" *ngIf="(signupSubmitted || f.cpassword.touched) && f.cpassword.invalid">
+          Confirm Password is Required
+        </mat-error>
+        <mat-error class="error" *ngIf="f.cpassword.errors?.pattern?.requiredPattern">
+          Invalid Confirm Password Pattern
+        </mat-error>
+      </div>
+    </div>
+    <hr color="grey">
+
+    <div class="row">
+      <div class="col-9"></div>
+      <div class="col-3">
+        <button class="btn btn-warning bt  " [disabled]="!signUpForm.valid" (click)="addUser()">Sign Up</button>
+      </div>
+
+
+    </div>
+
+  </form>
+
+</div>

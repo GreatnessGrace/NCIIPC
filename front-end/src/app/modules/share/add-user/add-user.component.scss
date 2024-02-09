@@ -1,0 +1,71 @@
+
+
+
+.label-sec{
+  margin-top: auto;
+  margin-bottom: auto;
+  float: left;
+  font-size: 16px;
+  font-weight: 500;
+  margin-left: 10px;
+}
+input,select{
+  padding: 6px;
+.error{
+  color: red;
+}
+.form-sec{
+  display: flex;
+  text-align: left;
+}
+.form-label{
+  margin-top: auto;
+  margin-bottom: auto;
+}
+}
+.ciri{
+  cursor: pointer;
+  font-size: 14px;
+}
+.sele2{
+  background-color: #fff !important
+}
+.bt{
+  width:100px;
+  
+}
+::ng-deep .sele1 .mat-form-field-flex {
+  background-color: black;
+  height:35px;
+  width: 100%;
+
+}
+::ng-deep .sele1 {
+  width:100%; border-radius: 0px; margin: 10px;
+}
+::ng-deep .redd{
+  color: #969696 !important;
+}
+::ng-deep .sele1 .mat-select-min-line{
+  color: darkmagenta !important;
+}
+::ng-deep .mat-form-field-infix{
+  margin-top: -7px;
+}
+.select-all{
+  margin: 5px 17px;
+}
+
+mat-checkbox{
+  color:black
+}
+::ng-deep {
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  border-radius:0px;
+  padding: 0.75em 0.75em 0 0.75em;
+}
+}
+
+.mat-dialog-container select {
+margin: 0px !important;
+}

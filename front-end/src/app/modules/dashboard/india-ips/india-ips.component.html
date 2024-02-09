@@ -1,0 +1,363 @@
+<section class="header-design">
+    <app-header></app-header>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-6">
+                <label class="colo pt-2 ml-4">
+                    <h1><b><span> 
+                        Attacker's IP - <img class="imggg" *ngIf="!cntry!" src="{{assetPath}}/flags/flag-of-India.jpg">
+                        <img class="imggg" *ngIf="cntry!"
+                        src="{{assetPath}}/flags/flag-of-{{cntry!|countryname}}.jpg">
+                    </span>{{cntry}}</b></h1>
+                   
+                   
+                </label>
+            </div>
+            <div class="col-lg-6 ">
+      
+                <h2 class="colo pt-2 float-right mr-4 poin"><b><span>Download CSV : &nbsp;     <img class="iconn" src="{{assetPath}}/images_and_logos/csvpic.png" alt="" title="Download CSV"
+                    (click)="generateCsv()" height="40" width="40"> </span></b></h2>
+           
+            </div>
+        </div>
+   
+        <div class="box-body col-lg-12">
+            <form class="inline-form" [formGroup]="ipsForm" (ngSubmit)="onSubmit()">
+             
+                <div class="form-group col-lg-2">
+                    <label for="startdate">Select Country</label>
+                    <input list="country" name="country"  class="form-control inn1" formControlName="country_filter">
+                    <datalist id="country" >
+                        <option *ngFor="let country of allCountries">{{country.name}} </option>
+                    </datalist>
+                </div> 
+                <div class="form-group col-lg-2">
+                    <label for="startdate">Select Type</label>
+                    <select class="form-control" formControlName="indicator_type">
+                        <option value="" class="">-- Select Type --</option>
+                        <option  value="hash">Hash
+                        </option>
+                        <option  value="ip">IP
+                        </option>
+                    </select>
+                </div> 
+                <div class="form-group col-lg-2">
+                    <label for="startdate">Select Date</label>
+                    <select class="form-control" formControlName="date_filter" #dateFilter
+                        (change)="onDateFilterChange(dateFilter.value)">
+                        <option value="" class="">-- Select Date --</option>
+                        <option *ngFor="let filter of dateFilterArray"  [value]="filter.key">{{filter.value}}
+                        </option>
+                    </select>
+                </div> 
+               <ng-container *ngIf="ipsForm.get('date_filter').value == 5">
+                    <div class="form-group col-lg-2">
+                        <label for="startdate">Start Date</label>
+                        <div class="input-group date-picker">
+                            <input matInput [matDatepicker]="picker" class="form-control cal mat-input-d"
+                                formControlName="start_date" placeholder="DD/MM/YYYY">
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"
+                                class="mat-datepicker-t"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-2">
+                        <label for="startdate">End Date</label>
+                        <div class="input-group date-picker">
+                            <input matInput [matDatepicker]="endpicker" class="form-control cal mat-input-d"
+                                formControlName="end_date" placeholder="DD/MM/YYYY">
+                            <mat-datepicker-toggle matIconSuffix [for]="endpicker"
+                                class="mat-datepicker-t"></mat-datepicker-toggle>
+                            <mat-datepicker #endpicker></mat-datepicker>
+                        </div>
+                    </div>
+                </ng-container>
+                <div class="form-group col-lg-2 mt-3 pt-1" >
+                    <button id="submit" type="submit" class="btn ">
+                        <span class="fa fa-search"></span> Search
+                    </button>
+                    <i *ngIf="this.searchloader" class="fa fa-spinner fa-spin"></i>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="container-fluid">
+        
+        <div class="row" [hidden]="countryHash">
+            <div class="col-md-12" [hidden]="searchloader">
+                <mat-paginator #matPaginator="matPaginator" [pageSizeOptions]="[10, 25, 50, 100, 500, 1000]"
+                    aria-label="Select page of users" showFirstLastButtons >
+                </mat-paginator>
+
+                <table id="country-hash" mat-table [dataSource]="dataSource" #sort="matSort" matSort class="mat-elevation-z8 table " >
+
+                    <ng-container matColumnDef="key">
+                        <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header> IPs </th> -->
+                        <th mat-header-cell *matHeaderCellDef  class="tab-header"> 
+                            <div class="row " >
+                              <div class="col-12 hedd" mat-sort-header>Attacker's IPs</div>
+                              <div class="col-12 hed1">
+                    
+                              </div>
+                            </div>
+                        </th> 
+                        <td mat-cell *matCellDef="let element; let i = index;" (click)="getIpDetails(element)">
+
+                            <span class="ipsLink"> {{element.key}}</span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="count">
+                        <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header> Attacks </th> -->
+                        <th mat-header-cell *matHeaderCellDef  class="tab-header"> 
+                            <div class="row " >
+                              <div class="col-12 hedd" mat-sort-header>Total Attacks </div>
+                              <div class="col-12 hed1">
+                    
+                              </div>
+                            </div>
+                        </th> 
+                        <td mat-cell *matCellDef="let element; let i = index;">
+
+                            <span> {{element.doc_count}}</span>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="event_timestamp">
+                        <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header> Attack Timestamp  </th> -->
+                        <th mat-header-cell *matHeaderCellDef  class="tab-header"> 
+                            <div class="row " >
+                              <div class="col-12 hedd" mat-sort-header>Latest Attack Timestamp </div>
+                              <div class="col-12 hed1">
+                    
+                              </div>
+                            </div>
+                        </th> 
+                        <td mat-cell *matCellDef="let element; let i = index;">
+                            <span> {{element.top_result.hits.hits[0]._source.event_timestamp | date:'dd-MMM-yyyy HH:MM:SS'}}</span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="bin_vt_av_results">
+                        <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header> Attack Timestamp  </th> -->
+                        <th mat-header-cell *matHeaderCellDef  class="tab-header"> 
+                            <div class="row" >
+                              <div class="col-12 hedd" mat-sort-header>Latest Malware Family</div>
+                              <div class="col-12 hed1">
+                    
+                              </div>
+                            </div>
+                        </th> 
+                        <td mat-cell *matCellDef="let element; let i = index;">
+                            <span *ngIf="!element.top_result.hits.hits[0]._source?.bin_av_class"> {{element.top_result.hits.hits[0]._source.bin_vt_av_results}}</span>
+                            <span >{{element.top_result.hits.hits[0]._source?.bin_av_class}}</span>
+                            <span *ngIf="!element.top_result.hits.hits[0]._source?.bin_av_class && !element.top_result.hits.hits[0]._source.bin_vt_av_results">N/A</span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="remote_port">
+                        <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header> Remote Port </th> -->
+                        <th mat-header-cell *matHeaderCellDef  class="tab-header"> 
+                            <div class="row " >
+                              <div class="col-12 hedd" mat-sort-header>Source Port </div>
+                              <div class="col-12 hed1">
+                                <mat-form-field class="filter hed1" floatLabel="never">
+                                  <mat-label>Search</mat-label>
+                                  <input class="inp1" matInput [formControl]="portFilter">
+                                </mat-form-field>
+                              </div>
+                            </div>
+                        </th> 
+                        <td mat-cell *matCellDef="let element; let i = index;">
+                            <span> {{element.top_result.hits.hits[0]._source.event_data?.remote_port ? element.top_result.hits.hits[0]._source.event_data?.remote_port : 'Unknown' }}</span>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="event_label">
+                        <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header> Event  </th> -->
+                        <th mat-header-cell *matHeaderCellDef  class="tab-header"> 
+                            <div class="row " >
+                              <div class="col-12 hedd" mat-sort-header>Latest Event </div>
+                              <div class="col-12 hed1">
+                                <mat-form-field class="filter hed1" floatLabel="never">
+                                  <mat-label>Search</mat-label>
+                                  <input class="inp1" matInput [formControl]="eventFilter">
+                                </mat-form-field>
+                              </div>
+                            </div>
+                        </th> 
+                        <td mat-cell *matCellDef="let element; let i = index;">
+                            <span> {{element.top_result.hits.hits[0]._source.event_label}}</span>
+                        </td>
+                    </ng-container>  
+                    
+                    <ng-container matColumnDef="ip2location_data">
+                        <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header> ISP  </th> -->
+                        <th mat-header-cell *matHeaderCellDef  class="tab-header"> 
+                            <div class="row " >
+                              <div class="col-12 hedd" mat-sort-header>Latest ISP </div>
+                              <div class="col-12 hed1">
+                                <mat-form-field class="filter hed1" floatLabel="never">
+                                  <mat-label>Search</mat-label>
+                                  <input class="inp1" matInput [formControl]="ispFilter">
+                                </mat-form-field>
+                              </div>
+                            </div>
+                        </th> 
+                        <td mat-cell *matCellDef="let element; let i = index;">
+                            <span> {{element.top_result.hits.hits[0]._source.ip2location_data.isp}}</span>
+                        </td>
+                    </ng-container>
+                    
+                   
+                    <ng-container matColumnDef="view_av">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <div class="row" >
+                                <div class="col-12 hedd" mat-sort-header>View AV details</div>
+                                <div class="col-12 hed1">
+                      
+                                </div>
+                              </div> </th>
+                        <td mat-cell *matCellDef="let row;" (click)="viewAvdet(row.top_result.hits.hits[0])"> <button class="evt"> View AV</button>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="9">No data Found</td>
+                    </tr>
+
+
+                </table>
+            </div>
+        </div>
+
+
+
+        <div class="row"  [hidden]="countryIps">
+            <div class="col-md-12" [hidden]="searchloader">
+                <mat-paginator #matPaginatorIp="matPaginator" [pageSizeOptions]="[10, 25, 50, 100, 500, 1000]"
+                    aria-label="Select page of users" showFirstLastButtons >
+                </mat-paginator>
+
+                <table id="country-ip" mat-table [dataSource]="dataSourceIp" #sortIp="matSort" matSort class="mat-elevation-z8 table " >
+
+                    <ng-container matColumnDef="key">
+                        <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header> IPs </th> -->
+                        <th mat-header-cell *matHeaderCellDef  class="tab-header"> 
+                            <div class="row " >
+                              <div class="col-12 hedd" mat-sort-header>Attacker's IPs</div>
+                              <div class="col-12 hed1">
+                    
+                              </div>
+                            </div>
+                        </th> 
+                        <td mat-cell *matCellDef="let element; let i = index;" (click)="getIpDetails(element)">
+
+                            <span  class="ipsLink"> {{element.key}}</span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="count">
+                        <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header> Attacks </th> -->
+                        <th mat-header-cell *matHeaderCellDef  class="tab-header"> 
+                            <div class="row " >
+                              <div class="col-12 hedd" mat-sort-header>Total Attacks </div>
+                              <div class="col-12 hed1">
+                    
+                              </div>
+                            </div>
+                        </th> 
+                        <td mat-cell *matCellDef="let element; let i = index;">
+
+                            <span> {{element.doc_count}}</span>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="event_timestamp">
+                        <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header> Attack Timestamp  </th> -->
+                        <th mat-header-cell *matHeaderCellDef  class="tab-header"> 
+                            <div class="row " >
+                              <div class="col-12 hedd" mat-sort-header>Latest Attack Timestamp </div>
+                              <div class="col-12 hed1">
+                    
+                              </div>
+                            </div>
+                        </th> 
+                        <td mat-cell *matCellDef="let element; let i = index;">
+                            <span> {{element.top_result.hits.hits[0]._source.event_timestamp | date:'dd-MMM-yyyy HH:MM:SS'}}</span>
+                        </td>
+                    </ng-container>
+
+
+
+                    <ng-container matColumnDef="remote_port">
+                        <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header> Remote Port </th> -->
+                        <th mat-header-cell *matHeaderCellDef  class="tab-header"> 
+                            <div class="row " >
+                              <div class="col-12 hedd" mat-sort-header>Latest Sensor Port </div>
+                              <div class="col-12 hed1">
+                                <mat-form-field class="filter hed1" floatLabel="never">
+                                  <mat-label>Search</mat-label>
+                                  <input class="inp1" matInput [formControl]="portFilterIP">
+                                </mat-form-field>
+                              </div>
+                            </div>
+                        </th> 
+                        <td mat-cell *matCellDef="let element; let i = index;">
+                            <span> {{element.top_result.hits.hits[0]._source.event_data?.remote_port ? element.top_result.hits.hits[0]._source.event_data?.remote_port : 'Unknown' }}</span>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="event_label">
+                        <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header> Event  </th> -->
+                        <th mat-header-cell *matHeaderCellDef  class="tab-header"> 
+                            <div class="row " >
+                              <div class="col-12 hedd" mat-sort-header>Latest Event </div>
+                              <div class="col-12 hed1">
+                                <mat-form-field class="filter hed1" floatLabel="never">
+                                  <mat-label>Search</mat-label>
+                                  <input class="inp1" matInput [formControl]="eventFilterIP">
+                                </mat-form-field>
+                              </div>
+                            </div>
+                        </th> 
+                        <td mat-cell *matCellDef="let element; let i = index;">
+                            <span> {{element.top_result.hits.hits[0]._source.event_label}}</span>
+                        </td>
+                    </ng-container>  
+                    
+                    <ng-container matColumnDef="ip2location_data">
+                    
+                        <th mat-header-cell *matHeaderCellDef  class="tab-header"> 
+                            <div class="row " >
+                              <div class="col-12 hedd" mat-sort-header>Latest ISP </div>
+                              <div class="col-12 hed1">
+                                <mat-form-field class="filter hed1" floatLabel="never">
+                                  <mat-label>Search</mat-label>
+                                  <input class="inp1" matInput [formControl]="ispFilterIP">
+                                </mat-form-field>
+                              </div>
+                            </div>
+                        </th> 
+                        <td mat-cell *matCellDef="let element; let i = index;">
+                            <span> {{element.top_result.hits.hits[0]._source.ip2location_data.isp}}</span>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsIp"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsIp;"></tr>
+
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="9">No data Found</td>
+                    </tr>
+
+
+                </table>
+
+        <br>
+        <br>
+            </div>
+
+
+        </div>
+
+    </div>
+</section>

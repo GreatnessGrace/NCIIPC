@@ -1,0 +1,93 @@
+<div class="row head">
+  <div class="col-11 float-left" >
+    <h2> Deployed Honeypot Details</h2>
+  </div>
+  <div class="col-1" (click)="closeButton('simple')">
+    <i class="fa fa-close float-right"></i>
+  </div>
+
+</div>
+<hr color="grey">
+<div class="mat-elevation-z8 container-fluid mt-0">
+
+  <div *ngIf="this.searchloaderxl" class="row lod" >
+    <div class="loader text-black" *ngIf="this.searchloaderxl" >
+    </div>
+  </div>
+
+  <mat-paginator [hidden]="isShowDiv" [pageSizeOptions]="[10, 25, 50, 100]" aria-label="Select page of users"
+    showFirstLastButtons>
+  </mat-paginator>
+  <div class="scrl">
+  <table mat-table [dataSource]="dataSource" class="table " [hidden]="isShowDiv">
+    <ng-container matColumnDef="start_date">
+      <th mat-header-cell *matHeaderCellDef> Conf. Date</th>
+      <td mat-cell *matCellDef="let row text-black" >
+
+        {{row.start_date | date:'medium'}}
+
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="honeypot_profile">
+      <th mat-header-cell *matHeaderCellDef> Honeypot </th>
+      <td mat-cell *matCellDef="let row text-black" >
+        {{row.honeypot_profile}}
+       <span *ngIf="row.honeypot_profile == null">{{row.snapshot_name}}</span>
+
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ip_address">
+      <th mat-header-cell *matHeaderCellDef> IP Address </th>
+      <td mat-cell *matCellDef="let row" class="text-black">
+
+        {{row.ip_address}}
+
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="service">
+      <th mat-header-cell *matHeaderCellDef> Service Details </th>
+      <td mat-cell *matCellDef="let row" class="wrp">
+
+        {{row.services}}
+
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="vulnerabilities">
+      <th mat-header-cell *matHeaderCellDef> Vuln Details </th>
+      <td mat-cell *matCellDef="let row" >
+
+        {{row.vulnerabilities}}
+
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="reconfigure">
+      <th mat-header-cell *matHeaderCellDef> Reconfigure </th>
+      <td mat-cell *matCellDef="let row" >
+        <button class="btn reconfig" (click)="reconfigure(row)">
+        <i class="fa fa-pencil-square-o "></i> Edit
+
+        </button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="health_status">
+      <th mat-header-cell *matHeaderCellDef> Status </th>
+      <td mat-cell *matCellDef="let row" >
+
+        <button class="btn" [ngClass]="row.health_status == 'UP' ? 'btn-up' : 'btn-down'">
+          {{row.health_status == 'UP' ? '↑' : '↓'}}&emsp;{{row.health_status}}<span *ngIf = "! row.health_status">Down</span>
+        </button>
+        <!-- <span [innerHTML]="row.last_up_time  | filter">  </span>-->
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="8">No Data Found</td>
+    </tr>
+  </table>
+</div>

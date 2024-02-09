@@ -1,0 +1,209 @@
+<nav class="navbar navbar-expand-lg navbar-dark  headerTheme nav1">
+    <span class="navbar-brand nav-link" (click)="navigation('')">
+        <img width="50px" height="50px" src="{{assetPath}}/images_and_logos/cdac_logo.png" alt="C-DAC Logo">
+        <img class="ml-1" width="160px" height="50px" src="{{assetPath}}/images_and_logos/newlogo.png"
+            alt="CTMS Logo">
+    </span>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+
+
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle active" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    href="#/dashboard" aria-haspopup="true" aria-expanded="false"
+                    [ngClass]="{'nav-item-active': (( currentComponent  === 'dashboard') || (currentComponent  == 'indiaips') || (currentComponent  == 'sectorsDashboard')  )}">
+
+                    <i class="fa fa-pie-chart colo1" aria-hidden="true"></i> Dashboard
+                </a>
+
+                <div class="dropdown-menu drpd" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" (click)="navigation('')" href="#/dashboard"
+                        [ngClass]="{'nav-item-active': currentComponent  == 'dashboard'}"><i
+                            class="fa fa fa-home icon-col"></i>&nbsp;Home</a>
+                   
+                    <div *ngIf="userType != 'user' " class="dropdown-divider"></div>
+                    <a *ngIf="userType != 'user' " class="dropdown-item" (click)="navigation('indiaips')"
+                        href="#/dashboard/indiaips" [ngClass]="{'nav-item-active': currentComponent  == 'indiaips'}"><i
+                            class="fa fa-pie-chart icon-col"></i>&nbsp;Attacker IP's</a>
+
+
+                </div>
+
+
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" (click)="navigation('threatMap')" href="#/dashboard/threatMap"
+                    [ngClass]="{'nav-item-active': currentComponent  == 'threatMap'}"><i class="fa fa-map-marker colo1"
+                        aria-hidden="true"></i> Threat Map<span class="sr-only">(current)</span></a>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle active" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false"
+                    [ngClass]="{'nav-item-active': ((currentComponent  == 'SectorEventData') || (currentComponent  == 'malBinaries') || (currentComponent  == 'PCapBinary')  )}">
+
+                    <i class="fa fa-tasks colo1" aria-hidden="true"></i> Repositories
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" (click)="navigation('SectorEventData')" href="#/dashboard/SectorEventData"
+                        [ngClass]="{'nav-item-active': currentComponent  == 'SectorEventData'}"><i
+                            class="fa fa fa-compress icon-col"></i>&nbsp;Threat Intel Events</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" (click)="navigation('malBinaries')" href="#/dashboard/malBinaries"
+                        [ngClass]="{'nav-item-active': currentComponent  == 'malBinaries'}"><i
+                            class="fa fa-microchip icon-col"></i>&nbsp;Binaries</a>
+
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" (click)="navigation('PCapBinary')"
+                        [ngClass]="{'nav-item-active': currentComponent  == 'PCapBinary'}"><i
+                            class="fa fa-flickr icon-col"></i>&nbsp;Binary Related PCAP</a>
+                  
+                  
+                </div>
+            </li>
+
+
+            <li class="nav-item active">
+                <a class="nav-link" (click)="navigation('reportDownload')" href="#/dashboard/reportDownload"
+                    [ngClass]="{'nav-item-active': currentComponent  == 'reportDownload'}"><i
+                        class="fa fa-download colo1" aria-hidden="true"></i> Report Download<span
+                        class="sr-only">(current)</span></a>
+            </li>
+
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle active" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false"
+                    [ngClass]="{'nav-item-active': ((currentComponent  == 'honeypotDetails') || (currentComponent  == 'nodeDetails') ||  (currentComponent  == 'nodeDashbord')   ||  (currentComponent  == 'honeypotConfig') )}">
+                    <i class="fa fa-map-pin colo1" aria-hidden="true"></i> Node Management
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" [ngClass]="{'nav-item-active': currentComponent  == 'nodeDashbord'}"
+                        (click)="navigation('nodeDashbord')" href="#/dashboard/nodeDashbord"><i
+                            class="fa fa-pie-chart icon-col"></i>&nbsp;Node Dashboard</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" [ngClass]="{'nav-item-active': currentComponent  == 'honeypotConfig'}"
+                                (click)="navigation('honeypotConfig')" href="#/dashboard/honeypotConfig"><i
+                                    class="fa fa-list-alt icon-col"></i>&nbsp;Node Registration</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" [ngClass]="{'nav-item-active': currentComponent  == 'nodeDetails'}"
+                        (click)="navigation('nodeDetails')" href="#/dashboard/nodeDetails"><i
+                            class="fa fa-desktop icon-col"></i>&nbsp;Node Details</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" [ngClass]="{'nav-item-active': currentComponent  == 'honeypotDetails'}"
+                        (click)="navigation('honeypotDetails')" href="#/dashboard/honeypotDetails"><i
+                            class="fa fa-laptop icon-col"></i>&nbsp;Honeypot Details</a>
+                   
+                </div>
+            </li>
+
+            <li class="nav-item active">
+                <a class="nav-link" (click)="navigation('highSeverity')" href="#/dashboard/highSeverity"
+                    [ngClass]="{'nav-item-active': currentComponent  == 'highSeverity'}"><i
+                        class="fa fa-exclamation-triangle colo1" aria-hidden="true"></i>&nbsp;High Severity Alert<span
+                        class="sr-only">(current)</span></a>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle active" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false"
+                    [ngClass]="{'nav-item-active': ((currentComponent  == 'SearchData') || (currentComponent  == 'searchIndicator'))}">
+                    <i class="fa fa-search colo1" aria-hidden="true"></i> Search
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" [ngClass]="{'nav-item-active': currentComponent  == 'SearchData'}"
+                        (click)="navigation('SearchData')" href="#/dashboard/SearchData"><i
+                            class="fa fa-search icon-col"></i>&nbsp;Search By Criteria</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" [ngClass]="{'nav-item-active': currentComponent  == 'searchIndicator'}"
+                        (click)="navigation('searchIndicator')" href="#/dashboard/searchIndicator"><i
+                            class="fa fa-binoculars icon-col"></i>&nbsp;Search By Indicator</a>
+                </div>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link"  href="http://192.168.8.1:4200/"  target="_blank"><i class="fa fa-laptop colo1" aria-hidden="true"></i>&nbsp;ADAR<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+                <!-- <a class="nav-link" href="http://112.196.121.16:4200/" target="_blank" ><i class="fa fa-cloud colo1" aria-hidden="true"></i>&nbsp;Enumeration<span class="sr-only">(current)</span></a> -->
+            </li>
+
+             <!--  -->
+        <li class="nav-item dropdown">
+            <a *ngIf="userType != 'user' " class="nav-link dropdown-toggle active"
+                [ngClass]="{'nav-item-active': ( (currentComponent  == 'honeypotStats') ||  (currentComponent  == 'honeypotBlueprint'))}"
+                id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-forumbee colo1" aria-hidden="true"></i> Honeypot Repo
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" [ngClass]="{'nav-item-active': currentComponent  == 'honeypotStats'}"
+                    (click)="navigation('honeypotStats')" href="#/dashboard/honeypotStats"><i
+                        class="fa fa-pie-chart icon-col"></i>&nbsp;Stats</a>
+                <div class="dropdown-divider"></div><a *ngIf="userType != 'user' && userType!= 'admin' " class="dropdown-item" [ngClass]="{'nav-item-active': currentComponent  == 'honeypotBlueprint'}"
+                (click)="navigation('honeypotBlueprint')" href="#/dashboard/honeypotBlueprint"><i
+                    class="fa fa-desktop icon-col"></i>&nbsp;File Upload</a>
+            <!-- <div class="dropdown-divider"></div> -->
+                <!-- <a class="dropdown-item" [ngClass]="{'nav-item-active': currentComponent  == 'honeypotBlueprintf'}"
+                    (click)="navigation('honeypotBlueprintf')" href="#/dashboard/honeypotBlueprintf"><i
+                        class="fa fa-desktop icon-col"></i>&nbsp;Blueprint</a>
+                <div class="dropdown-divider"></div> -->
+                <!-- <a class="dropdown-item" [ngClass]="{'nav-item-active': currentComponent  == 'honeypotConfig'}"
+                    (click)="navigation('honeypotConfig')" href="#/dashboard/honeypotConfig"><i
+                        class="fa fa-list-alt icon-col"></i>&nbsp;Node Registration</a> -->
+
+            </div>
+        </li>
+        
+        <!--  -->
+        </ul>
+
+
+       
+
+
+        <ul class="navbar-nav mr-right">
+            <li class="nav-item active">
+                <a class="nav-link notification" routerLink="/notifications"
+                    [ngClass]="{'nav-item-active': currentComponent  == 'notifications'}"> <i class="fa fa-bell colo2"
+                        aria-hidden="true"></i> <span class="button__badge"
+                        *ngIf="notificationCount">{{notificationCount}}</span>
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle active" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    [ngClass]="{'nav-item-active': ((currentComponent  == 'usermanagement') || (currentComponent  == 'userSession') || (currentComponent  == 'profile') )}"
+                    aria-haspopup="true" aria-expanded="false">
+                    {{ username }}
+
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" [ngClass]="{'nav-item-active': currentComponent  == 'profile'}"
+                        (click)="profile()"><i class="fa fa-user icon-col"></i>&nbsp; Profile</a>
+                    <div *ngIf="userType != 'user' " class="dropdown-divider"></div>
+                    <a *ngIf="userType != 'user' " class="dropdown-item"
+                        [ngClass]="{'nav-item-active': currentComponent  == 'usermanagement'}"
+                        (click)="navigation('usermanagement')" href="#/dashboard/usermanagement"><i
+                            class="fa fa-users icon-col"></i>&nbsp; Users</a>
+                    <div *ngIf="userType != 'user' " class="dropdown-divider"></div>
+                    <a *ngIf="userType != 'user' " class="dropdown-item"
+                        [ngClass]="{'nav-item-active': currentComponent  == 'userSession'}"
+                        (click)="navigation('userSession')" href="#/dashboard/userSession"><i
+                            class="fa fa-user-secret icon-col"></i>&nbsp; Users Session</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" (click)="changePassword()"><i class="fa fa-unlock-alt icon-col"></i>&nbsp;
+                        Change
+                        Password</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" (click)="logout()"><i class="fa fa-sign-out icon-col"></i>&nbsp; Logout</a>
+
+                </div>
+            </li>
+        </ul>
+    </div>
+
+</nav>

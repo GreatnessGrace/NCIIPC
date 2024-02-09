@@ -1,0 +1,145 @@
+table {
+    width: 100%;
+  }
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+  .ipsLink{
+    cursor: pointer;
+  }
+  .ipsLink:hover{
+    color: #000000;
+  }
+  td, th {
+    color: #fff !important;
+  }
+  .imggg{
+    height:30px;
+    width:50px;
+    margin-right: 10px;
+}
+  .tab-header{
+    font-size: medium
+  }
+  tr.mat-header-row {
+    height: 48px;
+  }
+  .poin{
+    cursor: pointer;
+  }
+   .inp{
+    height:35px;
+    width:100%;
+    border-radius: 4px;
+   }
+   .table th{
+    color: #000000;
+    background-color: #e7e7e7;
+    border: none;
+   
+    vertical-align: middle;
+    padding-left:20px;
+    padding-bottom: 10px;
+    
+  }
+  label{
+    color: black !important;
+  }
+  .table td{
+    color: black !important;
+    background-color: #fff;
+    padding: 10px;
+    font-size: 15px;
+    border:none;
+    border-bottom: 1px solid grey;
+  }
+  .loader {
+    border: 20px solid #000000;
+    border-radius: 50%;
+    border-top: 20px solid grey;
+    width: 110px;
+    height: 110px;
+    margin-left:45% !important;
+    margin-top:80px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+  }
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .filter {
+    display: block;
+  }
+  ::ng-deep .mat-paginator-container {
+    color: #000000;
+    font-size: medium;
+  
+    
+    background-color: transparent !important;
+  }
+  ::ng-deep .mat-paginator {
+    color: #000000;
+    font-size: medium;
+    
+    background-color: transparent !important;
+  }
+  ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+    // padding-bottom: 1.25em;
+    margin-left: -0px;
+  }
+  
+  .mat-sort-header {
+    color:#000000 !important;
+  }
+  $clr: #daa520;
+
+.select-all{
+    margin: 5px 17px;
+}
+.inline-form {
+    display: flex;
+    flex-flow: wrap;
+}
+.mat-checkbox{
+    color: black
+}
+.input-value {
+    color: black !important;
+}
+.inn1{
+  margin: 0px;
+}
+.btn {
+    width: auto;
+    background-color: $clr;
+}
+.rounded-circle{
+    border-radius: 2% !important;
+}
+
+.hedd {
+
+   
+   padding-top: 10px;
+   width: 100%;
+   margin-bottom: 10px;
+ }
+.hed1 {
+  
+  height:40px;
+  
+  width: 100%;
+}
+
+.hed3{
+  margin-left: 5px;
+}

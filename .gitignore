@@ -1,0 +1,15 @@
+node_modules
+cache
+BBHoney Backend.zip
+angular frontend.zip
+dist
+
+test.sql
+.DS_Store
+.DS_Store
+package-lock.json
+BB_LOGS
+BBHoney_Backend/package-lock.json
+front-end/package-lock.json
+\10_228_12_184.jks
+\10_228_12_184.csr

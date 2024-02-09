@@ -1,0 +1,121 @@
+.map-container {
+    position: relative;
+    top: 2rem;
+    // border: solid 1px;
+}
+
+.map-frame {
+    height: 100%;
+}
+
+#threat-map {
+    height: 400px;
+    width: 97%;
+    border: 2px solid black;
+}
+
+.h30{
+    height: 30px;
+}
+
+.map-div {
+    width: 100%;
+    padding: 10px;
+    margin-top: 2px;
+}
+
+::ng-deep {
+    .ring-container {
+        position: absolute;
+    }
+
+    .circle {
+        width: 10px;
+        height: 10px;
+        background-color: red;
+        border-radius: 50%;
+        position: absolute;
+    }
+
+    .ringring {
+        border: 3px solid red;
+        border-radius: 30px;
+        height: 20px;
+        width: 20px;
+        position: absolute;
+        left: -5px;
+        top: -5px;
+        animation: pulsate 1s ease-out;
+        animation-iteration-count: infinite;
+        opacity: 0.0
+    }
+
+    @keyframes pulsate {
+        0% {
+            transform: scale(0.1, 0.1);
+            opacity: 0.0;
+        }
+
+        50% {
+            opacity: 1.0;
+        }
+
+        100% {
+            transform: scale(1.2, 1.2);
+            opacity: 0.0;
+        }
+    }
+}
+
+.table th {
+    color: #000000;
+    background-color: #e7e7e7;
+    border: none;
+    padding-bottom: 20px;
+    font-size: large;
+    vertical-align: middle;
+    align-items: left;
+
+}
+
+.table td {
+    color: black;
+    background-color: #fff;
+    padding: 10px;
+    font-size: 15px;
+    border: none;
+    border-bottom: 1px solid grey;
+}
+
+.flag-img {
+    width: 20p;
+    height: 23px;
+    width: auto;
+    padding-right: 5px
+}
+
+.filter {
+    display: block;
+
+  }
+  
+  .hed {
+    margin-top: 20px;
+    // height:40px;
+    
+    width: 100%;
+  }
+  .hed1 {
+    
+    height:40px;
+    margin-left: 20px;
+    width: 100%;
+  }
+
+   .mat-sort-header {
+    color: #000000 !important;
+    font-size: unset;
+}
+.map-frame{
+    height: fit-content !important;
+}

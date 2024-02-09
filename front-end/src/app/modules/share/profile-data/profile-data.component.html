@@ -1,0 +1,70 @@
+<section class="sect">
+    <div class="row">
+        <div class="col-12" >
+            <mat-paginator #devicePaginator="matPaginator" [pageSizeOptions]="[10, 25, 50, 100]"
+                aria-label="Select page of users" showFirstLastButtons>
+            </mat-paginator>
+            <table mat-table [dataSource]="dataSource" #deviceSort="matSort" matSort 
+                class="table-striped table ">
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef class="tab-header">
+                        <div class="row">
+                            <div class="col-12 hed"># </div>
+                            <div class="col-12 hed1"></div>
+                        </div>
+                    </th>
+                    <td mat-cell *matCellDef="let row; let i = index;">{{i+1}} </td>
+                </ng-container>
+    
+                <ng-container matColumnDef="device_name">
+                    <th mat-header-cell *matHeaderCellDef class="tab-header">
+                        <div class="row">
+                            <div class="col-12 hed" mat-sort-header>Device Name</div>
+                             <div class="col-12 hed1">
+                              <!--  <mat-form-field class="filter" floatLabel="never">
+                                    <mat-label>Search</mat-label>
+                                    <input matInput [formControl]="dnFilter">
+                                </mat-form-field>-->
+                            </div> 
+                        </div>
+                    </th>
+                    <td mat-cell class="text-center" *matCellDef="let row; let i = index; ">{{row.device_name}} </td>
+                </ng-container>
+                <ng-container matColumnDef="profile_name">
+                    <th mat-header-cell *matHeaderCellDef class="tab-header">
+                        <div class="row">
+                            <div class="col-12 hed" mat-sort-header>Profile Name</div>
+                            <div class="col-12 hed1">
+                                <!-- <mat-form-field class="filter" floatLabel="never">
+                                    <mat-label>Search</mat-label>
+                                    <input matInput [formControl]="pnFilter">
+                                </mat-form-field> -->
+                            </div>
+                        </div>
+                    </th>
+                    <td mat-cell *matCellDef="let row; let i = index;">{{row.profile_name}} </td>
+                </ng-container>
+                <ng-container matColumnDef="device_type">
+                    <th mat-header-cell *matHeaderCellDef class="tab-header">
+                        <div class="row">
+                            <div class="col-12 hed" mat-sort-header>Device Type</div>
+                             <div class="col-12 hed1">
+                               <!--  <mat-form-field class="filter" floatLabel="never">
+                                    <mat-label>Search</mat-label>
+                                    <input matInput [formControl]="dtFilter">
+                                </mat-form-field>-->
+                            </div> 
+                        </div>
+                    </th>
+                    <td mat-cell *matCellDef="let row; let i = index;">{{row.device_type}} </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="12">No data found</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    </section>

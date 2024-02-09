@@ -1,0 +1,39 @@
+.table {
+    width: 98%;
+}
+.table th {
+    color: #000000;
+    background-color: white;
+    border: none;
+    padding: 10px;
+    vertical-align: middle;
+}
+
+
+
+.table td {
+    color: black;
+    background-color: #dcebcc;
+    padding: 10px;
+    font-size: 15px;
+    border: none;
+    border-bottom: 1px solid grey;
+}
+
+::ng-deep .mat-paginator {
+    color: #000000;
+    font-size: medium;
+    
+    
+    background-color: transparent !important;
+  }
+  ::ng-deep .mat-paginator-container {
+    color: #000000;
+    font-size: medium;
+    
+    background-color: transparent !important;
+  }
+
+
+
+

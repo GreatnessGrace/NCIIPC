@@ -1,0 +1,83 @@
+<div class="main-design text-center" >
+   
+   <div class="outboxx">
+    <div class="center-box ">
+      <div class="row text-center mb-2">
+        <div class="col-md-5 mt-2" > 
+           <img class="mt-1" src="{{assetPath}}/images_and_logos/cdac_logo.png" alt="C-DAC Mohali" height="70px" width="75px">
+           <img  class="mt-1" src="{{assetPath}}/images_and_logos/ctmslogo1.png" alt="C-DAC Mohali" height="70px" width="75px">
+          </div>
+        <div class="col-md-7 mt-2 logo">
+          <img src="{{assetPath}}/images_and_logos/newlogo.png" alt="C-DAC Mohali" height="70px" width="245px">
+          <br>
+        </div>
+          <b class="namm">National Proactive Threat Hunting & Response System</b>
+    
+      </div>
+    
+
+        <br>
+     
+  <form  [formGroup]="loginForm" #f="ngForm"  autocomplete="off" readonly >
+    
+      <div>
+          <!-- <input type="text" placeholder="Enter Username" autocomplete="off" formControlName="username"  /> -->
+          <input type="text" name="username" autocomplete="one-time-code" autocomplete="off" formControlName="username" placeholder="Enter Username" readonly onfocus="this.removeAttribute('readonly');" >
+
+      </div>
+       <!-- <mat-error class="error" *ngIf="(loginSubmitted || f.username.touched) && f.username?.errors?.required" >
+      Username is Required 
+     </mat-error> -->
+      <div>
+          <input #id2change1  type="hidden" id="Password"   class="mt-4"  name="password" formControlName="password" autocomplete="off"  (change)="myEncryption($event)" >
+          <input #id2change type="password" id="orgPassword" class="mt-4"  name="orgPassword" autocomplete="new-password" autocomplete="off"  placeholder="Enter Password" formControlName="orgPassword"   readonly  onfocus="this.removeAttribute('readonly');" (change)="myEncryption($event)">
+      
+          <!-- <input type="password" id="id2Field" placeholder="Enter value" formControlName="id2" autocomplete="off" class="mt-4"  #id2change (change)="myEncryption($event)"> -->
+          <!-- <span [hidden]="!showpw" (click)="id2change.type=id2change.type=='password'?'text':'password'" 
+          class="fa fa-fw field-icon toggle-password float-lt"
+              [ngClass]="(id2change.type=='password')?' fa-eye':' fa-eye-slash'" ></span>
+
+              <span (click)="id2change1.type=id2change1.type=='password'?'text':'password'" [hidden]="showpw"
+              class="fa fa-fw field-icon toggle-password float-lt"
+                  [ngClass]="(id2change1.type=='password')?' fa-eye':' fa-eye-slash'" ></span>
+               -->
+              
+      </div>
+      <!-- <mat-error class="error"  *ngIf="f.orgPassword.errors?.minLength">
+        Password must be more than seven characters long.
+      </mat-error> -->
+      <br>
+      <div style="transform:scale(0.75); transform-origin:0 0; margin-left: 23%;">
+          <re-captcha (resolved)="resolved($event)" [siteKey]="siteKey"></re-captcha>
+      </div>
+    
+      <button class="btn btn-color cc1" [disabled]="!f.valid" (click)="login()">  Login <i *ngIf="loading" class="fa fa-spinner fa-spin colob"></i></button>
+<div class="row">
+  <div class="col-md-3">
+      
+      <div class="button-class colo" (click)="signup()" >
+          <b> Sign Up </b>
+        </div>
+  </div>
+  <div class="col-md-4"></div>
+  <div class="col-md-5">
+      <div class="button-class colo mb-1" (click)="forgotPassword()">
+          Forgot password ?
+      </div>
+      
+  </div>
+</div>
+      
+
+
+ 
+</form>
+
+</div>
+   </div>
+   <img class="g20image" src="{{assetPath}}/images_and_logos/emblem.png" alt="C-DAC Mohali" height="130px" width="100px">
+   <img class="g20image" src="{{assetPath}}/images_and_logos/g20.png" alt="C-DAC Mohali" height="150px" width="280px">
+   <img class="g20image" src="{{assetPath}}/images_and_logos/Aazadi.webp" alt="C-DAC Mohali" height="110px" width="200px">
+
+<!-- <app-footer class="fixed-bottom"></app-footer> -->
+</div>

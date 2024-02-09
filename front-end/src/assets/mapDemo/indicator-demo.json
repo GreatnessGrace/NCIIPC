@@ -1,0 +1,192 @@
+{
+    "type": "bundle",
+    "id": "bundle--7565d154-d3ec-4542-be60-bf1642fe55e5",
+    "spec_version": "2.0",
+    "objects": [
+      {
+        "type": "relationship",
+        "id": "relationship--f21e7c90-014d-4d86-9334-d84b16280c42",
+        "created_by_ref": "identity--200db46c-8455-4a42-840c-bbea779a1647",
+        "created": "2023-04-05T04:59:14.590Z",
+        "modified": "2023-04-05T04:59:14.590Z",
+        "relationship_type": "indicates",
+        "source_ref": "indicator--43b49b89-38a1-44a4-aa97-48928049e025",
+        "target_ref": "malware--37b7d97a-5b06-4d6e-abf2-9da108c57a68"
+      },
+      {
+        "type": "relationship",
+        "id": "relationship--f21e7c90-014d-4d86-9334-d84b16280c42",
+        "created_by_ref": "identity--200db46c-8455-4a42-840c-bbea779a1647",
+        "created": "2023-04-05T04:59:14.590Z",
+        "modified": "2023-04-05T04:59:14.590Z",
+        "relationship_type": "indicates",
+        "source_ref": "indicator--43b49b89-38a1-44a4-aa97-48928049e025",
+        "target_ref": "malware--37b7d97a-5b06-4d6e-abf2-9da108c57a68"
+      },
+      {
+        "type": "relationship",
+        "id": "relationship--e3266660-061f-48d5-b65b-ed8c1e534fd0",
+        "created_by_ref": "identity--200db46c-8455-4a42-840c-bbea779a1647",
+        "created": "2023-04-05T04:59:13.654Z",
+        "modified": "2023-04-05T04:59:13.654Z",
+        "relationship_type": "related-to",
+        "source_ref": "indicator--43b49b89-38a1-44a4-aa97-48928049e025",
+        "target_ref": "identity--483ad5e3-ef52-480d-ab29-6173a3aa19e2"
+      },
+      {
+        "type": "indicator",
+        "id": "indicator--43b49b89-38a1-44a4-aa97-48928049e025",
+        "created_by_ref": "identity--200db46c-8455-4a42-840c-bbea779a1647",
+        "created": "2023-04-05T04:59:13.549Z",
+        "modified": "2023-04-05T04:59:15.751Z",
+        "name": "http://59.99.141.203:36128/Mozi.m+-O+/tmp/netgear",
+        "description": "This indicator indicates a URL",
+        "pattern": "[url:value = 'http://59.99.141.203:36128/Mozi.m+-O+/tmp/netgear' AND ipv4-addr:value = '59.99.141.203']",
+        "valid_from": "2023-04-05T10:17:17Z",
+        "labels": [
+          "anomalous-activity"
+        ],
+        "external_references": [
+          {
+            "source_name": "cdac_hp",
+            "description": "honeypot=cdac_hp)"
+          }
+        ],
+        "x_event_label": [
+          "binary_drop",
+          "classified_malware",
+          "download_url"
+        ],
+        "x_honeypot": [
+          "cdac_hp"
+        ],
+        "x_node_id": [
+          22
+        ],
+        "x_organization": [
+          "STPI-Bengaluru-Karnataka"
+        ],
+        "x_organization_region": [
+          "South"
+        ],
+        "x_organization_sector": [
+          "IT & ITES"
+        ]
+      },
+      {
+        "type": "malware",
+        "id": "malware--37b7d97a-5b06-4d6e-abf2-9da108c57a68",
+        "created_by_ref": "identity--200db46c-8455-4a42-840c-bbea779a1647",
+        "created": "2022-12-17T06:43:14.933Z",
+        "modified": "2022-12-17T06:43:14.933Z",
+        "name": "fbe51695e97a45dc61967dc3241a37dc",
+        "description": "This Malware object represents the malicious binary captured on honeynet sensor",
+        "kill_chain_phases": [
+          {
+            "kill_chain_name": "mandiant-attack-lifecycle-model",
+            "phase_name": "initial-compromise"
+          }
+        ],
+        "labels": [
+          "IoT Botnet"
+        ],
+        "external_references": [
+          {
+            "source_name": "cdac_hp",
+            "description": "Bin ID= 75359 | bin_md5=fbe51695e97a45dc61967dc3241a37dc"
+          }
+        ],
+        "valid_from": "2022-11-06T02:35:43Z",
+        "x_bin_av_class": "",
+        "x_bin_classification": "Classified",
+        "x_bin_vt_av_classification_ratio": "45/63",
+        "x_bin_vt_av_labels": {
+          "ALYac": "Backdoor.Linux.Mirai",
+          "AVG": "Other:Malware-gen [Trj]",
+          "Ad-Aware": "Trojan.Generic.30302262",
+          "AhnLab-V3": "Trojan/Linux.Mirai",
+          "Antiy-AVL": "Trojan[Backdoor]/Linux.Mirai.b",
+          "Arcabit": "Trojan.Generic.D1CE6036",
+          "Avast": "Other:Malware-gen [Trj]",
+          "Avira": "LINUX/Mirai.souoo",
+          "BitDefender": "Trojan.Generic.30302262",
+          "ClamAV": "Unix.Trojan.Dakkatoni-9809143-0",
+          "Comodo": "Malware@#11su19qb5ycn2",
+          "Cynet": "Malicious (score: 99)",
+          "Cyren": "E32/Trojan.GUMK-6",
+          "DrWeb": "Linux.Packed.1027",
+          "ESET-NOD32": "Linux/Mozi.A",
+          "Elastic": "Linux.Packer.Patched.UPX",
+          "Emsisoft": "Trojan.Generic.30302262 (B)",
+          "F-Secure": "Malware.LINUX/Mirai.souoo",
+          "FireEye": "Trojan.Generic.30302262",
+          "Fortinet": "Linux/Mirai.A!tr.bdr",
+          "GData": "Trojan.Generic.30302262",
+          "Google": "Detected",
+          "Ikarus": "Trojan.Linux.Dakkatoni",
+          "Jiangmin": "Backdoor.Linux.fkxe",
+          "Kaspersky": "HEUR:Backdoor.Linux.Mirai.b",
+          "Lionic": "Trojan.Linux.Mirai.K!c",
+          "MAX": "malware (ai score=100)",
+          "MaxSecure": "Trojan.Malware.121218.susgen",
+          "McAfee": "GenericRXME-LX!FBE51695E97A",
+          "McAfee-GW-Edition": "Backdoor.ys",
+          "MicroWorld-eScan": "Trojan.Generic.30302262",
+          "Microsoft": "Trojan:Linux/Dakkatoni.A!MTB",
+          "NANO-Antivirus": "Trojan.Mirai.huxepe",
+          "Rising": "Backdoor.Mirai/Linux!1.DDF1 (CLOUD)",
+          "Sangfor": "Backdoor.Linux.Mirai.b",
+          "Sophos": "Linux/DDoS-CIH",
+          "Symantec": "Trojan.Gen.NPE",
+          "Tencent": "Backdoor.Linux.Mirai.wao",
+          "TrendMicro": "Backdoor.Linux.MIRAI.PUSELVHB",
+          "TrendMicro-HouseCall": "Backdoor.Linux.MIRAI.PUSELVHB",
+          "VIPRE": "Trojan.Generic.30302262",
+          "ViRobot": "ELF.S.Agent.132876",
+          "VirIT": "Linux.Mirai.HGK",
+          "Zillya": "Trojan.Mirai.Linux.78021",
+          "ZoneAlarm": "HEUR:Backdoor.Linux.Mirai.b"
+        },
+        "x_honeypot": [
+          "cdac_hp"
+        ],
+        "x_node_id": [
+          75
+        ],
+        "x_organization": [
+          "SDC-Lucknow-UttarPradesh"
+        ],
+        "x_organization_region": [
+          "North"
+        ],
+        "x_organization_sector": [
+          "government-national"
+        ]
+      },
+      {
+        "type": "identity",
+        "id": "identity--483ad5e3-ef52-480d-ab29-6173a3aa19e2",
+        "created": "2022-12-24T20:29:51.248Z",
+        "modified": "2022-12-24T20:29:51.248Z",
+        "name": "STPI-Bengaluru-Karnataka",
+        "description": "STPI-Bengaluru-Karnataka",
+        "identity_class": "organization",
+        "sectors": [
+          "government"
+        ]
+      },
+      {
+        "revoked": false,
+        "description": "Cyber Security Technology Division, Centre for Development of Advanced Computing, Mohali.",
+        "modified": "2022-12-12T09:33:10.583000+00:00",
+        "type": "identity",
+        "name": "Cyber Security Technology Division",
+        "sectors": [
+          "government-national"
+        ],
+        "identity_class": "organization",
+        "created": "2022-12-12T09:33:10.583000+00:00",
+        "id": "identity--200db46c-8455-4a42-840c-bbea779a1647"
+      }
+    ]
+  }

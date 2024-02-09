@@ -1,0 +1,116 @@
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document" >
+    <div class="modal-content backk1">
+      <div class="modal-header border-0">
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> 
+      </div>
+      <div class="modal-body">
+        <div class="map-frame1">
+          <div id="map-full" class="container-fluid">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row ">
+
+  <div class="map-div col-xl-8 p-2">
+    <div>
+      <!-- <button type="button" class="btn colo backk p-0 " data-toggle="modal" data-target="#exampleModal"
+        (click)="invalidateSize()" title="Full screen view">
+        <i class="fa fa-expand" aria-hidden="true"></i>
+      </button> -->
+      <div class="map-frame ">
+        <div id="map" class="container-fluid">
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="col-xl-4 p-2 sidechart" *ngFor="let chart of chartAllData; let i = index">
+
+
+    <div class="chartcolor" [ngClass]="{'chartHeight': i == 0}">
+
+      <div class="row mb-0">
+        <div class="col-2"></div>
+        <div class="col-8 text-center pt-2">
+          <h1 class="colo"><b>{{chart.message}}</b></h1>
+        </div>
+        <div class="col-2">
+          <button type="button" [matMenuTriggerFor]="menu1" class="btn buttonn">
+            <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+            <mat-menu #menu1="matMenu" class="d1">
+                <span *ngIf="chartType != 'table'" mat-menu-item (click)="chartToggle('table')"
+                    class="text-white"> <img src="{{assetPath}}/images_and_logos/tablepic.png" title="Table"
+                        style="height:25px; width:25px; cursor: pointer;"> Table</span>
+                <span *ngIf="chartType != 'pie'" mat-menu-item (click)="chartToggle('pie')"
+                    class="text-white"><img src="{{assetPath}}/images_and_logos/piechart.png"
+                        title="Chart View" style="height:25px; width:25px; cursor: pointer;"> Pie
+                    Chart</span>
+                <span *ngIf="chartType != 'bar'" mat-menu-item class="text-white"
+                    (click)="chartToggle('bar')"> <img src="{{assetPath}}/images_and_logos/bar-chart.png"
+                        title="Chart View" style="height:20px; width:20px; cursor: pointer;"> &nbsp;Bar
+                    Chart</span>
+            </mat-menu>
+        </button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div *ngIf="chartType == 'table'" class="text-center col-xl-12 ">
+          <div class="table-sec mt-3">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th class="text-left">
+                    Name
+                  </th>
+                  <th>
+                    Documents
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of chart['data']" ng-repeat-start="action in thing.actions" ng-class-odd="odd"
+                  ng-class-even="even">
+                  <td class="text-left">
+                   
+
+                    {{data.key}}
+                  </td>
+                  <td>
+                    {{data.doc_count}}
+                  </td>
+                </tr>
+                <tr *ngIf="!chart['data'].length && chart['data']">
+                  <td colspan="2">No data.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="text-center col-xl-12 ">
+          <div class="pie" *ngIf="chartType == 'pie'">
+            <app-child-chart [chartData]="chart" [chartId]="10" class="atchart"></app-child-chart>
+          </div>
+          <div class="pie" *ngIf="chartType == 'bar'">
+            <app-bar-charts [chartData]="chart" [chartId]="10"></app-bar-charts>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr color="grey" width="98%">
+</div>

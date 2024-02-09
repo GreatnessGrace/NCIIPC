@@ -1,0 +1,15 @@
+.background {
+    background: #fff;
+    border: 1px solid grey ;
+    height:400px !important; 
+    overflow-y: auto;
+
+
+}
+::ng-deep .segment-key {
+    color: #000000 !important;
+}
+
+ngx-json-viewer  {
+    position: fixed;
+}

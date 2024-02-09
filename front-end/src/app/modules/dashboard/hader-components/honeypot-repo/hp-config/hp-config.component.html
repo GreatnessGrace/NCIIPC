@@ -1,0 +1,356 @@
+<section>
+    <app-header></app-header>
+    <div class="formbold-main-wrapper">
+        <div class="formbold-form-wrapper">
+            <form #config="ngForm" [formGroup]="configForm" 
+            (ngSubmit)="onSubmit(config.value)">
+            <!-- (ngSubmit)="onSubmit(config.value)" -->
+                <div class="formbold-mb-3 row">
+                    <div class="col-xl-4">
+                        <label for="node_location" class="formbold-form-label"> Node Location<span
+                                class="star">*</span></label>
+                        <input type="text" formControlName="node_location" id="node_location"
+                            placeholder="Enter node location" class="formbold-form-input" />
+                        <mat-error
+                            *ngIf="configForm.get('node_location')?.touched && configForm.get('node_location')?.hasError('required')">
+                            Please fill out this field.
+                        </mat-error>
+                        <mat-error *ngIf="configForm.get('node_location')?.hasError('pattern')">
+                            Please enter valid characters: alphabets, '-', '_', or spaces
+                        </mat-error>
+                    </div>
+                    <div class="col-xl-4">
+                        <label for="region" class="formbold-form-label"> Region<span class="star">*</span></label>
+                        <select formControlName="region" id="region" class="formbold-form-input"
+                            (change)="getStates($event)">
+                            <option class="formbold-form-input" value="" selected="selected" disabled>Select Region
+                            </option>
+                            <option class="formbold-form-input" value="Central-India">Central-India</option>
+                            <option class="formbold-form-input" value="East">East</option>
+                            <option class="formbold-form-input" value="North">North</option>
+                            <option class="formbold-form-input" value="North-East">North-East</option>
+                            <option class="formbold-form-input" value="North-East">North-West</option>
+                            <option class="formbold-form-input" value="South">South</option>
+                            <option class="formbold-form-input" value="West">West</option>
+                        </select>
+                        <mat-error
+                            *ngIf="configForm.get('region')?.touched && configForm.get('region')?.hasError('required')">
+                            Please fill out this field.
+                        </mat-error>
+                    </div>
+                    <div class="col-xl-4">
+                        <label for="sector" class="formbold-form-label"> Sector<span class="star">*</span></label>
+                        <select formControlName="sector" id="sector" class="formbold-form-input">
+                            <option class="formbold-form-input" value="" selected="selected" disabled>Select Sector
+                            </option>
+                            <option class="formbold-form-input" value="BFSI">BFSI</option>
+                            <option class="formbold-form-input" value="Government">Government</option>
+                            <option class="formbold-form-input" value="Power-Energy">Power-Energy</option>
+                            <option class="formbold-form-input" value="Indusrtial">Indusrtial</option>
+                            <option class="formbold-form-input" value="IT-ITES">IT-ITES</option>
+                            <option class="formbold-form-input" value="Research-Academic">Research-Academic</option>
+                            <option class="formbold-form-input" value="Telecom">Telecom</option>
+                            <option class="formbold-form-input" value="Strategic-PSU">Strategic-PSU</option>
+                            <option class="formbold-form-input" value="Healthcare-Pharma">Healthcare-Pharma</option>
+                            <option class="formbold-form-input" value="Transport">Transport</option>
+                        </select>
+                        <mat-error
+                            *ngIf="configForm.get('sector')?.touched && configForm.get('sector')?.hasError('required')">
+                            Please fill out this field.
+                        </mat-error>
+                    </div>
+                </div>
+                <div class="formbold-mb-3 row">
+
+
+                    <div class="col-xl-4">
+                        <label for="state" class="formbold-form-label">State<span class="star">*</span></label>
+                        <select formControlName="state" id="state" class="formbold-form-input" (change)="getCities()">
+                            <option class="formbold-form-input" value="" selected="selected" disabled>Select State
+                            </option>
+                            <option *ngFor="let state of statesArray; let i = index" [value]="state" [ngValue]="state">
+                                {{ state }}</option>
+                        </select>
+                        <mat-error
+                            *ngIf="configForm.get('state')?.touched && configForm.get('state')?.hasError('required')">
+                            Please fill out this field.
+                        </mat-error>
+                    </div>
+                    <div class="col-xl-4">
+                        <label for="city" class="formbold-form-label"> City<span class="star">*</span></label>
+                        <select formControlName="city" id="city" class="formbold-form-input" (change)="checkOther()">
+                            <option class="formbold-form-input" value="" selected="selected" disabled>Select City
+                            </option>
+                            <option *ngFor="let city of citiesArray; let i = index" [value]="city" [ngValue]="city">{{
+                                city }}</option>
+                            <option class="formbold-form-input" value="other">Other
+                            </option>
+                        </select>
+                        <mat-error
+                            *ngIf="configForm.get('city')?.touched && configForm.get('city')?.hasError('required')">
+                            Please fill out this field.
+                        </mat-error>
+                    </div>
+                    <div class="col-xl-4" [hidden]="ifOther">
+                        <label for="otherCity" class="formbold-form-label"> City Name </label>
+                        <input type="text" formControlName="otherCity" id="otherCity" placeholder="Enter your city"
+                            class="formbold-form-input" />
+                    </div>
+                </div>
+                <div class="formbold-mb-3 row">
+                    <div class="col-xl-6">
+                        <label for="lat" class="formbold-form-label"> Latitude<span class="star">*</span></label>
+                        <input type="text" formControlName="lat" id="lat" placeholder="Enter Latitude"
+                            class="formbold-form-input" />
+                        <mat-error
+                            *ngIf="configForm.get('lat')?.touched && configForm.get('lat')?.hasError('required')">
+                            Please fill out this field.
+                        </mat-error>
+                        <mat-error *ngIf="configForm.get('lat')?.hasError('pattern')">
+                            Please enter a valid latitude (-90 to 90).
+                        </mat-error>
+                    </div>
+                    <div class="col-xl-6">
+                        <label for="lng" class="formbold-form-label"> Longitude<span class="star">*</span></label>
+                        <input type="text" formControlName="lng" id="lng" placeholder="Enter Longitide"
+                            class="formbold-form-input" />
+                        <mat-error
+                            *ngIf="configForm.get('lng')?.touched && configForm.get('lng')?.hasError('required')">
+                            Please fill out this field.
+                        </mat-error>
+                        <mat-error *ngIf="configForm.get('lng')?.hasError('pattern')">
+                            Please enter a valid longitude (-180 to 180).
+                        </mat-error>
+                    </div>
+                </div>
+                <div class="formbold-mb-3 row">
+                    <div class="col-xl-4">
+                        <label for="mac_address" class="formbold-form-label"> Mac Address<span
+                                class="star">*</span></label>
+                        <input type="text" formControlName="mac_address" id="mac_address"
+                            placeholder="Enter mac address" class="formbold-form-input" />
+                        <mat-error
+                            *ngIf="configForm.get('mac_address')?.touched && configForm.get('mac_address')?.hasError('required')">
+                            Please fill out this field.
+                        </mat-error>
+                        <mat-error *ngIf="configForm.get('mac_address')?.hasError('pattern')">
+                            Please enter a valid MAC address in the valid format.
+                        </mat-error>
+                    </div>
+                    <div class="col-xl-4">
+                        <label for="node_hardware" class="formbold-form-label"> Node Hardware<span
+                                class="star">*</span></label>
+                        <select formControlName="node_hardware" id="node_hardware" class="formbold-form-input">
+                            <option class="formbold-form-input" value="" selected="selected" disabled>Select Node
+                                Hardware
+                                Type
+                            </option>
+                            <option class="formbold-form-input" value="Server">Server</option>
+                            <option class="formbold-form-input" value="Desktop">Desktop</option>
+                            <option class="formbold-form-input" value="raspberry">Raspberry Pi</option>
+                        </select>
+                        <mat-error
+                            *ngIf="configForm.get('node_hardware')?.touched && configForm.get('node_hardware')?.hasError('required')">
+                            Please fill out this field.
+                        </mat-error>
+                    </div>
+                </div>
+                <div class="formbold-mb-3 row">
+                    <div class="col-xl-2">
+                        <label class="formbold-form-label"> Network Type<span class="star">*</span></label>
+                        <select formControlName="network_type" id="network_type" class="formbold-form-input"
+                            (change)="getNWtype($event)">
+                            <option class="formbold-form-input" value="" selected="selected" disabled>Select Network
+                                Type</option>
+                            <option class="formbold-form-input" value="Private">Private</option>
+                            <option class="formbold-form-input" value="Public">Public</option>
+                        </select>
+                        <mat-error
+                            *ngIf="configForm.get('network_type')?.touched && configForm.get('network_type')?.hasError('required')">
+                            Please fill out this field.
+                        </mat-error>
+                    </div>
+
+                    <div class="col-xl-4">
+                        <label for="node_ip" class="formbold-form-label"> Node IP (Local IP/ Public IP)<span
+                                class="star">*</span> </label>
+                        <input type="text" formControlName="node_ip" id="node_ip" placeholder="Enter node ip"
+                            class="formbold-form-input" />
+                        <mat-error
+                            *ngIf="configForm.get('node_ip')?.touched && configForm.get('node_ip')?.hasError('required')">
+                            Please fill out this field.
+                        </mat-error>
+                        <mat-error *ngIf="configForm.get('node_ip')?.hasError('pattern')">
+                            Please enter a valid IP address in the valid format.
+                        </mat-error>
+                    </div>
+                    <div class="col-xl-4" [hidden]="isPublic">
+                        <label for="base_ip" class="formbold-form-label"> Mapped Public IP </label>
+                        <input type="text" formControlName="base_ip" id="base_ip" placeholder="Enter public ip"
+                            class="formbold-form-input" />
+                        <mat-error *ngIf="configForm.get('base_ip')?.hasError('pattern')">
+                            Please enter a valid IP address in the valid format.
+                        </mat-error>
+                    </div>
+                    <div class="col-xl-2">
+                        <label for="port" class="formbold-form-label">SSH Port </label>
+                        <input type="text" formControlName="port" id="port" placeholder="Enter SSH port"
+                            class="formbold-form-input" />
+                    </div>
+                </div>
+                <div class="formbold-mb-3 row">
+                    <div class="col-xl-4">
+                        <label for="node_sensor_hp_type" class="formbold-form-label"> Honeypot Type<span
+                                class="star">*</span></label>
+                        <select formControlName="node_sensor_hp_type" id="node_sensor_hp_type"
+                            class="formbold-form-input">
+                            <option class="formbold-form-input" value="" selected="selected" disabled>Select Honeypot
+                                Type
+                            </option>
+                            <option class="formbold-form-input" value="LIHP">LIHP</option>
+                            <option class="formbold-form-input" value="HIHP">HIHP</option>
+                        </select>
+                        <mat-error
+                            *ngIf="configForm.get('node_sensor_hp_type')?.touched && configForm.get('node_sensor_hp_type')?.hasError('required')">
+                            Please fill out this field.
+                        </mat-error>
+                    </div>
+                    <div class="col-xl-4">
+                        <label for="interface" class="formbold-form-label"> Interface<span class="star">*</span></label>
+                        <input type="text" formControlName="interface" id="interface" placeholder="Enter interface"
+                            class="formbold-form-input" />
+                        <mat-error
+                            *ngIf="configForm.get('interface')?.touched && configForm.get('interface')?.hasError('required')">
+                            Please fill out this field.
+                        </mat-error>
+                    </div>
+                    <div class="col-xl-4">
+                        <label for="virtual_tech" class="formbold-form-label"> Virtual Tech<span
+                                class="star">*</span></label>
+                        <select formControlName="virtual_tech" id="virtual_tech" class="formbold-form-input">
+                            <option class="formbold-form-input" value="" selected="selected" disabled>Select Virtual
+                                Tech
+                            </option>
+                            <option class="formbold-form-input" value="Docker" 
+                            [disabled]="configForm.get('node_sensor_hp_type')?.value === 'HIHP'">Docker</option>
+                            <option class="formbold-form-input" value="Virtual Box"  [disabled]="configForm.get('node_sensor_hp_type')?.value === 'LIHP'">Virtual Box</option>
+                        </select>
+                        <mat-error
+                            *ngIf="configForm.get('virtual_tech')?.touched && configForm.get('virtual_tech')?.hasError('required')">
+                            Please fill out this field.
+                        </mat-error>
+                    </div>
+                </div>
+
+
+                <div class="formbold-mb-3 row">
+                    <div class="col-xl-4">
+                        <label for="subnet" class="formbold-form-label"> Subnet IP<span class="star">*</span></label>
+                        <input type="text" formControlName="subnet" id="subnet" placeholder="Enter subnet IP address"
+                            class="formbold-form-input" />
+                        <mat-error
+                            *ngIf="configForm.get('subnet')?.touched && configForm.get('subnet')?.hasError('required')">
+                            Please fill out this field.
+                        </mat-error>
+                        <mat-error *ngIf="configForm.get('subnet')?.hasError('pattern')">
+                            Please enter a valid IP address in the valid format.
+                        </mat-error>
+                    </div>
+                    <div class="col-xl-4">
+                        <label for="netmask" class="formbold-form-label"> Netmask IP<span class="star">*</span></label>
+                        <input type="text" formControlName="netmask" id="netmask" placeholder="Enter netmask IP address"
+                            class="formbold-form-input" />
+                        <mat-error
+                            *ngIf="configForm.get('netmask')?.touched && configForm.get('netmask')?.hasError('required')">
+                            Please fill out this field.
+                        </mat-error>
+                        <mat-error *ngIf="configForm.get('netmask')?.hasError('pattern')">
+                            Please enter a valid IP address in the valid format.
+                        </mat-error>
+                    </div>
+                    <div class="col-xl-4">
+                        <label for="gateway" class="formbold-form-label">Gateway IP<span class="star">*</span></label>
+                        <input type="text" formControlName="gateway" id="gateway" placeholder="Enter gateway IP address"
+                            class="formbold-form-input" />
+                        <mat-error
+                            *ngIf="configForm.get('gateway')?.touched && configForm.get('gateway')?.hasError('required')">
+                            Please fill out this field.
+                        </mat-error>
+                        <mat-error *ngIf="configForm.get('gateway')?.hasError('pattern')">
+                            Please enter a valid IP address in the valid format.
+                        </mat-error>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-4">
+                        <label for="dns" class="formbold-form-label"> DNS<span class="star">*</span></label>
+                        <input type="text" formControlName="dns" id="dns" placeholder="Enter DNS"
+                            class="formbold-form-input" />
+                        <mat-error
+                            *ngIf="configForm.get('dns')?.touched && configForm.get('dns')?.hasError('required')">
+                            Please fill out this field.
+                        </mat-error>
+                        <mat-error *ngIf="configForm.get('dns')?.hasError('pattern')">
+                            Please enter a valid IP address in the valid format.
+                        </mat-error>
+                    </div>
+                    <div class="col-xl-4">
+                        <label for="total_hp" class="formbold-form-label"> No. of Honeypots<span
+                                class="star">*</span></label>
+                        <input type="number" formControlName="total_hp" id="total_hp"
+                            placeholder="Enter Total No. of Honeypots" class="formbold-form-input" />
+                        <mat-error
+                            *ngIf="configForm.get('total_hp')?.touched && configForm.get('total_hp')?.hasError('required')">
+                            Please fill out this field.
+                        </mat-error>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div formArrayName="ipAddresses" class="sub-div">
+                            <div *ngFor="let ipAddressGroup of ipAddresses().controls; let i = index">
+                                <div [formGroupName]="i">
+                                    <div class="row">
+                                        <div class="col-xl-5">
+                                            <label [for]="isSpecialCondition ? 'special_private_ip' : 'private_ip'" class="formbold-form-label">
+                                                {{ isSpecialCondition ? 'Public IP' : 'Private IP' }}
+                                              </label>
+                                              
+                                            <!-- <label for="private_ip" class="formbold-form-label">Private IP</label> -->
+                                            <input type="text" id="private_ip" formControlName="private_ip"
+                                            [placeholder]="isSpecialCondition ? 'Enter Public IP address' : 'Enter private IP address'"
+                                            class="formbold-form-input" />
+                                            <mat-error
+                                                *ngIf="configForm.get('ipAddresses.'+i+'')?.get('private_ip')?.touched && configForm.get('ipAddresses.'+i+'')?.get('private_ip')?.hasError('required')">
+                                                Please fill out this field.
+                                            </mat-error>
+                                            <mat-error *ngIf="configForm.get('ipAddresses.'+i+'')?.get('private_ip')?.hasError('pattern')">
+                                                Please enter a valid IP address in the valid format.
+                                            </mat-error>
+                                        </div>
+                                        <div class="col-xl-5" [hidden]="isPublic"
+                                        >
+                                            <label for="mapped_ip" class="formbold-form-label">Mapped IP</label>
+                                            <input type="text" id="mapped_ip" formControlName="mapped_ip"
+                                                placeholder="Enter mapped IP address" class="formbold-form-input" />
+                                            <mat-error
+                                                *ngIf="configForm.get('ipAddresses.'+i+'')?.get('mapped_ip')?.touched && configForm.get('ipAddresses.'+i+'')?.get('mapped_ip')?.hasError('required')">
+                                                Please fill out this field.
+                                            </mat-error>
+                                            <mat-error *ngIf="configForm.get('ipAddresses.'+i+'')?.get('mapped_ip')?.hasError('pattern')">
+                                                Please enter a valid IP address in the valid format.
+                                            </mat-error> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="formbold-btn btn-primary" type="submit" [disabled]="configForm.invalid">Submit</button>
+            </form>
+        </div>
+    </div>
+
+</section>

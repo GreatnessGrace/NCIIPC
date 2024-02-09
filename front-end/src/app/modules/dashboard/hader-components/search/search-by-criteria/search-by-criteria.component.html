@@ -1,0 +1,335 @@
+<section class="header-design">
+    <app-header></app-header>
+    <div class="col-lg-12 ">
+        <div class="panel">
+            <div class="panel-heading">
+                <h2 class=" colo">
+                    <b>Search by Criteria</b>
+                </h2>
+            </div>
+            <br>
+
+            <div>
+                <div class="box-body col-lg-12">
+                    <form class="inline-form" [formGroup]="criteriaForm" (ngSubmit)="onSubmit()">
+                        <div class="form-group col-lg-2">
+                            <label for="eventType">Select Indicator Type:</label>
+                            <select class="form-control h32" id="searchtype" required="" formControlName="eventType">
+                                <option value="" class="" disabled selected>-- Select Indicator Type --</option>
+                                <option value="ip_address" class="">IP Address</option>
+                                <option value="md5_hash" class="">Binary MD5 Hash</option>
+                                <option value="url_address" class="">URL</option>
+                                <option value="event_data.vul_name" class="">Vulnerabilty</option>
+                                <option value="malware_family" class="">Malware Family</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label for="eventTypeValue">Enter Indicator Value:</label>
+                            <input type="text" class="form-control h32" id="searchValue" required=""
+                                formControlName="eventTypeValue" placeholder="Enter Indicator Value" />
+
+                        </div>
+
+
+                        <div class="form-group col-lg-2 mt-3">
+                            <button id="submit" type="submit" class="btn">
+                                <span class="fa fa-search"></span> Search
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr color="grey" class="hrw">
+    <div *ngIf="this.searchloader" class="row lod4">
+        <div class="loader text-black" *ngIf="this.searchloader">
+        </div>
+    </div>
+
+    <div class="background upper-div" [hidden]="!showEvent">
+        <div class="panel">
+            <div class="panel-heading">
+                <h2 class="colo">
+                    Events Data
+                </h2>
+            </div>
+
+
+            <table mat-table [dataSource]="dataSource" matSort #sortCriteria="matSort" class="table-striped table">
+                <ng-container matColumnDef="key">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="tab-header">Event Name</th>
+                    <td mat-cell *matCellDef="let row">{{row.key}} </td>
+                </ng-container>
+                <ng-container matColumnDef="count">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="tab-header"> Event Count</th>
+                    <td mat-cell *matCellDef="let row"> {{row.doc_count}}</td>
+                </ng-container>
+                <ng-container matColumnDef="details">
+                    <th mat-header-cell *matHeaderCellDef>More Details</th>
+                    <td mat-cell *matCellDef="let row;"> <button class="evt" (click)="ShowJson(row)">More
+                            Detail</button></td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="8">No data matching the filter</td>
+                </tr>
+            </table>
+
+        </div>
+
+    </div>
+    <div class=" row">
+        <div *ngIf="this.searchloaderxl" class="col-12 lod">
+            <div class="loader text-black" *ngIf="this.searchloaderxl">
+            </div>
+        </div>
+        <div class="background" [hidden]="!showEventJson">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h2 class="colo">
+                        Binary Indicator Attack Data
+                    </h2>
+                </div>
+                <hr color="grey">
+                <div class="row">
+                    <div class="col-2">
+
+                        <table class="filterr">
+                            <ng-container *ngFor="let colum of displayedColumnsData">
+                                <tr [hidden]="colum.columnVal == 'id' || colum.columnVal == 'view_json'">
+                                    <td><input type="checkbox" [id]="colum.columnVal" [checked]=true class="bigbox"
+                                            name="colum.columnVal" (change)="getAllChecked($event)"
+                                            [value]="colum.columnVal"></td>
+                                    <td class="checkbox-cl"><label
+                                            for="{{colum.columnVal}}">{{colum.columnName}}</label> </td>
+                                </tr>
+                            </ng-container>
+                        </table>
+                    </div>
+                    <div class="col-10 jsonTable">
+                        <mat-paginator #paginatorEvent="matPaginator" [pageSizeOptions]="[10, 25, 50, 100]"
+                            aria-label="Select page of users">
+                        </mat-paginator>
+                        <table mat-table [dataSource]="eventJson" matSort #sortJson="matSort"
+                            class="table-striped table ">
+                            <!--organization_sector -->
+                            <ng-container matColumnDef="id">
+                                <th mat-header-cell *matHeaderCellDef class="">#</th>
+
+                                <td mat-cell *matCellDef="let row; let i = index;">{{i+1}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="organization_sector">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="row ">
+                                        <div class="col-12 hed" mat-sort-header>Sector</div>
+                                        <div class="col-12 hed1">
+                                            <mat-form-field class="filter" floatLabel="never">
+                                                <mat-label>Search</mat-label>
+                                                <input matInput [formControl]="secFilter">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let row;">
+                                    {{row._source.organization_sector}}</td>
+                            </ng-container>
+                            <!-- organization_region -->
+                            <ng-container matColumnDef="event_timestamp">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="row ">
+                                        <div class="col-12 hed" mat-sort-header>Event Time</div>
+                                        <div class="col-12 hed1">
+                                        </div>
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let row"> {{row._source.event_timestamp | date :'medium'}}
+                                </td>
+                            </ng-container>
+                            <!-- organization_region -->
+                            <ng-container matColumnDef="organization_region">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="row ">
+                                        <div class="col-12 hed" mat-sort-header>Region</div>
+                                        <div class="col-12 hed1">
+                                            <mat-form-field class="filter" floatLabel="never">
+                                                <mat-label>Search</mat-label>
+                                                <input matInput [formControl]="regFilter">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let row;">
+                                    {{row._source.organization_region}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="organization">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="row ">
+                                        <div class="col-12 hed" mat-sort-header>Organization</div>
+                                        <div class="col-12 hed1">
+                                            <mat-form-field class="filter" floatLabel="never">
+                                                <mat-label>Search</mat-label>
+                                                <input matInput [formControl]="orgFilter">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let row"> {{row._source.organization}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="node_id">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="row ">
+                                        <div class="col-12 hed" mat-sort-header>Node ID</div>
+                                        <div class="col-12 hed1">
+                                            <mat-form-field class="filter" floatLabel="never">
+                                                <mat-label>Search</mat-label>
+                                                <input matInput [formControl]="nodeFilter">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let row"> {{row._source.node_id}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="honeypot">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="row ">
+                                        <div class="col-12 hed" mat-sort-header>Honeypot</div>
+                                        <div class="col-12 hed1">
+
+                                        </div>
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let row"> {{row._source.honeypot}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="event_label">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="row ">
+                                        <div class="col-12 hed" mat-sort-header>Event Label</div>
+                                        <div class="col-12 hed1">
+
+                                        </div>
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let row"> {{row._source.event_label}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="organization_city">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="row ">
+                                        <div class="col-12 hed" mat-sort-header>Organization City</div>
+                                        <div class="col-12 hed1">
+                                            <mat-form-field class="filter" floatLabel="never">
+                                                <mat-label>Search</mat-label>
+                                                <input matInput [formControl]="cityFilter">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let row"> {{row._source.organization_city}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="organization_state">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="row ">
+                                        <div class="col-12 hed" mat-sort-header>Organization State</div>
+                                        <div class="col-12 hed1">
+                                            <mat-form-field class="filter" floatLabel="never">
+                                                <mat-label>Search</mat-label>
+                                                <input matInput [formControl]="stateFilter">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                  </th>
+                                <td mat-cell *matCellDef="let row"> {{row._source.organization_state}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="session_id">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="row ">
+                                        <div class="col-12 hed" mat-sort-header> Session ID </div>
+                                        <div class="col-12 hed1">
+
+                                        </div>
+                                    </div>
+                                   </th>
+                                <td mat-cell *matCellDef="let row"> {{row._source.event_data.session_id}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="remote_ip">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="row ">
+                                        <div class="col-12 hed" mat-sort-header>Remote IP  </div>
+                                        <div class="col-12 hed1">
+
+                                        </div>
+                                    </div>
+                                    </th>
+                                <td mat-cell *matCellDef="let row"> {{row._source.event_data.remote_ip}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="local_ip">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="row ">
+                                        <div class="col-12 hed" mat-sort-header> Local IP  </div>
+                                        <div class="col-12 hed1">
+
+                                        </div>
+                                    </div></th>
+                                <td mat-cell *matCellDef="let row"> {{row._source.event_data.local_ip}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="target_profile">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="row ">
+                                        <div class="col-12 hed" mat-sort-header>Target Profile </div>
+                                        <div class="col-12 hed1">
+
+                                        </div>
+                                    </div> </th>
+                                <td mat-cell *matCellDef="let row"> {{row._source.event_data.target_profile}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="service">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="row ">
+                                        <div class="col-12 hed" mat-sort-header> Service</div>
+                                        <div class="col-12 hed1">
+
+                                        </div>
+                                    </div> </th>
+                                <td mat-cell *matCellDef="let row"> {{row._source.event_data.service}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="view_json">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="row ">
+                                        <div class="col-12 hed"> View </div>
+                                        <div class="col-12 hed1">
+
+                                        </div>
+                                    </div> </th>
+                                <td mat-cell *matCellDef="let row;"><button class="evt"
+                                        (click)="showJsonData(row._source)">JSON
+                                        Data </button></td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsJson"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsJson;"></tr>
+
+                            <tr class="mat-row" *matNoDataRow>
+                                <td class="mat-cell" colspan="16">No data found</td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

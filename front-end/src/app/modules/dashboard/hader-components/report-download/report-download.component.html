@@ -1,0 +1,222 @@
+<section class="header-design">
+    <app-header></app-header>
+    <div class="row background">
+        <div class="col-sm-12">
+            <div class="panel panel-color panel-border panel-danger panel-shadow">
+                <div class="panel-heading mt-3">
+                    <h2 class="panel-title">
+                        <b class="colo">Report</b>
+                    </h2>
+                </div>
+                <div class="panel-body">
+                    <form role="form" [formGroup]="reportDownloadForm" (ngSubmit)="onSubmit()" #f="ngForm">
+                        <div class="row">
+                            <div class="col-md-2 ">
+                                <div class="form-group">
+                                    <label for="node">Report Filter</label>
+                                    <select class="form-control" formControlName="organization_type" #device
+                                        (change)="getCriteriatype(device.value)"
+                                        [attr.disabled]="userState ? true : null">
+                                        <option *ngIf="!userType" value="">-- Select Report Filter --</option>
+                                        <option *ngIf="!userType" value="organization_region.keyword">Orgnaization
+                                            Region</option>
+                                        <!-- <option *ngIf="!userType" value="organization_sector.keyword">Organization
+                                            Sector</option> -->
+                                            <option *ngIf="!userType" value="organization_state.keyword">Orgnaization
+                                                State</option>
+                                        <option value="organization.keyword">Organization Name</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- </div> -->
+                            <!-- <div class="row"> -->
+                            <div class="col-md-2 ">
+                                <div class="form-group">
+                                    <label for="node">Filter Value <i *ngIf="this.searchloaderxs"
+                                            class="fa fa-spinner fa-spin sml"></i>
+                                    </label>
+                                    <!-- <mat-select  class="form-control mat-select-dnld" multiple formControlName="organization_name">
+                                        <div class="select-all">
+                                            <mat-checkbox [(ngModel)]="allSelected" [ngModelOptions]="{standalone: true}"
+                                              (change)="toggleAllSelection()">Select All</mat-checkbox>
+                                        </div>
+                                        <mat-option *ngFor="let index of organization" [value]="index"> {{index.key}}</mat-option>
+                                    </mat-select> -->
+                                    <ng-multiselect-dropdown formControlName="organization_name" id="searchValue"
+                                        [settings]="dropdownSettings" [data]="organization" [(ngModel)]="selectedItems"
+                                        (onSelectAll)="onSelectAll($event)" [disabled]="isDropdownDisabled">
+                                    </ng-multiselect-dropdown>
+                                </div>
+                            </div>
+                            <div class="col-md-2 ">
+                                <div class="form-group">
+                                    <label for="selectFilter"> Select Date</label>
+                                    <select class="form-control" id="selectFilter" formControlName="date_filter"
+                                        #dateFilter (change)="onDateFilterChange(dateFilter.value)">
+                                        <option value="" disabled>-- Select Date Range --</option>
+                                        <option *ngFor="let filter of dateFilterArray" [value]="filter.key">
+                                            {{filter.value}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <ng-container *ngIf="reportDownloadForm.get('date_filter').value == 5">
+                                <div class="col-md-2 ">
+                                    <div class="form-group">
+                                        <label for="startdate"> &nbsp;&nbsp; Start Date</label>
+                                        <div class="input-group date-picker">
+                                            <input matInput [matDatepicker]="picker"
+                                                class="form-control cal mat-input-d" formControlName="start_date"
+                                                placeholder="Select Start Date" [max]="currentDate">
+                                            <mat-datepicker-toggle matIconSuffix [for]="picker"
+                                                class="mat-datepicker-t"></mat-datepicker-toggle>
+                                            <mat-datepicker #picker></mat-datepicker>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2 ">
+                                    <div class="form-group">
+                                        <label for="enddate"> &nbsp;&nbsp; End Date</label>
+                                        <div class="input-group date-picker">
+                                            <input matInput [matDatepicker]="endpicker"
+                                                class="form-control cal mat-input-d" formControlName="end_date"
+                                                placeholder="Select End Date" [max]="currentDate">
+                                            <mat-datepicker-toggle matIconSuffix [for]="endpicker"
+                                                class="mat-datepicker-t"></mat-datepicker-toggle>
+                                            <mat-datepicker #endpicker></mat-datepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <div class="col-md-2 mrt">
+                                <div class="form-group">
+                                    <button id="submit" type="submit" class="btn" [disabled]="!f.valid">Report
+                                        Generate</button>
+                                    <i *ngIf="this.searchloader" class="fa fa-spinner fa-spin"></i>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr color="grey" class="hrw">
+    <div class="row report-download-row">
+        <div class="background1 ">
+            <div class="panel-heading">
+                <h2 class="panel-title">
+                    <b class="colo ml-5"> Reports Generated</b>
+                </h2>
+            </div>
+            <div class="container-fluid contwid">
+
+                <div *ngIf="this.searchloaderxl" class="row lod">
+                    <div class="loader text-black" *ngIf="this.searchloaderxl">
+                    </div>
+                </div>
+
+                <table *ngIf="!this.searchloaderxl" mat-table [dataSource]="dataSource" class=" table zindex"
+                    id="reports">
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header"># </th>
+                        <td mat-cell *matCellDef="let row; let i = index;">{{i+1}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="organization_type">
+                        <th mat-header-cell *matHeaderCellDef class="tab-header"> Report Filter</th>
+                        <td mat-cell *matCellDef="let row"> {{row.organisation_type}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="organization_name">
+                        <th mat-header-cell *matHeaderCellDef>Value </th>
+                        <td mat-cell *matCellDef="let row;" class="show-specific-content"
+                            [title]="row.organisation_value">
+                            {{row.organisation_value}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="start_date">
+                        <th mat-header-cell *matHeaderCellDef>Start Date </th>
+                        <td mat-cell *matCellDef="let row;" class="text-black">
+                            {{row.start_date | date: dateFormatA }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="end_date">
+                        <th mat-header-cell *matHeaderCellDef>End Date </th>
+                        <td mat-cell *matCellDef="let row;" class="text-black">
+                            {{row.end_date | date: dateFormatA }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="generated_date">
+                        <th mat-header-cell *matHeaderCellDef>Generated Date </th>
+                        <td mat-cell *matCellDef="let row;" class="text-black">
+                            {{row.download_date | date: dateFormatA }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef>Status </th>
+                        <td mat-cell *matCellDef="let row;">
+                            <span *ngIf="row.status == 0">In Progess</span>
+                            <span *ngIf="row.status == 1">Completed
+
+                            </span>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="action">
+                        <th class="text-center" mat-header-cell *matHeaderCellDef>&emsp;Download File</th>
+                        <td mat-cell class="text-center" *matCellDef="let row; let i = index;">
+                            <img class="iconn" src="{{assetPath}}/images_and_logos/pdficon.png" alt=""
+                                title="Download PDF" (click)="generatePdf(row)">
+                            <img class="iconn" src="{{assetPath}}/images_and_logos/jsonicon.png" alt="" title="Download JSON"
+                                (click)="generateJson(row,i)">
+                                <!-- <i *ngIf="this.searchloaderJson"
+                                            class="fa fa-spinner fa-spin sml"></i> -->
+                            <!-- <img class="iconn" src="{{assetPath}}/images_and_logos/exelicon.png" alt="" title="Download EXCEL"
+                                (click)="generateExcel()" 
+                               > -->
+                            <img class="iconn" src="{{assetPath}}/images_and_logos/csvpic.png" alt=""
+                                title="Download CSV" (click)="generateCsv(row,i)">
+                                <i  *ngIf="searchloaderFile[i] != 'hide'" 
+                                class="fa fa-spinner fa-spin sml"></i>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="8">No data found</td>
+                    </tr>
+                </table>
+
+                <table id="csvreport" class="d-none">
+                    <thead>
+                        <tr>
+                            <td>Indicator type</td>
+                            <td>IP address</td>
+                            <td>Hash</td>
+                            <td>Start Date</td>
+                            <td>End Date</td>
+                            <td>sector</td>
+                            <td>severity</td>
+                            <td>Event List</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr *ngFor="let data of csvDataToDownload; let i = index">
+                            <td>{{data._source.indicator_type}}</td>
+                            <td>{{data._source.ip_address}}</td>
+                            <td>{{data?._source?.md5_hash}}</td>
+                            <td>{{data._source.start_date}}</td>
+                            <td>{{data._source.end_date}}</td>
+                            <td>{{data._source.sector}}</td>
+                            <td>{{data._source.indicator_severity}}</td>
+                            <td> <span *ngFor="let event of data._source.indicator_events"> {{event.event_name}} </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>

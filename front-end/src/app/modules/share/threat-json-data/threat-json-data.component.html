@@ -1,0 +1,14 @@
+<div class="row">
+  <div class="col-9">
+    <h2><b class="colo">JSON Details</b></h2>
+  </div>
+  <div class="col-3">
+    <div class="float-right" (click)="closeButton('simple')">
+      <i class="fa fa-close text-black"></i>
+    </div>
+  </div>
+</div>
+<div class="background">
+
+  <ngx-json-viewer [json]="data" [depth]="1"></ngx-json-viewer>
+</div>

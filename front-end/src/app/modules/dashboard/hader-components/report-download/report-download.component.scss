@@ -1,0 +1,179 @@
+$clr: #000000;
+
+.body {
+    width: 100%;
+}
+
+.btn {
+    width: auto;
+    color: #fff;
+    background-color: #daa520;
+}
+label{
+    color: black;
+}
+.row {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+
+select,
+input {
+    height: 32px;
+}
+
+input {
+    margin-top: 0px;
+    width: 90%;
+}
+
+.evt {
+    width: max-content;
+}
+.contwid{
+    width:90%;
+}
+.input-group {
+ 
+    height: 38px;
+}
+
+.form-control {
+    // width: 300px !important;
+    height: 38px;
+}
+
+
+.loader {
+    border: 20px solid #000000;
+    border-radius: 50%;
+    border-top: 20px solid grey;
+    width: 110px;
+    height: 110px;
+    margin-left:45% !important;
+    margin-top:80px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+  }
+  
+
+
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.table th {
+    color: #000000;
+    background-color: #e7e7e7;
+    border: none;
+    padding: 10px;
+    vertical-align: middle;
+}
+
+.table td {
+    color: black;
+    background-color: #fff;
+    padding: 15px;
+    border: none;
+    border-bottom: 1px solid grey;
+}
+
+.mr-20 {
+    margin-right: 20px !important;
+}
+
+.panel {
+    padding-bottom: 3px;
+    margin-left: 30px;
+}
+
+.iconn {
+    height: 31px;
+    width: 31px;
+    cursor: pointer;
+    margin-left: 15px;
+}
+
+.sml {
+    font-size: 14px;
+    margin-left: 5px;
+}
+.date-picker{
+    border-radius: 4px;
+}
+.form-control{
+    border:none;
+}
+.select-all{
+    margin: 5px 17px;
+}
+  
+.mat-checkbox{
+    color:black
+}
+
+.show-specific-content {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+::ng-deep {
+    .mat-select-dnld .mat-select-value-text {
+        color: black !important;
+    }
+}
+.mrt{
+    margin-top:19px;
+}
+::ng-deep{
+    .dropdown-btn{
+        height: 38px;
+        color: black !important;
+        background-color: #fff !important;
+        border-radius: 4px;
+        height: 38px;
+        overflow: auto ;
+    }
+    .dropdown-list{
+      z-index: 1000 !important; 
+      margin-top: -120px !important;
+    
+      overflow: auto ;
+    }
+    .dropdown-list .filter-textbox, li{
+       padding: 0px !important;
+      }
+    .item2{
+        height:100px;
+    }
+    .report-download-row{
+        position: relative;
+        z-index: 0;
+    }
+.background1 {
+    width: -webkit-fill-available;
+   
+}
+.zindex{
+    z-index: 10000 !important;
+}
+}

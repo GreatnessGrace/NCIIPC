@@ -1,0 +1,98 @@
+<div class="row text-black">
+  <div class="col-9 float-left">
+    <h2> <i class="fa fa-map-pin" aria-hidden="true" class="colo"></i> Node permission management</h2>
+  </div>
+  <div class="col-3 float-right" (click)="closeButton('simple')">
+    <i class="fa fa-close"></i>
+  </div>
+
+</div>
+<hr color="grey">
+
+
+<div class="row">
+
+
+  <div class="usermenu-tab text-black">
+
+    <div *ngIf="data && data.node_ids && data.node_ids.length" class="show-some-content">
+      <h3 class="pt-0"><span class="colo ">Nodes Assigned : </span>
+        <span appearance="fill" *ngIf="data.node_ids[data.node_ids?.length-1].node_id == 0 ">All</span>
+        <span class=" ellipsis mrgt" appearance="fill" *ngIf="data.node_ids[data.node_ids?.length-1].node_id != 0 ">
+          <span appearance="fill" *ngFor="let node of data.node_ids; let i =  index">
+            {{node.node_id}}<span *ngIf="i != data.node_ids.length-1">,</span></span>
+        </span>
+      </h3>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="row">
+  <div class="col-xl-6">
+    <mat-form-field appearance="fill">
+      <mat-label>Region</mat-label>
+      <mat-select multiple [(ngModel)]="selectedRegionsA">
+        <div class="select-all">
+          <mat-checkbox [(ngModel)]="allSelected" [ngModelOptions]="{standalone: true}"
+            (change)="toggleAllSelection('region')">Select All</mat-checkbox>
+        </div>
+        <mat-option *ngFor="let topping of finalRegionList; let i =  index" (click)="selectedRegions()"
+          [value]="topping">
+          {{topping.region}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="col-5 ml-3">
+    <mat-form-field appearance="fill">
+      <mat-label>Sector</mat-label>
+      <mat-select multiple [(ngModel)]="selectedSectorA">
+        <div class="select-all">
+          <mat-checkbox [(ngModel)]="allSectorSelected" [ngModelOptions]="{standalone: true}"
+            (change)="toggleAllSelection('sector')">Select All</mat-checkbox>
+        </div>
+        <mat-option *ngFor="let topping of finalSectorList; let i =  index" (click)="selectedSector()"
+          [value]="topping">
+          {{topping.key}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <i *ngIf="this.spin1" class="fa fa-spinner fa-spin"></i>
+  </div>
+</div>
+<br>
+<div class="row">
+  <div class="col-xl-6">
+    <mat-form-field appearance="fill">
+      <mat-label>Organization</mat-label>
+      <mat-select multiple [(ngModel)]="selectedOrganisations">
+        <div class="select-all">
+          <mat-checkbox [(ngModel)]="allOrganisationSelected" [ngModelOptions]="{standalone: true}"
+            (change)="toggleAllSelection('organization')">Select All</mat-checkbox>
+        </div>
+        <mat-option *ngFor="let topping of finalOrganizationList; let i =  index" (click)="selectedOrganization()"
+          [value]="topping">
+          {{topping.key}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <i *ngIf="this.spin2" class="fa fa-spinner fa-spin"></i>
+  </div>
+  <div class="col-5 ">
+    <mat-form-field appearance="fill">
+      <mat-label>Node ID</mat-label>
+      <mat-select multiple [(ngModel)]="selectedNodes">
+        <div class="select-all">
+          <mat-checkbox [(ngModel)]="allNodeSelected" [ngModelOptions]="{standalone: true}"
+            (change)="toggleAllSelection('nodes')">Select All</mat-checkbox>
+        </div>
+        <mat-option *ngFor="let topping of finalNodeList; let i =  index" (click)="nodeAccess()" [value]="topping">
+          {{topping.id}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <i *ngIf="this.spin3" class="fa fa-spinner fa-spin"></i>
+  </div>
+</div>
+<hr color="grey">
+<div class="row">
+  <button class="btn btn-warning mr-3" (click)="givePrevillage()">Give Privilage</button>
+</div>

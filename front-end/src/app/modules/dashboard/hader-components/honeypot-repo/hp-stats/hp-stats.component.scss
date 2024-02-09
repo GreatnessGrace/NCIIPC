@@ -1,0 +1,265 @@
+.scrollable-table {
+    max-height: 360px; 
+    overflow-y: auto;
+  }
+  
+  .disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+  .small-box {
+      position: relative;
+      display: block;
+      -webkit-border-radius: 15px;
+      -moz-border-radius: 15px;
+      border-radius: 15px;
+      margin-bottom: 15px;
+    }
+    .imggg{
+      // margin-top: 24px !important;
+      height:25px !important;
+      width:40px !important;
+  }
+  
+    .imgg{
+      margin-top: 15px !important;
+      height:55px !important;
+      width:70px !important;
+  }
+    .bg-new-green {
+      background: radial-gradient(#60efbc, #58d5c9) !important;
+    }
+    .bg-new-purple {
+      background: radial-gradient(#f588d8, #c0a3e5)!important;
+    }
+    .bg-new-mazenta {
+      background: radial-gradient(#fbc1cc, #fa6086) !important;
+    }
+    .bg-new-blue{
+      background: radial-gradient(#1fe4f5, #56c1fa) !important;   
+    }
+    .small-box .icon {
+      position: absolute;
+      top:22px;
+      bottom:5px;
+      margin-left: 30px;
+      z-index: 0;
+      font-size: 65px;
+      color:black;
+    }
+    h2{
+      color:black
+    }
+  
+    .small-box:hover {
+      text-decoration: none;
+      color: #f9f9f9;
+    }
+    .small-box:hover .icon {
+      animation-name: tansformAnimation;
+      animation-duration: .5s;
+      animation-iteration-count: 1;
+      animation-timing-function: ease;
+      animation-fill-mode: forwards;
+      -webkit-animation-name: tansformAnimation;
+      -webkit-animation-duration: .5s;
+      -webkit-animation-iteration-count: 1;
+      -webkit-animation-timing-function: ease;
+      -webkit-animation-fill-mode: forwards;
+      -moz-animation-name: tansformAnimation;
+      -moz-animation-duration: .5s;
+      -moz-animation-iteration-count: 1;
+      -moz-animation-timing-function: ease;
+      -moz-animation-fill-mode: forwards;
+    }
+  
+    .small-box > .inner {
+      padding: 10px;
+    }
+  .content{
+      padding: 20px;
+  }
+    .small-box > .small-box-footer {
+      position: relative;
+      text-align: center;
+      padding: 3px 0;
+      color: #fff;
+      color: rgba(255, 255, 255, 0.8);
+      display: block;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.1);
+      text-decoration: none;
+      border-radius: 15px;
+      cursor: pointer;
+    }
+    .small-box > .small-box-footer:hover {
+      color: #fff;
+      background: rgba(0, 0, 0, 0.15);
+    }
+  
+    .small-box h3 {
+      font-size: 38px;
+      font-weight: bold;
+      margin: 0 0 10px 0;
+      white-space: nowrap;
+      padding: 0;
+    }
+    .small-box p {
+      font-size: 15px;
+    }
+    .small-box p > small {
+      display: block;
+      color: #f9f9f9;
+      font-size: 13px;
+      margin-top: 5px;
+    }
+    .small-box h3,
+    .small-box p {
+      z-index: 5px;
+    }
+    .table th{
+      color: #000000;
+      background-color: #e7e7e7;
+      
+      padding: 10px;
+      vertical-align: middle;
+  }
+  .buttonn{
+    border: 1px solid grey;
+    color: #fdb927;
+    height:35px;
+    width:35px;
+    margin-top: 10px;
+    background-color: transparent;
+    padding: 0px;
+    float: right;
+  }
+  .table-striped > tbody > tr:nth-child(odd) > td, .table-striped > tbody > tr:nth-child(odd) > th {
+    background-color: #fff;
+    color: black !important;
+    }
+
+    ::ng-deep .table-striped > tbody > tr:nth-child(odd) > td {
+      background-color: #fff;
+      color: black !important;
+
+    }
+    
+    ::ng-deep .table-striped > tbody > tr:nth-child(even) > td {
+      background-color: #dcebcc;
+      color: black !important;
+
+    }
+    ::ng-deep .evt {
+  color: black !important;
+
+}
+
+::ng-deep .mat-menu-item {
+  color: black;
+}
+::ng-deep .text-white {
+  color: black;
+}
+  .table-striped > tbody > tr:nth-child(even) > td, .table-striped > tbody > tr:nth-child(even) > th {
+    background-color: #dcebcc;
+    color: black;
+    }
+  .table td{
+    color: black;
+    // color: #fff !important;
+    padding: 10px;
+    font-size: 15px;
+    border:none;
+    border-bottom: 1px solid grey;  
+  }
+  ::ng-deep .mat-button{
+    padding:0px !important;
+  }
+  ::ng-deep .d1{
+    background-color: #dcebcc;
+    color:black !important;
+  }
+  table, th, td {
+    margin-top: inherit;
+    width: -webkit-fill-available;
+  }
+  .mt-5, .my-5{
+    margin-top: 1rem!important
+  }
+  .pch1{
+   height:20px;
+    width:20px;
+     cursor: pointer;
+  }
+  .pch2{
+   height:25px;
+    width:25px;
+     cursor: pointer;
+  }
+  .table-sec{
+    height: 250px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    padding: 5px;
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+  
+  .table td,th{
+    border-top:none;
+    padding: 0.35rem;
+  
+  }
+  .tables-div{
+    padding: 30px;
+    box-shadow: inset 2px 2px 5px #434651, inset -3px -3px 7px #354d6f !important;
+  }
+  
+  .honeypotTable{
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  
+  
+  .flex-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .flex-item {
+    flex: 0 0 18.5%;
+    // margin-bottom: 10px;
+  }
+  
+  .flex-row {
+    display: flex;
+  }
+  
+  .flex-col {
+    flex: 1;
+  }
+  
+  .inner {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .flex-left {
+    flex: 0 0 50%; 
+  }
+  
+  .flex-right {
+    flex: 0 0 50%; 
+    text-align: right;
+  }
+  
+  .count {
+    font-size: 30px;
+    color: white;
+  }
