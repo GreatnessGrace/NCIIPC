@@ -285,7 +285,7 @@
             </mat-form-field>
           </div>
           
-          <div class="col-sm-6">
+          <!-- <div class="col-sm-6">
             <mat-form-field appearance="fill" class="ml-3 mt-3">
               <mat-label class="redd">Image Name<i *ngIf="this.searchloader_image"
                   class="fa fa-spinner fa-spin smol"></i></mat-label>
@@ -297,8 +297,24 @@
                   {{image.image}}</mat-option>
               </mat-select>
             </mat-form-field>
-          </div>
+          </div> -->
           
+          <div class="col-sm-6">
+            <mat-form-field appearance="fill" class="ml-3 mt-3">
+                <mat-label class="redd">Image Name<i *ngIf="this.searchloader_image" class="fa fa-spinner fa-spin smol"></i></mat-label>
+                <mat-select formControlName="image">
+                    <mat-option class="formbold-form-input" value="null" selected="selected" disabled>Select Image</mat-option>
+                    <ng-container *ngFor="let image of hp_image; let i = index">
+                        <ng-container *ngIf="!isDuplicate(image.image)">
+                            <mat-option class="chipbg" [value]="image.image" >
+                                {{image.image}}
+                            </mat-option>
+                        </ng-container>
+                    </ng-container>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        
           <div class="col-sm-6">
             <mat-form-field appearance="fill" class="ml-3 mt-3">
               <mat-label class="redd">Services<i *ngIf="this.searchloader_image"
@@ -310,7 +326,7 @@
               </mat-select>
             </mat-form-field>
           </div> 
-
+        
           <div class="col-sm-6">
             <mat-form-field appearance="fill" class="ml-3 mt-3">
               <mat-label class="redd">Network type<i *ngIf="this.searchloader_image"

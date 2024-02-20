@@ -3,7 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 // const API_URL = "https://192.168.8.11:5000";
-const API_URL = "https://192.168.100.53:5000";
+const API_URL = "https://192.168.8.165:4200";
+// const API_URL = "https://192.168.100.53:5000";
 
 export const environment = {
   production: true,
@@ -12,8 +13,8 @@ export const environment = {
   recoverUrl : '/NCIIPC/#/recoverpassword',
   assetPath: 'assets',
   recaptchasiteKey:"6LdPQkQpAAAAABYsRznW84g1BOB5W1Q1t4ahlj1m",
-  // threat_mapIP :'164.164.32.25',
-  threat_mapIP :'192.168.100.56',
+  threat_mapIP :'164.164.32.25',
+  // threat_mapIP :'192.168.100.56',
   // threat_mapPort :'61615',
   threat_mapPort :'61615',
   //sign up component 

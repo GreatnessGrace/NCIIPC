@@ -23,6 +23,7 @@ import { ProfileDataComponent } from './profile-data/profile-data.component';
 import { ConfigHihpComponent } from './config-hihp/config-hihp.component';
 import { ThreatScoreComponent } from './threat-score/threat-score.component';
 import { HybridReportJsonDataComponent } from './hybrid-report-json-data/hybrid-report-json-data.component';
+import { HoneypotHealthComponent } from './honeypot-health/honeypot-health.component';
 
 
 @NgModule({
@@ -41,6 +42,7 @@ import { HybridReportJsonDataComponent } from './hybrid-report-json-data/hybrid-
     ConfigHihpComponent,
     ThreatScoreComponent,
     HybridReportJsonDataComponent,
+    HoneypotHealthComponent,
   ],
   imports: [
     CommonModule,

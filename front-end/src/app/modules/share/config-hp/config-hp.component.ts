@@ -258,18 +258,50 @@ console.log('Hardware:', this.node_hardware);
     
   }
 
+  // getImageName(evt: any) {
+  //   // console.log(evt);
+  //   this.nodeForm.get('image').setValue('')
+  //   let profile = evt.profile_name;
+  //   this.nodeForm.get('profile').setValue(profile)
+    
+  //   let url = environment.getImageName;
+  //   this.restServ.post(url, { name: evt.name, hard: this.node_hardware }, {}).subscribe(res => {
+  //     this.hp_image = res;
+  //     this.hp_services = [];
+  //   });
+  // }
   getImageName(evt: any) {
-    // console.log(evt);
-    this.nodeForm.get('image').setValue('')
+    this.nodeForm.get('image').setValue('');
     let profile = evt.profile_name;
-    this.nodeForm.get('profile').setValue(profile)
+    this.nodeForm.get('profile').setValue(profile);
     
     let url = environment.getImageName;
     this.restServ.post(url, { name: evt.name, hard: this.node_hardware }, {}).subscribe(res => {
-      this.hp_image = res;
-      this.hp_services = [];
+        this.hp_image = res;
+        this.hp_services = [];
+        
+        // Extract all profile IDs from the response
+        const profiles = res.map((item: { profile: any; }) => item.profile);
+        
+        // Call the getNodeConfig API with all the profile IDs
+        this.callNodeConfigAPI(profiles);
     });
-  }
+}
+
+callNodeConfigAPI(profiles: number[]) {
+    this.restServ.post(environment.getNodeConfig, { profiles: profiles }, {}).subscribe(res => {
+        this.hp_services = res;
+    });
+}
+
+
+
+
+isDuplicate(imageName: string): boolean {
+
+  return this.hp_image.filter((img: { image: string; }) => img.image === imageName).length > 1;
+}
+
 
   getDeviceName(evt: any) {
     let url = environment.deviceName
@@ -281,17 +313,17 @@ console.log('Hardware:', this.node_hardware);
   }
 
 
-  getImageDataProfile(e: any) {
-    this.nodeForm.get('os_type').setValue(e.os_type);
-    this.nodeForm.get('os_ver_type').setValue(e.os_name);
-    this.nodeForm.get('vm_type').setValue(e.vm_type);
-    this.nodeForm.get('vm_name').setValue(e.vm_name);
-    this.nodeForm.get('hp_profile').setValue(e.profile);
-    this.restServ.post(environment.getNodeConfig, { profile: e.profile }, {}).subscribe(res => {
-      this.hp_services = res;
-      // this.isShowService=true;
-    });
-  }
+  // getImageDataProfile(e: any) {
+  //   this.nodeForm.get('os_type').setValue(e.os_type);
+  //   this.nodeForm.get('os_ver_type').setValue(e.os_name);
+  //   this.nodeForm.get('vm_type').setValue(e.vm_type);
+  //   this.nodeForm.get('vm_name').setValue(e.vm_name);
+  //   this.nodeForm.get('hp_profile').setValue(e.profile);
+  //   this.restServ.post(environment.getNodeConfig, { profile: e.profile }, {}).subscribe(res => {
+  //     this.hp_services = res;
+  //     // this.isShowService=true;
+  //   });
+  // }
 
   selectAllserv() {
     if (this.nodeForm.get('hp_services').value.length == 0) {

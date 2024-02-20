@@ -1,0 +1,29 @@
+#chartcontrols {
+    height: auto;
+    padding: 5px 5px 0 16px;
+    max-width: 100%;
+  }
+  
+  #chartdiv {
+    width: 100% !important;
+    height: 400px;
+    min-width: 100% !important;
+  }
+  h3{
+    color: #fff;
+  }
+  .dateRange{
+    display: flex;
+  }
+  .dateValue{
+    padding: 5px;
+    color: #fdb927;
+  }
+  ::ng-deep #chartdiv canvas{
+    width: 1100px !important;
+    height: 400px !important;
+  }
+  .scr1{
+    height: 600px;
+    overflow: auto;
+  }

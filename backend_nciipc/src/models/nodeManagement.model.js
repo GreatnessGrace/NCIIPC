@@ -1800,16 +1800,34 @@ NodeModel.gethpProfile = async (req, result) => {
   }
 };
 
+// NodeModel.getNodeConfig = async (req, result) => {
+//   let nodeQuery = `SELECT node_package.package_name AS value , node_package.package_id AS 'key' FROM node_hp_profile_package Inner Join node_package ON node_package.package_id = node_hp_profile_package.package_id WHERE node_hp_profile_package.profile_id =${req.body.profile}`;
+//   // let nodeQuery = `SELECT node_package.package_name AS value , node_package.package_id AS 'key' FROM node_vulnerability_package Inner Join node_package ON node_package.package_id = node_vulnerability_package.package_id WHERE node_vulnerability_package.profile_id =${req.body.profile}`;
+
+//   try {
+//     dbConn.query(nodeQuery, async (err, resp) => {
+//       return result(null, resp);
+//     });
+//   } catch (err) {
+//     return result(null, err);
+//   }
+// };
+
 NodeModel.getNodeConfig = async (req, result) => {
-  let nodeQuery = `SELECT node_package.package_name AS value , node_package.package_id AS 'key' FROM node_hp_profile_package Inner Join node_package ON node_package.package_id = node_hp_profile_package.package_id WHERE node_hp_profile_package.profile_id =${req.body.profile}`;
-  // let nodeQuery = `SELECT node_package.package_name AS value , node_package.package_id AS 'key' FROM node_vulnerability_package Inner Join node_package ON node_package.package_id = node_vulnerability_package.package_id WHERE node_vulnerability_package.profile_id =${req.body.profile}`;
+   let nodeQuery = `SELECT Distinct (node_package.package_name) AS value , node_package.package_id AS 'key' 
+                  FROM node_hp_profile_package 
+                  INNER JOIN node_package ON node_package.package_id = node_hp_profile_package.package_id 
+                  WHERE node_hp_profile_package.profile_id IN (${req.body.profiles.join(',')})`;
 
   try {
     dbConn.query(nodeQuery, async (err, resp) => {
+      if (err) {
+        return result(err, null);
+      }
       return result(null, resp);
     });
   } catch (err) {
-    return result(null, err);
+    return result(err, null);
   }
 };
 

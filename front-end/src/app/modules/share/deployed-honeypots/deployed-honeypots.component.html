@@ -76,7 +76,7 @@
       <th mat-header-cell *matHeaderCellDef> Status </th>
       <td mat-cell *matCellDef="let row" >
 
-        <button class="btn" [ngClass]="row.health_status == 'UP' ? 'btn-up' : 'btn-down'">
+        <button class="btn" [ngClass]="row.health_status == 'UP' ? 'btn-up' : 'btn-down'" (click)="getHoneypotHealth(row.u_conf_id)">
           {{row.health_status == 'UP' ? '↑' : '↓'}}&emsp;{{row.health_status}}<span *ngIf = "! row.health_status">Down</span>
         </button>
         <!-- <span [innerHTML]="row.last_up_time  | filter">  </span>-->

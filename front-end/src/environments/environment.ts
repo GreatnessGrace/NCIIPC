@@ -111,6 +111,7 @@ export const environment = {
   // Node detail
   nodeDetail: API_URL + '/nodeDetail',
   getNodeHealthConnection: API_URL+'/getNodeHealthConnection',
+  getHoneypotHealthConnection: API_URL+'/getHoneypotHealthConnection',
 
   // user session
   userSession: API_URL+ '/api/v1/users/userSession',

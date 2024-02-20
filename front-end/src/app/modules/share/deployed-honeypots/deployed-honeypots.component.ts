@@ -7,6 +7,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import Swal from 'sweetalert2';
 import { Subscription } from 'rxjs';
 import { NotificationService } from 'src/app/core/services/notification.service';
+import { MatDialog } from '@angular/material/dialog';
+import { HoneypotHealthComponent } from '../honeypot-health/honeypot-health.component';
+
 @Component({
   selector: 'app-deployed-honeypots',
   templateUrl: './deployed-honeypots.component.html',
@@ -15,6 +18,7 @@ import { NotificationService } from 'src/app/core/services/notification.service'
 export class DeployedHoneypotsComponent implements OnInit {
   getDelteHoneypotData! : Subscription;
   getConfigDetailsData! : Subscription;
+  getHoneypotHealthData!:Subscription
 
   searchloaderxl: boolean = true;
   dataSource!: MatTableDataSource<any>;
@@ -35,7 +39,8 @@ export class DeployedHoneypotsComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<DeployedHoneypotsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private restServ:RestService,
-    private notiServ: NotificationService
+    private notiServ: NotificationService,
+    public dialog: MatDialog,
     ) { }
 
   ngOnInit(): void {
@@ -60,6 +65,35 @@ export class DeployedHoneypotsComponent implements OnInit {
       this.dialogRef.close("I am closed!!")
     }
   }
+
+  getHoneypotHealth(u_conf_id: any) {
+    let url = environment.getHoneypotHealthConnection
+     this.restServ.post(url, {u_conf_id:u_conf_id}, {}).subscribe(res => {
+      
+      let dialogRef = this.dialog.open(HoneypotHealthComponent, {
+        data: { Object: res }
+      });
+      dialogRef.afterClosed().subscribe(res => {
+        if(res){
+          // this.getNodeDetail()
+        }
+      })
+    })
+    // this.getNodeDetail()
+  }
+  // getHoneypotHealth(u_conf_id: any){
+  //     let url = environment.getHoneypotHealthConnection
+  //     this.getHoneypotHealthData = this.restServ.post(url,{u_conf_id:u_conf_id},{}).subscribe(res=>{
+  //       let dialogRef = this.dialog.open(HoneypotHealthComponent,{
+  //         data: { Object: res}
+  //       });
+  //       dialogRef.afterClosed().subscribe(res => {
+  //          this.getConfigDetails()
+  //       })
+  //     })
+  //     this.getConfigDetails()
+  //   }
+
 
   reconfigure(evt:any){
 

@@ -1,0 +1,38 @@
+
+<div class="row">
+    <div class="col-9">
+        <h2><b class="colo">Honeypot Status</b></h2>
+    </div>
+    <div class="col-3">
+        <div class="float-right" (click)="closeButton('simple')">
+            <i class="fa fa-close text-white"></i>
+        </div>
+    </div>
+</div>
+<div class="scr1" >
+    <div class="dateRange">
+        <h3>From : </h3>
+        <span class="dateValue"><u>{{startDate}}</u></span>
+        <h3> To: </h3>
+        <span class="dateValue"><u>{{endDate}}</u></span>
+    </div>
+    <div  class="container-fluid" style="width:100% !important; height: 500px !important;">
+        <h3>CPU Utilaztion in %</h3>
+        <div id="chartcontrols" (click)="getClick($event)"></div>
+        <div id="chartdiv" (change)="onchange($event)" (scroll)="onchange($event)" (click)="onchange($event)"></div>
+
+    </div>
+
+    <div class="dateRange">
+        <h3>From : </h3>
+        <span class="dateValue"><u>{{startDate}}</u></span>
+        <h3> To: </h3>
+        <span class="dateValue"><u>{{endDate}}</u></span>
+    </div>
+    <div class="container-fluid" style="width:100% !important; height: 500px !important;">
+        <h3>Available RAM in MBytes</h3>
+        <div id="chartcontrols1" (click)="getClick($event)"></div>
+        <div id="chartdiv1" (change)="onchange1($event)" (scroll)="onchange1($event)" (click)="onchange1($event)"></div>
+
+    </div>
+</div>
