@@ -15,7 +15,7 @@
 
             <!-- <input type="file" (change)="onFileSelected($event)" accept=".xml">
             <button class="formbold-btn btn-warning" (click)="parseXML()">Submit</button> -->
-            <form #blueprint="ngForm" [formGroup]="blueprintForm" ><br>
+            <form #blueprint="ngForm" [formGroup]="blueprintForm" (ngSubmit)="onSubmit(blueprint.value)"><br>
                 <!-- (ngSubmit)="onSubmit(blueprint.value)"  -->
 
                 <div class="formbold-mb-3 row">

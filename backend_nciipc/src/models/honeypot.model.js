@@ -1077,7 +1077,7 @@ async function totalIot() {
             INNER JOIN node_hp_profile ON node_snapshot_hp_profile.profile_id = node_hp_profile.profile_id
             WHERE node_snapshot.honeypot_category = 'IoT'
         ) AS distinctCount,
-        (SELECT COUNT(DISTINCT node_image.image_name, node_image.image_tag, node_hp_profile.profile_name)
+        (SELECT COUNT( node_hp_profile.profile_name)
  FROM node_image
  INNER JOIN node_snapshot ON node_snapshot.image_id = node_image.image_id
  INNER JOIN node_snapshot_hp_profile ON node_snapshot_hp_profile.snapshot_id = node_snapshot.snapshot_id
@@ -1121,7 +1121,7 @@ async function totalWeb() {
             INNER JOIN node_hp_profile ON node_snapshot_hp_profile.profile_id = node_hp_profile.profile_id
             WHERE node_snapshot.honeypot_category = 'WEB'
         ) AS distinctCount,
-        (SELECT COUNT(DISTINCT node_image.image_name, node_image.image_tag, node_hp_profile.profile_name)
+        (SELECT COUNT( node_hp_profile.profile_name)
         FROM node_image
         INNER JOIN node_snapshot ON node_snapshot.image_id = node_image.image_id
         INNER JOIN node_snapshot_hp_profile ON node_snapshot_hp_profile.snapshot_id = node_snapshot.snapshot_id
@@ -1163,7 +1163,7 @@ async function totalScada() {
             WHERE node_snapshot.honeypot_category = 'SCADA'
         ) AS distinctCount,
         (
-          SELECT COUNT(DISTINCT node_hp_profile.profile_name)
+          SELECT COUNT( node_hp_profile.profile_name)
           FROM node_snapshot_hp_profile
           INNER JOIN node_snapshot ON node_snapshot.snapshot_id = node_snapshot_hp_profile.snapshot_id
           INNER JOIN node_hp_profile ON node_snapshot_hp_profile.profile_id = node_hp_profile.profile_id
@@ -1378,33 +1378,41 @@ Honeypot.doubleDeviceVulnerabilities = (req, result) => {
   // console.log(req.body.cat)
   try {
     dbConn.query(
-      `WITH RankedVulnerabilities AS (
-        SELECT
-            COUNT(*) AS doc_count,
-            nv.vulnerability,
-                          nhp.device_name,
-            ROW_NUMBER() OVER (PARTITION BY nhp.device_name ORDER BY COUNT(*) DESC) AS rnk
-        FROM
-            node_vulnerability_package AS nvp
-        INNER JOIN
-            node_hp_profile AS nhp ON nhp.profile_id = nvp.profile_id
-        INNER JOIN
-            node_vulnerability AS nv ON nv.vulnerability_id = nvp.vulnerability_id
-        WHERE
-            nv.vulnerability IS NOT NULL AND nv.vulnerability != 'NULL'
-        GROUP BY
-            nhp.device_name, nv.vulnerability
-    )
-    SELECT
-        doc_count,
-        vulnerability,
-        device_name
-    FROM
-        RankedVulnerabilities
-    WHERE
-        rnk <= 10
-    ORDER BY
-        device_name, doc_count DESC;
+      `SELECT
+      doc_count,
+      vulnerability,
+      device_name
+  FROM (
+      SELECT
+          doc_count,
+          vulnerability,
+          device_name,
+          @rank := IF(@prev_device = device_name, @rank + 1, 1) AS rnk,
+          @prev_device := device_name
+      FROM (
+          SELECT
+              COUNT(*) AS doc_count,
+              nv.vulnerability,
+              nhp.device_name
+          FROM
+              node_vulnerability_package AS nvp
+          INNER JOIN
+              node_hp_profile AS nhp ON nhp.profile_id = nvp.profile_id
+          INNER JOIN
+              node_vulnerability AS nv ON nv.vulnerability_id = nvp.vulnerability_id
+          WHERE
+              nv.vulnerability IS NOT NULL AND nv.vulnerability != 'NULL'
+          GROUP BY
+              nhp.device_name, nv.vulnerability
+          ORDER BY
+              nhp.device_name, doc_count DESC
+      ) AS Counts,
+      (SELECT @rank := 0, @prev_device := NULL) AS vars
+  ) AS RankedVulnerabilities
+  WHERE
+      rnk <= 10
+  ORDER BY
+      device_name, doc_count DESC;  
       `,
       (err, res) => {
         result(null, res);
@@ -1782,33 +1790,43 @@ async function totalDoubleVulnerabilities() {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       dbConn.query(
-        `WITH RankedVulnerabilities AS (
-          SELECT
-              COUNT(distinct vulnerability) AS doc_count,
-              nv.vulnerability,
-              ns.honeypot_category,
-              ROW_NUMBER() OVER (PARTITION BY ns.honeypot_category ORDER BY COUNT(*) DESC) AS rnk
-          FROM
-              node_vulnerability_package AS nvp
-          INNER JOIN
-              node_snapshot AS ns ON ns.snapshot_id = nvp.snapshot_id
-          INNER JOIN
-              node_vulnerability AS nv ON nv.vulnerability_id = nvp.vulnerability_id
-          WHERE
-              nv.vulnerability IS NOT NULL AND nv.vulnerability != 'NULL'
-          GROUP BY
-              ns.honeypot_category, nv.vulnerability
-      )
-      SELECT
-          doc_count,
-          vulnerability,
-          honeypot_category
-      FROM
-          RankedVulnerabilities
-      WHERE
-          rnk <= 10
-      ORDER BY
-          honeypot_category, doc_count DESC;      
+        `SELECT
+    doc_count,
+    vulnerability,
+    honeypot_category
+FROM (
+    SELECT
+        doc_count,
+        vulnerability,
+        honeypot_category,
+        @rank := IF(@prev_category = honeypot_category, @rank + 1, 1) AS rnk,
+        @prev_category := honeypot_category
+    FROM (
+        SELECT
+            COUNT(*) AS doc_count,
+            nv.vulnerability,
+            ns.honeypot_category
+        FROM
+            node_vulnerability_package AS nvp
+        INNER JOIN
+            node_snapshot AS ns ON ns.snapshot_id = nvp.snapshot_id
+        INNER JOIN
+            node_vulnerability AS nv ON nv.vulnerability_id = nvp.vulnerability_id
+        WHERE
+            nv.vulnerability IS NOT NULL AND nv.vulnerability != 'NULL'
+        GROUP BY
+            ns.honeypot_category, nv.vulnerability
+        ORDER BY
+            ns.honeypot_category, doc_count DESC
+    ) AS Counts,
+    (SELECT @rank := 0, @prev_category := NULL) AS vars
+) AS RankedVulnerabilities
+WHERE
+    rnk <= 10
+ORDER BY
+    honeypot_category, doc_count DESC;
+
+      
         `,
         async (err, res) => {
           resolve(res);
@@ -1893,31 +1911,39 @@ async function Protocols() {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       dbConn.query(
-        `WITH RankedPackages AS (
-          SELECT
-              COUNT(distinct package_name) AS doc_count,
-              np.package_name,
-              ns.honeypot_category,
-              ROW_NUMBER() OVER (PARTITION BY ns.honeypot_category ORDER BY COUNT(*) DESC) AS rnk
-          FROM
-              node_package AS np
-          INNER JOIN
-              node_snapshot_package AS nsp ON nsp.package_id = np.package_id
-          INNER JOIN
-              node_snapshot AS ns ON ns.snapshot_id = nsp.snapshot_id
-          GROUP BY
-              ns.honeypot_category, np.package_name
-      )
-      SELECT
-          doc_count,
-          package_name,
-          honeypot_category
-      FROM
-          RankedPackages
-      WHERE
-          rnk <= 10
-      ORDER BY
-          honeypot_category, doc_count DESC;
+        `SELECT
+        doc_count,
+        package_name,
+        honeypot_category
+    FROM (
+        SELECT
+            doc_count,
+            package_name,
+            honeypot_category,
+            @rank := IF(@prev_category = honeypot_category, @rank + 1, 1) AS rnk,
+            @prev_category := honeypot_category
+        FROM (
+            SELECT
+                COUNT(distinct np.package_name) AS doc_count,
+                np.package_name,
+                ns.honeypot_category
+            FROM
+                node_package AS np
+            INNER JOIN
+                node_snapshot_package AS nsp ON nsp.package_id = np.package_id
+            INNER JOIN
+                node_snapshot AS ns ON ns.snapshot_id = nsp.snapshot_id
+            GROUP BY
+                ns.honeypot_category, np.package_name
+            ORDER BY
+                ns.honeypot_category, doc_count DESC
+        ) AS Counts,
+        (SELECT @rank := 0, @prev_category := NULL) AS vars
+    ) AS RankedPackages
+    WHERE
+        rnk <= 10
+    ORDER BY
+        honeypot_category, doc_count DESC;    
         `,
         async (err, res) => {
           resolve(res);
