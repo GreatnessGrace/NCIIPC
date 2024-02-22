@@ -315,6 +315,12 @@ router.post(
   nodeController.honeypotDeviceType
 );
 
+router.post(
+  "/deployedHoneyotDeviceType",
+  auth.verifyToken,
+  nodeController.deployedHoneyotDeviceType
+);
+
 router.get(
   "/sectorFilterData",
   auth.verifyToken,

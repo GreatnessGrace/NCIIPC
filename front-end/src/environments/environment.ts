@@ -211,6 +211,7 @@ export const environment = {
   profileImage: API_URL + '/honeypot/profileImage',
   timeGraph: API_URL + '/honeypot/timeGraph',
   honeyotDeviceType: API_URL + '/honeyotDeviceType',
+  deployedHoneyotDeviceType: API_URL + '/deployedHoneyotDeviceType',
 
   // node registration
   configData: API_URL + '/honeypot/configData',

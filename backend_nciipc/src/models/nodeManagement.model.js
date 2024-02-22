@@ -3405,6 +3405,58 @@ NodeModel.honeypotDeviceType = async (req, result) => {
   INNER JOIN node_snapshot AS ns ON ns.snapshot_id = nshp.snapshot_id
   INNER JOIN node_image AS ni ON ni.image_id = ns.image_id
   WHERE
+      ni.status = 0 AND rdt.row_num <= 10
+  GROUP BY
+      ndp.device_type,
+      ndp.device_name
+  ORDER BY
+      ndp.device_type,
+      device_count DESC;  
+      `,
+      (err, res) => {
+        if (err) {
+          return result(err, null);
+        }
+
+        const organizedData = res.reduce((acc, row) => {
+          const { device_type, device_name, device_count } = row;
+          if (!acc[device_type]) {
+            acc[device_type] = [];
+          }
+          acc[device_type].push({ device_name, device_count });
+          return acc;
+        }, {});
+        return result(null, organizedData);
+      }
+    );
+  } catch (err) {
+    return result(err, null);
+  }
+};
+NodeModel.deployedHoneyotDeviceType = async (req, result) => {
+  try {
+    dbConn.query(
+      `SELECT
+      ndp.device_type,
+      ndp.device_name,
+      COUNT(*) AS device_count
+  FROM
+      node_hp_profile ndp
+  JOIN (
+      SELECT
+          device_type,
+          @row_number := @row_number + 1 AS row_num
+      FROM
+          (SELECT @row_number := 0) AS init,
+          (SELECT device_type, COUNT(*) AS device_count
+           FROM node_hp_profile
+           GROUP BY device_type
+           ORDER BY COUNT(*) DESC) AS counts
+  ) AS rdt ON ndp.device_type = rdt.device_type
+  INNER JOIN node_snapshot_hp_profile AS nshp ON nshp.profile_id = ndp.profile_id
+  INNER JOIN node_snapshot AS ns ON ns.snapshot_id = nshp.snapshot_id
+  INNER JOIN node_image AS ni ON ni.image_id = ns.image_id
+  WHERE
       ni.status = 1 AND rdt.row_num <= 10
   GROUP BY
       ndp.device_type,

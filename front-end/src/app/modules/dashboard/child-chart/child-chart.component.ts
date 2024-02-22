@@ -49,7 +49,8 @@ export class ChildChartComponent {
     series.slices.template.setAll({
       // fillOpacity: 0.5,
       stroke: am5.color("#fff"),
-      strokeWidth: 2
+      strokeWidth: 2,
+      tooltipText: "{category}: {value}"
     });
    
     

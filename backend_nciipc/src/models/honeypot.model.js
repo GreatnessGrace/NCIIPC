@@ -1023,7 +1023,7 @@ async function totalDeviceNames() {
     setTimeout(() => {
       dbConn.query(
         `SELECT    
-        (SELECT COUNT(DISTINCT node_image.image_name, node_image.image_tag, node_hp_profile.device_name)
+        (SELECT COUNT(DISTINCT COALESCE(node_image.image_name, 'null') , COALESCE(node_image.image_tag, 'null'), node_hp_profile.device_name)
         FROM node_image
         INNER JOIN node_snapshot ON node_snapshot.image_id = node_image.image_id
         INNER JOIN node_snapshot_hp_profile ON node_snapshot_hp_profile.snapshot_id = node_snapshot.snapshot_id
@@ -1043,12 +1043,12 @@ async function totalDeviceTypes() {
     setTimeout(() => {
       dbConn.query(
         `SELECT    
-        (SELECT COUNT(DISTINCT node_image.image_name, node_image.image_tag, node_hp_profile.device_type)
+        (SELECT COUNT(DISTINCT COALESCE(node_image.image_name, 'null') , COALESCE(node_image.image_tag, 'null'), node_hp_profile.device_type)
  FROM node_image
  INNER JOIN node_snapshot ON node_snapshot.image_id = node_image.image_id
  INNER JOIN node_snapshot_hp_profile ON node_snapshot_hp_profile.snapshot_id = node_snapshot.snapshot_id
  INNER JOIN node_hp_profile ON node_hp_profile.profile_id = node_snapshot_hp_profile.profile_id) AS totalCount,
-        (SELECT count(distinct device_type) FROM node_hp_profile) as distinctCount`,
+        (SELECT count(distinct device_type) FROM node_hp_profile) as distinctCount;`,
         // (SELECT count(device_type) FROM node_hp_profile) as totalCount,
 
         async (err, res) => {
@@ -1684,11 +1684,12 @@ nhpp.package_id
 Honeypot.deviceTable = (req, result) => {
   try {
     dbConn.query(
-      `SELECT
-        nhp.device_name,
-        nhp.device_type
-      FROM
-        node_hp_profile AS nhp`,
+      `SELECT 
+      (nhp.device_name),
+      nhp.device_type
+    FROM
+      node_hp_profile AS nhp
+      group by device_name`,
       (err, res) => {
         if (err) {
           return result(null, err);
