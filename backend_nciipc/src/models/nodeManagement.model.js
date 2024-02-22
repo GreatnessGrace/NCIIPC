@@ -3765,11 +3765,37 @@ GROUP BY timestamp;
   }
 };
 
+
+async function getUserNodesAssigned(req) {
+  const token = req.headers.authorization;
+
+  const decoded = jwt.verify(token, config.JWT_PASSWORD_KEY);
+
+  const user = await User.findOne({ where: { username: decoded.data } });
+
+  let allNodes = await Node_id.findAll({
+    attributes: [["node_id", "id"]],
+    where: { user_id: user.dataValues.user_id },
+  });
+  if (allNodes[0].id == 0) {
+    allNodes = await NodeLocations.findAll({ attributes: ["id"] });
+  }
+  let node = [];
+  allNodes.forEach((val) => {
+    node.push(val?.dataValues?.id);
+  });
+
+  return node;
+}
+
 NodeModel.regionFilterData = async (req, result) => {
+  let node = await getUserNodesAssigned(req);
+
   try {
     const query = `
       SELECT COUNT(region) AS doc_count, region
       FROM honeybox.node_location
+      WHERE node_location.id IN (${node})
       GROUP BY region;
     `;
     dbConn.query(query, (err, res) => {
@@ -3793,10 +3819,13 @@ NodeModel.regionFilterData = async (req, result) => {
 };
 
 NodeModel.sectorFilterData = async (req, result) => {
+  let node = await getUserNodesAssigned(req);
+
   try {
     const query = `
       SELECT COUNT(sector) AS doc_count, sector
       FROM honeybox.node_location
+      WHERE node_location.id IN (${node})
       GROUP BY sector;
     `;
     dbConn.query(query, (err, res) => {
@@ -3820,10 +3849,12 @@ NodeModel.sectorFilterData = async (req, result) => {
 };
 
 NodeModel.organizationFilterData = async (req, result) => {
+  let node = await getUserNodesAssigned(req);
   try {
     const query = `
       SELECT COUNT(organization) AS doc_count, organization
       FROM honeybox.node_location
+      WHERE node_location.id IN (${node})
       GROUP BY organization;
     `;
     dbConn.query(query, (err, res) => {
