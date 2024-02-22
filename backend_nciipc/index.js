@@ -22,14 +22,14 @@ dotenv.config();
 
 
 // setup the server port
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 4200;
 // parser request data content type application
 
 
 app.use(bodyParser.urlencoded({
     extended: true
   }));
- 
+
   app.disable('etag');
   app.use((req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -48,9 +48,10 @@ app.get('/', (req, res) => {
     res.send('Hello World');
     return;
 });
+
 app.set('env', 'production');
 app.use(cors({
-  origin: ["http://localhost:4200", "https://192.168.100.53","https://192.168.100.109","https://192.168.100.102", "https://192.168.8.160"]
+  origin: ["http://localhost:4200", "https://192.168.8.165", "https://192.168.100.53","https://192.168.100.109","https://192.168.100.102"]
 }));
 
 
@@ -78,7 +79,7 @@ app.use('/permission', NodePermission);
 app.get('*', function(req, res){
     res.status(404).send('Page Not Found');
   });
-  
+
 const options = {
     key: fs.readFileSync("server.key"),
     cert: fs.readFileSync("server.cert"),
@@ -86,10 +87,12 @@ const options = {
 };
 
 // const options = {
-//   key: fs.readFileSync("/etc/ssl/192.168.100.53-key.pem"),
-//   cert: fs.readFileSync("/etc/ssl/192.168.100.53-cert.pem"),
+//   key: fs.readFileSync("/etc/ssl/server.key"),
+// cert: fs.readFileSync("/etc/ssl/server.crt"),
 //   ciphers: "ECDHE-RSA-AES256-GCM-SHA384:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!SRP:!CAMELLIA:HIGH:!AES128"
 // };
+
+
 const scheduledFunctions = require('./src/schedulers/node-cron');
 scheduledFunctions.initScheduledJobs();
 
@@ -107,3 +110,5 @@ app.listen(port, () => {
 
 
 app.timeout = 20000;
+                              
+

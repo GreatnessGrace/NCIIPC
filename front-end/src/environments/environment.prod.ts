@@ -228,4 +228,9 @@ export const environment = {
    citiesList: API_URL + '/honeypot/citiesList',
    addCity: API_URL + '/honeypot/addCity',
  
+
+     //profileEdit
+ editProfile: API_URL + '/api/v1/users/editProfile',
+ getuser: API_URL + '/api/v1/users/getuserList/',
+
 };

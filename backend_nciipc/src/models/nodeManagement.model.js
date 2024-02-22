@@ -3384,35 +3384,34 @@ NodeModel.honeypotDeviceType = async (req, result) => {
       //   device_count DESC;
       
       // `,
-      `WITH RankedDeviceTypes AS (
-        SELECT
-          device_type,
-          ROW_NUMBER() OVER (ORDER BY COUNT(*) DESC) AS row_num
-        FROM
-          node_hp_profile
-        GROUP BY
-          device_type
-      )
+      `SELECT
+      ndp.device_type,
+      ndp.device_name,
+      COUNT(*) AS device_count
+  FROM
+      node_hp_profile ndp
+  JOIN (
       SELECT
-        ndp.device_type,
-        ndp.device_name,
-        COUNT(*) AS device_count
+          device_type,
+          @row_number := @row_number + 1 AS row_num
       FROM
-        node_hp_profile ndp
-      JOIN
-        RankedDeviceTypes rdt ON ndp.device_type = rdt.device_type
-        inner join node_snapshot_hp_profile as nshp ON nshp.profile_id = ndp.profile_id
-        inner join node_snapshot as ns ON ns.snapshot_id = nshp.snapshot_id
-        inner join node_image as ni ON ni.image_id = ns.image_id
-      WHERE
-              ni.status = 1 AND 
-        rdt.row_num <= 10
-      GROUP BY
-        ndp.device_type,
-        ndp.device_name
-      ORDER BY
-        ndp.device_type,
-        device_count DESC;
+          (SELECT @row_number := 0) AS init,
+          (SELECT device_type, COUNT(*) AS device_count
+           FROM node_hp_profile
+           GROUP BY device_type
+           ORDER BY COUNT(*) DESC) AS counts
+  ) AS rdt ON ndp.device_type = rdt.device_type
+  INNER JOIN node_snapshot_hp_profile AS nshp ON nshp.profile_id = ndp.profile_id
+  INNER JOIN node_snapshot AS ns ON ns.snapshot_id = nshp.snapshot_id
+  INNER JOIN node_image AS ni ON ni.image_id = ns.image_id
+  WHERE
+      ni.status = 1 AND rdt.row_num <= 10
+  GROUP BY
+      ndp.device_type,
+      ndp.device_name
+  ORDER BY
+      ndp.device_type,
+      device_count DESC;  
       `,
       (err, res) => {
         if (err) {
