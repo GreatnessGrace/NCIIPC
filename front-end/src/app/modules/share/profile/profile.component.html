@@ -1,4 +1,4 @@
-<div class="profile-div">
+<!-- <div class="profile-div">
     <h2 class="panel-title">
         <i class="fa fa-user colo"></i>&nbsp;&nbsp;<b>{{username}}</b>
         <div class="float-right" (click)="closeButton('simple')">
@@ -52,4 +52,76 @@
             </td>
         </tr>
     </table>
+</div> -->
+
+
+
+
+<div class="profile-div">
+    <form  [formGroup]="profileForm">
+        <h2 class="panel-title">
+            <i class="fa fa-user colo"></i><b><input class="inp1" type="text" matInput formControlName="name"></b><span class="error" *ngIf="f.errors">&nbsp;Full Name is Required</span>
+            <div class="float-right" (click)="closeButton('simple')">
+                <i class="fa fa-close"></i>
+            </div>
+        </h2>
+        <hr color="grey">
+        <table>
+            <tr>
+                <td class="colo">Username</td>
+                <td>:</td>
+                <td>&nbsp;&nbsp;&nbsp;{{username}}</td>
+                <!-- <td><input class="inp1" type="text" matInput formControlName="usernamep"></td> -->
+            </tr>
+            <tr>
+                <td class="colo">Email</td>
+                <td>:</td>
+                <td><input class="inp1" type="email" matInput formControlName="email"><span class="error" *ngIf="fe?.errors">&nbsp;Invalid Email Pattern</span></td>
+                
+            </tr>
+            <tr>
+                <td class="colo">Role</td>
+                <td>:</td>
+                <td>&nbsp;&nbsp;&nbsp;{{role}}</td>
+            </tr>
+
+            <tr *ngIf="this.allNodes[this.allNodes?.length-1]?.id == 0 ">
+                <td class="colo">Nodes Assigned</td>
+                <td>:</td>
+                <td>&nbsp;&nbsp;&nbsp;All </td>
+            </tr>
+            <tr *ngIf="allNodes[this.allNodes?.length-1]?.id != 0">
+                <td class="colo">Nodes Assigned</td>
+                <td>:</td>
+                <td> <span *ngFor="let node of allNodes;let i = index;">{{node.id}} <span
+                            *ngIf="i != allNodes.length-1">,</span></span> </td>
+            </tr>
+            <tr>
+                <td class="colo">Region Assigned</td>
+                <td>:</td>
+                <td> <span *ngFor="let reg of region.data;let i = index;">{{reg.key}} <span
+                            *ngIf="i != region.data.length-1">,</span></span> </td>
+            </tr>
+            <tr>
+                <td class="colo">Sector Assigned</td>
+                <td>:</td>
+                <td> <span *ngFor="let sec of sector.data;let i = index;">{{sec.key}} <span
+                            *ngIf="i != sector.data.length-1">,</span></span> </td>
+            </tr>
+            <tr>
+                <td class="colo vt">Organization Assigned</td>
+                <td class="vt">:</td>
+                <td>
+                    <div class="orgni">
+                        <span *ngFor="let org of organization.data;let i = index;">{{org.key}} <span
+                                *ngIf="i != organization.data.length-1">,</span></span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <button [disabled]="!profileForm.valid" (click)="save()" class="btn btn-success text-center">Save</button>
+
+    <!-- <button *ngIf="role=='user'" (click)="gethpPro()" class="btn btn-success text-center">More Details</button> -->
 </div>

@@ -5,7 +5,7 @@ const elastic = require('elasticsearch')
 const bodyParser = require('body-parser').json();
 
 const usersController = require('../controllers/users.controller.js');
-var { LOGIN,CREATE_USER } = require('../validator/validator.js');
+var { LOGIN,CREATE_USER,PROFILE } = require('../validator/validator.js');
 // elastic search
 // const elasticsearch = elastic.Client({
 //     host: 'localhost:9200'
@@ -80,5 +80,13 @@ router.get('/allcountries',auth.verifyToken, usersController.allcountries)
 
 // severity alert
 router.post('/mitreAttack',auth.verifyToken, usersController.getMitreAttack)
+
+//edit Profile
+router.post(
+    "/editProfile",
+    PROFILE,
+    auth.verifyToken,
+    usersController.editProfile
+  );
 
 module.exports = router;

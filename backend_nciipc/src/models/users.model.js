@@ -881,4 +881,34 @@ Users.removeToken = async (result) => {
         return result(null, err);
     }
 }
+
+Users.editProfile = (req, result) => {
+    let { user_id, name, email } = req.body;
+    try {
+      dbConn.query(
+        `SELECT * FROM users where email='${email}' and user_id <> ${user_id}`,
+        (err, res) => {
+          if (res.length > 0) {
+            console.log("response", res);
+            result(null, {
+              message: "this Email already existed",
+            });
+          } else {
+            dbConn.query(
+              `update users  set name='${name}',email='${email}' where user_id=${user_id}`,
+              (err, resp) => {
+                console.log("resp");
+                result(null, {
+                  message: "Profile Edit SuccessFully",
+                });
+              }
+            );
+          }
+        }
+      );
+    } catch (err) {
+      return result(null, err);
+    }
+  };
+  
 module.exports = Users;
