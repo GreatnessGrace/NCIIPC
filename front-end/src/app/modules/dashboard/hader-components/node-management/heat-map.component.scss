@@ -18,7 +18,7 @@
 }
 ::ng-deep {
     .mat-menu-content {
-        background-color: #fff !important;
+        // background-color: #fff !important;
         color: black;
     }
 
@@ -183,4 +183,8 @@
 .select-all{
     background-color: #fff !important;
     margin-left: 15px;
+}
+
+::ng-deep .mat-menu-content {
+ background-color: #dcebcc;
 }
