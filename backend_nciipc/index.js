@@ -50,7 +50,7 @@ app.get('/', (req, res) => {
 });
 app.set('env', 'production');
 app.use(cors({
-  origin: ["http://localhost:4200", "https://192.168.100.53","https://192.168.100.109","https://192.168.100.102"]
+  origin: ["http://localhost:4200", "https://192.168.100.53","https://192.168.100.109","https://192.168.100.102", "https://192.168.8.160"]
 }));
 
 

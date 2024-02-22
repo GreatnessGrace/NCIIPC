@@ -893,11 +893,11 @@ async function totalHp() {
 //         (SELECT count(distinct profile_name) FROM node_hp_profile) as distinctCount;
 // `,
 `SELECT 
-(SELECT COUNT(DISTINCT node_image.image_name, node_image.image_tag, node_hp_profile.profile_name)
- FROM node_image
- INNER JOIN node_snapshot ON node_snapshot.image_id = node_image.image_id
- INNER JOIN node_snapshot_hp_profile ON node_snapshot_hp_profile.snapshot_id = node_snapshot.snapshot_id
- INNER JOIN node_hp_profile ON node_hp_profile.profile_id = node_snapshot_hp_profile.profile_id) AS totalCount,
+( SELECT COUNT(DISTINCT COALESCE(node_image.image_name, 'null'), COALESCE(node_image.image_tag, 'null'), node_hp_profile.profile_name)
+FROM node_image
+INNER JOIN node_snapshot ON node_snapshot.image_id = node_image.image_id
+INNER JOIN node_snapshot_hp_profile ON node_snapshot_hp_profile.snapshot_id = node_snapshot.snapshot_id
+INNER JOIN node_hp_profile ON node_hp_profile.profile_id = node_snapshot_hp_profile.profile_id) AS totalCount,
 (SELECT COUNT(DISTINCT profile_name) FROM node_hp_profile) AS distinctCount;
 `,
         async (err, res) => {
@@ -1308,31 +1308,32 @@ Honeypot.doubleProfilesDevices = (req, result) => {
   // console.log(req.body.cat)
   try {
     dbConn.query(
-      `WITH RankedDeviceTypes AS (
-        SELECT
-          device_type,
-          ROW_NUMBER() OVER (ORDER BY COUNT(*) DESC) AS row_num
-        FROM
-          node_hp_profile
-        GROUP BY
-          device_type
-      )
+      `SELECT
+      ndp.device_type,
+      ndp.device_name,
+      COUNT(*) AS device_count
+  FROM
+      node_hp_profile ndp
+  JOIN (
       SELECT
-        ndp.device_type,
-        ndp.device_name,
-        COUNT(*) AS device_count
+          device_type,
+          @row_number := @row_number + 1 AS row_num
       FROM
-        node_hp_profile ndp
-      JOIN
-        RankedDeviceTypes rdt ON ndp.device_type = rdt.device_type
-      WHERE
-        rdt.row_num <= 10 and  ndp.profile_name LIKE '%:${req.body.cat}:%'
-      GROUP BY
-        ndp.device_type,
-        ndp.device_name
-      ORDER BY
-        ndp.device_type,
-        device_count DESC;
+          (SELECT @row_number := 0) AS init,
+          (SELECT device_type, COUNT(*) AS device_count
+           FROM node_hp_profile
+           GROUP BY device_type
+           ORDER BY COUNT(*) DESC) AS counts
+  ) AS rdt ON ndp.device_type = rdt.device_type
+  WHERE
+  rdt.row_num <= 10 and  ndp.profile_name LIKE '%:${req.body.cat}:%'
+  GROUP BY
+      ndp.device_type,
+      ndp.device_name
+  ORDER BY
+      ndp.device_type,
+      device_count DESC;
+  
       `,
       //    `SELECT  node_profile_device.device_name, node_profile_device.device_type, node_image.node_id,node_image.image_name, node_image.vm_name, node_image.image_tag,node_snapshot.snapshot_name,node_snapshot.honeypot_type FROM node_profile_device
       //   inner join node_snapshot_hp_profile on node_snapshot_hp_profile.profile_id = node_profile_device.profile_id
