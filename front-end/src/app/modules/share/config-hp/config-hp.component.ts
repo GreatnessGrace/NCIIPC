@@ -352,17 +352,17 @@ isDuplicate(imageName: string): boolean {
       this.searchloaderxl = true
       // console.log(this.nodeForm.value);
 
-      this.restServ.post(environment.saveHoneypotConfig, this.nodeForm?.value, {}).subscribe(res => {
-        if (res.status == 1) {
-          this.searchloaderxl = false;
-          this.notiServ.showSuccess(res.message);
-          this.dialogRef.close("success");
-        }
-        else {
-          this.searchloaderxl = false;
-          this.notiServ.showError("Something went wrong. Try again !!!")
-        }
-      });
+      // this.restServ.post(environment.saveHoneypotConfig, this.nodeForm?.value, {}).subscribe(res => {
+      //   if (res.status == 1) {
+      //     this.searchloaderxl = false;
+      //     this.notiServ.showSuccess(res.message);
+      //     this.dialogRef.close("success");
+      //   }
+      //   else {
+      //     this.searchloaderxl = false;
+      //     this.notiServ.showError("Something went wrong. Try again !!!")
+      //   }
+      // });
     }
   }
 

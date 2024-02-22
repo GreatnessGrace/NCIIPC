@@ -87,8 +87,8 @@
                     <a class="dropdown-item" [ngClass]="{'nav-item-active': currentComponent  == 'nodeDashbord'}"
                         (click)="navigation('nodeDashbord')" href="#/dashboard/nodeDashbord"><i
                             class="fa fa-pie-chart icon-col"></i>&nbsp;Node Dashboard</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" [ngClass]="{'nav-item-active': currentComponent  == 'honeypotConfig'}"
+                            <div class="dropdown-divider" *ngIf="userType != 'user' "></div>
+                            <a class="dropdown-item" *ngIf="userType != 'user'" [ngClass]="{'nav-item-active': currentComponent  == 'honeypotConfig'}"
                                 (click)="navigation('honeypotConfig')" href="#/dashboard/honeypotConfig"><i
                                     class="fa fa-list-alt icon-col"></i>&nbsp;Node Registration</a>
                     <div class="dropdown-divider"></div>

@@ -109,18 +109,16 @@ export class DeployedHoneypotsComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
 
-        this.getDelteHoneypotData = this.restServ.post(environment.delteHoneypot,evt,{}).subscribe((res)=>{
-          console.log("resSwal",res)
-          if(res.status == 1){
-            this.notiServ.showSuccess(res.message);
-               this.getConfigDetails()
-          }
-      else{
-        this.notiServ.showError("Something went wrong.Try Again !!! ")
-      }
-       
-          
-        })
+      //   this.getDelteHoneypotData = this.restServ.post(environment.delteHoneypot,evt,{}).subscribe((res)=>{
+      //     console.log("resSwal",res)
+      //     if(res.status == 1){
+      //       this.notiServ.showSuccess(res.message);
+      //          this.getConfigDetails()
+      //     }
+      // else{
+      //   this.notiServ.showError("Something went wrong.Try Again !!! ")
+      // } 
+      //   })
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire('Canceled', '', 'error');
       }
