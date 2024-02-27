@@ -15,7 +15,8 @@ export const environment = {
   // recaptchasiteKey:"6LdPQkQpAAAAABYsRznW84g1BOB5W1Q1t4ahlj1m",
   recaptchasiteKey : "6LeZaHImAAAAAOJaHVFOfRbOY9G8FvDtwGmyQjx2",
 
-  threat_mapIP :'164.164.32.25',
+  // threat_mapIP :'164.164.32.25',
+  threat_mapIP :'192.168.8.160',
   // threat_mapIP :'192.168.100.56',
   // threat_mapPort :'61615',
   threat_mapPort :'61615',

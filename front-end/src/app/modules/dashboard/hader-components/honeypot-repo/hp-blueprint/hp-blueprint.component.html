@@ -209,14 +209,15 @@
                         *ngFor="let honeypot_profile of honeypot_profiles().controls; let hpIndex=index"
                         style="padding: 20px ">
                         <div class="row" *ngIf="isshow[hpIndex]">
-                            <p style="margin-top: 1%;">{{hpIndex+1}}</p>
+                            <p style="margin: 1%; color: black;">{{hpIndex+1}}</p>
                             <button type="button" class="btn btcus" (click)="maximize(hpIndex)"><i
                                     class="fa fa-plus-circle colo"></i></button>
                             <mat-error *ngIf="blueprintForm.get('honeypot_profiles.'+hpIndex+'')?.invalid">
                                 <strong>##</strong>
                             </mat-error>
                             <div class="profile"><b>Profile name:
-                                </b>{{blueprintForm.get('honeypot_profiles.'+hpIndex+'')?.get('profile_name')?.value}}
+                                </b>
+                                <span style="color: black; font-size: 14px;"> {{blueprintForm.get('honeypot_profiles.'+hpIndex+'')?.get('profile_name')?.value}} </span>
                             </div>
                         </div>
                         <div [formGroupName]="hpIndex" *ngIf="!isshow[hpIndex]">
@@ -261,10 +262,13 @@
                                             <strong>##</strong>
                                         </mat-error>
                                         <div class="service"><b>Service name:
-                                            </b>{{blueprintForm.get('honeypot_profiles.'+hpIndex+'')?.get('service.'+serviceIndex+'')?.get('name')?.value}}
+                                            </b>
+                                            <span style="color: black; font-size: 14px;">{{blueprintForm.get('honeypot_profiles.'+hpIndex+'')?.get('service.'+serviceIndex+'')?.get('name')?.value}}</span>
                                             <br>
-                                            <b>PORT:
-                                            </b>{{blueprintForm.get('honeypot_profiles.'+hpIndex+'')?.get('service.'+serviceIndex+'')?.get('port')?.value}}
+                                            <b>
+                                                PORT:
+                                            </b>
+                                            <span style="color: black; font-size: 14px;">{{blueprintForm.get('honeypot_profiles.'+hpIndex+'')?.get('service.'+serviceIndex+'')?.get('port')?.value}}</span>
                                         </div>
                                     </div>
 
