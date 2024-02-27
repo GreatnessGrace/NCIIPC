@@ -89,22 +89,23 @@ export class ConfigHpComponent implements OnInit {
 
   initNodeForm() {
     this.nodeForm = this.fb.group({
-      hp_type: ['', [Validators.required]],
-      os_type: ['', [Validators.required]],
+      hp_type: [''],
+      os_type: [''],
       node_id: [this.data.Object],
-      os_ver_type: ['', [Validators.required]],
+      os_ver_type: ['', ],
       vm_type: [''],
-      vm_name: ['', [Validators.required]],
-      snapshot_id: ['', [Validators.required]],
-      honeypot_cat: ['', [Validators.required]],
-      device_type: ['', [Validators.required]],
-      device_name: ['', [Validators.required]],
-      profile: ['', [Validators.required]],
-      image: ['', [Validators.required]],
-      hp_services: [[], [Validators.required]],
-      network_type: ['', [Validators.required]],
-      number_of_honeypot: ['', [Validators.required]],
-      hp_profile: ['', [Validators.required]],
+      vm_name: [''],
+     snapshot_id: ['', [Validators.required]],
+     honeypot_cat: ['', [Validators.required]],
+     device_type: ['', [Validators.required]],
+     device_name: ['', [Validators.required]],
+  profile: ['', ],
+     image: ['', [Validators.required]],
+    //  image: [''],
+     hp_services: [[], [Validators.required]],
+     network_type: ['', [Validators.required]],
+     number_of_honeypot: ['', [Validators.required]],
+      hp_profile: ['', ],
     });
   }
 
@@ -348,21 +349,22 @@ isDuplicate(imageName: string): boolean {
     
   }
   saveConfiguration() {
-    if (!this.nodeForm.invalid) {
+    if (!this.nodeForm.invalid) 
+    {
       this.searchloaderxl = true
       // console.log(this.nodeForm.value);
 
-      // this.restServ.post(environment.saveHoneypotConfig, this.nodeForm?.value, {}).subscribe(res => {
-      //   if (res.status == 1) {
-      //     this.searchloaderxl = false;
-      //     this.notiServ.showSuccess(res.message);
-      //     this.dialogRef.close("success");
-      //   }
-      //   else {
-      //     this.searchloaderxl = false;
-      //     this.notiServ.showError("Something went wrong. Try again !!!")
-      //   }
-      // });
+      this.restServ.post(environment.saveHoneypotConfig, this.nodeForm?.value, {}).subscribe(res => {
+        if (res.status == 1) {
+          this.searchloaderxl = false;
+          this.notiServ.showSuccess(res.message);
+          this.dialogRef.close("success");
+        }
+        else {
+          this.searchloaderxl = false;
+          this.notiServ.showError("Something went wrong. Try again !!!")
+        }
+      });
     }
   }
 
