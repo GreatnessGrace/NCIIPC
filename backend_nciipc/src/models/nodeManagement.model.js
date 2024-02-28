@@ -1831,6 +1831,7 @@ NodeModel.getNodeConfig = async (req, result) => {
   }
 };
 
+
 NodeModel.getImageName= async (req,result)=>{
   let nodeQuery = `
   SELECT
@@ -1850,7 +1851,7 @@ NodeModel.getImageName= async (req,result)=>{
   INNER JOIN
       node_image ON node_image.image_id = node_snapshot.image_id
   WHERE
-      node_hp_profile.device_name = '${req.body.name}' AND node_hardware = '${req.body.hard}'
+      node_hp_profile.profile_name = '${req.body.profile_name}' AND node_hardware = '${req.body.hard}'
   ORDER BY
       image;`;
 
@@ -2275,14 +2276,386 @@ NodeModel.getHoneypotHealthConnection = async (req, result) => {
   }
 };
 
+// NodeModel.saveHoneypotConfig = async (req, result) => {
+//   try {
+//     var conf_id = 0;
+//     var { hp_type, hp_services, node_id, vm_name, hp_profile } = req.body;
+
+//     console.log("Body", req.body);
+
+//     var serv = hp_services.filter((e) => {
+//       if (e && e != undefined && e != null && e != "") {
+//         return e.key;
+//       }
+//     });
+
+//     var serv_name = hp_services.map((e) => {
+//       if (e && e != undefined && e != null && e != "") {
+//         return e.value;
+//       }
+//     });
+
+//     let servieslist = await getServiceList(serv);
+//     let services = await getServices(serv);
+
+//     if (servieslist && services) {
+//       servieslist.filter((servL) => {
+//         services.filter((e) => {
+//           if (servL.conf_id == e.conf_id) {
+//             conf_id = servL.conf_id;
+//           }
+//         });
+//       });
+//     }
+
+//     if (conf_id == 0) {
+//       let maxNode = await getMaxNode();
+
+//       if (maxNode[0].conf_id == null) {
+//         maxNode[0].conf_id = 0;
+//       }
+//       conf_id = maxNode[0].conf_id + 1;
+
+//       let insertedNode = await InsertNode(conf_id, serv);
+
+//       let vul_id = await getVulnerabilities(hp_profile);
+
+//       for (var i = 0; i < vul_id.length; i++) {
+//         var inserting = await InsertVul(conf_id, vul_id[i].vulnerability_id);
+//       }
+//     }
+
+//     let hptypeId = await gethp_typeid(hp_type);
+
+//     let newConfig = await createConfig(req.body, serv, conf_id, hptypeId);
+
+//     let nodeNetdata = await getNodeIpsData(node_id);
+
+//     const ipAddressList = [];
+//     const ipAddressType = {};
+
+//     nodeNetdata.forEach((row) => {
+//       if (row.type === "public") {
+//         ipAddressList.push(row.ip_address);
+//       } else {
+//         ipAddressType[row.type] = row.ip_address;
+//       }
+//     });
+
+//     const randomIp = getRandomIp(ipAddressList);
+
+//     let updateNImage = await updateNodeImage(vm_name, node_id);
+
+//     let currentNodeConfig = await getCurrentConfiguration(node_id);
+
+//     let updateConfig = await updateNodeConfig(currentNodeConfig, randomIp);
+
+//     let currentConfig = await getCurrentConfiguration(node_id);
+
+//     let generateXml = await getXmlObject(currentConfig, nodeNetdata, req.body, serv_name);
+
+//     let setNode = await setNodeConfig(currentConfig, conf_id);
+
+//     if (setNode) {
+//       return result({
+//         status: 1,
+//         message: "Honeypot added successfully",
+//         data: setNode,
+//       });
+//     }
+//   } catch (error) {
+//     console.error("Error:", error);
+//     return result({
+//       status: 0,
+//       message: "An error occurred while adding honeypot",
+//       error: error.message,
+//     });
+//   }
+// };
+
+
+// function getRandomIp(ipAddressList) {
+//   const randomIndex = Math.floor(Math.random() * ipAddressList.length);
+//   return ipAddressList[randomIndex];
+// }
+
+// async function getCurrentConfiguration(node_id) {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       // Changes tell by Shivani Ma'am
+//       let nodeNetquery =
+//         "SELECT node_configuration.node_id, node_configuration.conf_id, node_configuration.network_type, node_configuration.vm_type, node_configuration.vm_name, " +
+//         "node_configuration.os_type, node_configuration.honeypot_type, node_configuration.honeypot_profile, node_configuration.snapshot_name, node_configuration.honeypot_count, " +
+//         "node_configuration.u_conf_id, node_configuration.os_name, node_configuration.start_date,node_configuration.end_date, node_configuration.health_status, node_configuration.ip_address, " +
+//         "node_image.image_name, node_image.image_tag, group_concat(node_configuration_package.package_id separator ',') as service , group_concat(node_package.package_name separator ',') as services " +
+//         "FROM  node_configuration join node_configuration_package on node_configuration_package.conf_id = node_configuration.conf_id "
+//         +"join node_package on node_package.package_id=node_configuration_package.package_id" + " Left Join node_image ON  node_image.vm_name = node_configuration.vm_name " +
+//         "WHERE " +
+//         "node_configuration.node_id =  " +
+//         node_id +
+//         " AND node_configuration.end_date IS NULL group by start_date";
+//       // let nodeNetquery =
+//       //   "SELECT node_configuration.node_id, node_configuration.conf_id, node_configuration.network_type, node_configuration.vm_type, node_configuration.vm_name, " +
+//       //   "node_configuration.os_type, node_configuration.honeypot_type, node_configuration.honeypot_profile, node_configuration.snapshot_name, node_configuration.honeypot_count, " +
+//       //   "node_configuration.u_conf_id, node_configuration.os_name, node_configuration.start_date,node_configuration.end_date, node_configuration.health_status, node_configuration.ip_address, " +
+//       //   "node_image.image_name, node_image.image_tag " +
+//       //   "FROM  node_configuration Left Join node_image ON node_image.node_id = node_configuration.node_id AND node_image.vm_name = node_configuration.vm_name " +
+//       //   "WHERE " +
+//       //   "node_configuration.node_id =  " +
+//       //   node_id +
+//       //   " AND node_configuration.end_date IS NULL ";
+//       dbConn.query(nodeNetquery, async (err, res) => {
+//         if(err){
+//           console.log(err);
+//         }
+//         resolve(res);
+//       });
+//     }, 300);
+//   });
+// }
+
+// async function InsertNode(maxNode, service) {
+//   // console.log("service", service);
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       service.map((e) => {
+//         // console.log("maxNode", maxNode, "service", e);
+//         query = `insert into node_configuration_package(conf_id,package_id) values(${maxNode},${e})`;
+//         dbConn.query(query, async (err, res) => {
+//           resolve(res);
+//         });
+//       });
+//     });
+//   });
+// }
+
+// async function getVulnerabilities(profile) {
+
+//   console.log("-----Service------", profile);
+//   return new Promise((resolve, reject) => {
+//     // Use for..of loop to iterate over the service array
+//     // for (const e of service) {
+//     // Use a template literal to construct the SQL query
+//     const query = `SELECT DISTINCT node_vulnerability.vulnerability_id FROM node_vulnerability_package INNER JOIN node_vulnerability ON node_vulnerability_package.vulnerability_id = node_vulnerability.vulnerability_id WHERE node_vulnerability_package.profile_id in (?)`;
+
+//     // Use await to ensure the database query is completed before proceeding
+//     try {
+//       dbConn.query(query, profile, async (err, insertResult) => {
+//         if (err) {
+//           console.log("eerrrrrr---->>>", err);
+//           reject(err);
+//         } else {
+//           const vulnerability_id = insertResult;
+//           // return vulnerability_id; // Resolve with the fetched image_id
+//           resolve(insertResult);
+//         }
+//       });
+//       // console.log("e-----------", e);
+//       // console.log("res---------", vulnerabilityIds);
+//       // Push the vulnerability IDs into the array
+//       // vulnerabilityIds.push(result);
+//     } catch (err) {
+//       // Handle any errors from the database query
+//       console.error("Error querying the database:", err);
+//       reject(err);
+//     }
+
+//     // Resolve the promise with the vulnerabilityIds array
+//     // resolve(vulnerabilityIds);
+//   });
+// }
+
+// async function InsertVul(conf, vul_id) {
+//   // console.log("--Insertion---", conf, vul_id)
+//   // console.log("service Insert vul",service)
+//   return new Promise((resolve, reject) => {
+//     query = `insert into node_configuration_vulnerability (conf_id,vulnerability_id) values(${conf},${vul_id})`;
+//     dbConn.query(query, async (err, res) => {
+//       resolve(res);
+//     });
+//   });
+// }
+
+// async function updateNodeImage(vm_name, node_id) {
+//   // console.log(
+//   //   "vm_name=====>>>>>>>>",
+//   //   vm_name,
+//   //   "\nnode_id===========>>>>",
+//   //   node_id
+//   // );
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       query = `update node_image set node_image.status=1 where node_image.vm_name= '${vm_name}' and node_id in (${node_id},0)`;
+
+//       dbConn.query(query, async (err, res) => {
+//         resolve(res);
+//       });
+//     });
+//   });
+// }
+
+// async function gethpName(vm_name, node_id) {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       query = `select node_snapshot.honeypot_name from node_snapshot 
+//       inner join node_image on node_image.image_id = node_snapshot.image_id
+//       where node_id = ${node_id} and vm_name = '${vm_name}' `;
+
+//       dbConn.query(query, async (err, res) => {
+//         resolve(res);
+//       });
+//     });
+//   });
+// }
+
+// async function setIpAddress(allConfs) {
+//   return new Promise((resolve, reject) => {
+//     // console.log("setNodeConfig------",allConfs)
+//     setTimeout(() => {
+//       allConfs.map((conf, i) => {
+//         // console.log("-------setNodeConfig------",conf.ip_address)
+//         let nodeConf = `UPDATE node_configuration set ip_address = '${conf.ip_address}' where u_conf_id =  ${conf.u_conf_id}`;
+//         dbConn.query(nodeConf, async (err, res) => {
+//           if (i == allConfs.length - 1) {
+//             resolve(res);
+//           }
+//         });
+//       });
+//     }, 1);
+//   });
+// }
+
+// async function setNodeConfig(allConfs) {
+//   return new Promise((resolve, reject) => {
+//     // console.log("allConfs", allConfs);
+//     setTimeout(() => {
+//       allConfs.map((conf, i) => {
+//         //  console.log("conf.ip_address---------",conf.ip_address)
+//         let nodeConf = `update node_network set status=1 where ip_address = '${conf.ip_address}' and node_id=${conf.node_id}`;
+//         dbConn.query(nodeConf, async (err, res) => {
+//           if (i == allConfs.length - 1) {
+//             resolve(res);
+//           }
+//         });
+//       });
+//     }, 1);
+//   });
+// }
+
+// async function getNodeIpsData(node_id) {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       query = `SELECT DISTINCT ip_address,type FROM node_network WHERE node_network.node_id = ${node_id} and status = 0`;
+//       dbConn.query(query, async (err, res) => {
+//         resolve(res);
+//       });
+//     });
+//   });
+// }
+
+// async function createConfig(req, serv, conf_id, hptypeId) {
+//   // console.log("req", req, "serv", serv);
+//   // console.log("hptypeId", hptypeId);
+//   // console.log("hptypeId", hptypeId[0].hp_id);
+
+//   var {
+//     hp_type,
+//     node_id,
+//     os_type,
+//     os_ver_type,
+//     vm_name,
+//     vm_type,
+//     snapshot_id,
+//     profile,
+//     network_type,
+//     number_of_honeypot,
+//   } = req;
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       query = `insert into node_configuration(node_id, os_type, os_name, vm_type, vm_name, snapshot_name, conf_id, honeypot_count, network_type, hp_id, honeypot_type,honeypot_profile) 
+//                                         values(${node_id},'${os_type}','${os_ver_type}','${vm_type}','${vm_name}','${snapshot_id}','${conf_id}','${number_of_honeypot}','${network_type}','${hptypeId[0].hp_id}','${hp_type}','${profile}')`;
+
+//       dbConn.query(query, async (err, res) => {
+//         resolve(res);
+//       });
+//     });
+//   });
+// }
+
+// async function createConfigHiHp(req, serv, conf_id, hptypeId) {
+//   // console.log("req", req, "serv", serv);
+//   // console.log("hptypeId", hptypeId);
+//   // console.log("hptypeId", hptypeId[0].hp_id);
+
+//   var {
+//     hp_type,
+//     node_id,
+//     os_type,
+//     os_ver_type,
+//     vm_name,
+//     vm_type,
+//     hp_name,  // Actually it contains snapshot_name but as already wrong conventions are used , so am not changing this mess for now 
+//     profile,
+//     network_type,
+//     number_of_honeypot,
+//   } = req;
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       query = `insert into node_configuration(node_id, os_type, os_name, vm_type, vm_name, snapshot_name, conf_id, honeypot_count, network_type, hp_id, honeypot_type,honeypot_profile) 
+//                                         values(${node_id},'${os_type}','${os_ver_type}','${vm_type}','${vm_name}','${hp_name}','${conf_id}','${number_of_honeypot}','${network_type}','${hptypeId[0].hp_id}','${hp_type}','${profile}')`;
+
+//       dbConn.query(query, async (err, res) => {
+//         resolve(res);
+//       });
+//     });
+//   });
+// }
+
+// async function updateNodeConfig(allconf, ip_add) {
+//   // console.log("==================allconf", allconf);
+//   // console.log("==================ip_add", ip_add);
+
+//   const confIdsWithNullIp = allconf
+//     .filter((item) => item.ip_address === null)
+//     .map((item) => item.u_conf_id);
+
+//   // console.log(confIdsWithNullIp);
+
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       query = `UPDATE node_configuration set ip_address = '${ip_add}' where u_conf_id = '${confIdsWithNullIp}'`;
+
+//       dbConn.query(query, async (err, res) => {
+//         // console.log("errrrrrrrrrr", res);
+//         resolve(res);
+//       });
+//     });
+//   });
+// }
+
+// async function gethp_typeid(hp_type) {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       query = `SELECT hp_id FROM node_honeypot_type WHERE hp_type = '${hp_type}'`;
+//       dbConn.query(query, async (err, res) => {
+//         resolve(res);
+//       });
+//     });
+//   });
+// }
+
+//////////////////////////////////////////////////////////////////////
+
+
+
 NodeModel.saveHoneypotConfig = async (req, result) => {
   var conf_id = 0;
   var { hp_type, hp_services, node_id, vm_name, hp_profile } = req.body;
-  // console.log("req.body--------", req.body);
+  console.log("req.body  1--------", req.body);
 
   var serv = hp_services.filter((e) => {
     if (e && e != undefined && e != null && e != "") {
-      // console.log("--key--",e.key)
+      console.log("--key--",e.key)
       return e.key;
     }
   });
@@ -2291,45 +2664,45 @@ NodeModel.saveHoneypotConfig = async (req, result) => {
       return e.value;
     }
   });
-  // console.log("serv",serv);
-  // console.log("serv_name",serv_name)
+  console.log("Console 2  serv",serv);
+  console.log("serv_name",serv_name)
   let servieslist = await getServiceList(serv);
-  // console.log("servieslist------",servieslist);
+  console.log("servieslist------",servieslist);
 
   let services = await getServices(serv);
-  // console.log("services-----",services);
+  console.log("services-----",services);
 
   if (servieslist && services) {
     servieslist.filter((servL) => {
       services.filter((e) => {
         if (servL.conf_id == e.conf_id) {
           conf_id = servL.conf_id;
-          // console.log("conf_id====",conf_id);
+          console.log("conf_id====",conf_id);
         }
       });
     });
   }
-  // console.log("conf_id",conf_id)
+  console.log("conf_id",conf_id)
 
   if (conf_id == 0) {
     let maxNode = await getMaxNode();
-    // console.log("maxNode", maxNode)
+    console.log("maxNode", maxNode)
 
     if (maxNode[0].conf_id == null) {
       maxNode[0].conf_id = 0;
     }
     conf_id = maxNode[0].conf_id + 1;
     //     // conf_id
-    // console.log("conf_id--->", conf_id)
+    console.log("conf_id---> console 3", conf_id)
     let insertedNode = await InsertNode(conf_id, serv);
-    // console.log("insertedNode--------",insertedNode);
-
+    console.log("insertedNode--------",insertedNode);
+console.log("Profiles--==",hp_profile)
     let vul_id = await getVulnerabilities(hp_profile);
-    // console.log("vul_id", vul_id)
+    console.log("vul_id", vul_id)
 
     for (var i = 0; i < vul_id.length; i++) {
       var inserting = await InsertVul(conf_id, vul_id[i].vulnerability_id);
-      // console.log(inserting);
+      console.log(inserting);
     }
   }
 
@@ -2338,10 +2711,11 @@ NodeModel.saveHoneypotConfig = async (req, result) => {
 
   // insert new config
   let newConfig = await createConfig(req.body, serv, conf_id, hptypeId);
-
+console.log("node_id",node_id)
   let nodeNetdata = await getNodeIpsData(node_id);
 
-  // console.log("nodeNetdata===>>>>",nodeNetdata);
+  console.log("nodeNetdata===>>>>",nodeNetdata);
+  console.log("nodeNetdata===>>>>",newConfig);
 
   const ipAddressList = [];
   const ipAddressType = {};
@@ -2355,26 +2729,29 @@ NodeModel.saveHoneypotConfig = async (req, result) => {
   });
 
   const randomIp = getRandomIp(ipAddressList);
-  // console.log("--------------------------",nodeNetdata)
+  console.log("--------------------------",nodeNetdata)
   let updateNImage = await updateNodeImage(vm_name, node_id);
+  console.log("--------------------------",updateNImage)
 
   let currentNodeConfig = await getCurrentConfiguration(node_id);
+  console.log("--------------------------",currentNodeConfig)
 
   let updateConfig = await updateNodeConfig(currentNodeConfig, randomIp);
+  console.log("--------------------------",updateConfig)
 
   let currentConfig = await getCurrentConfiguration(node_id);
-
-
+console.log("--------------------------",currentConfig)
+// console.log(currentConfig, nodeNetdata, req.body,serv_name)
   let generateXml = await getXmlObject(currentConfig, nodeNetdata, req.body,serv_name);
 
-  // console.log("-----------------------------------",generateXml)
+  console.log("-----------------------------------generateXml",generateXml)
   // set ip
   // let setIpAdd = await setIpAddress(currentConfig,conf_id);
 
   // set node config
 
   let setNode = await setNodeConfig(currentConfig, conf_id);
-
+console.log(":setNode",setNode)
   if (setNode) {
     return result({
       status: 1,
@@ -2388,22 +2765,56 @@ function getRandomIp(ipAddressList) {
   const randomIndex = Math.floor(Math.random() * ipAddressList.length);
   return ipAddressList[randomIndex];
 }
-
+// getCurrentConfiguration(5)
 async function getCurrentConfiguration(node_id) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       // Changes tell by Shivani Ma'am
-      let nodeNetquery =
-        "SELECT node_configuration.node_id, node_configuration.conf_id, node_configuration.network_type, node_configuration.vm_type, node_configuration.vm_name, " +
-        "node_configuration.os_type, node_configuration.honeypot_type, node_configuration.honeypot_profile, node_configuration.snapshot_name, node_configuration.honeypot_count, " +
-        "node_configuration.u_conf_id, node_configuration.os_name, node_configuration.start_date,node_configuration.end_date, node_configuration.health_status, node_configuration.ip_address, " +
-        "node_image.image_name, node_image.image_tag, group_concat(node_configuration_package.package_id separator ',') as service , group_concat(node_package.package_name separator ',') as services " +
-        "FROM  node_configuration join node_configuration_package on node_configuration_package.conf_id = node_configuration.conf_id "
-        +"join node_package on node_package.package_id=node_configuration_package.package_id" + " Left Join node_image ON  node_image.vm_name = node_configuration.vm_name " +
-        "WHERE " +
-        "node_configuration.node_id =  " +
-        node_id +
-        " AND node_configuration.end_date IS NULL group by start_date";
+      let nodeNetquery = `
+      SELECT 
+        node_configuration.node_id, 
+        node_configuration.conf_id, 
+        node_configuration.network_type, 
+        node_configuration.vm_type, 
+        node_configuration.vm_name, 
+        node_configuration.os_type, 
+        node_configuration.honeypot_type, 
+        node_configuration.honeypot_profile, 
+        node_configuration.snapshot_name, 
+        node_configuration.honeypot_count, 
+        node_configuration.u_conf_id, 
+        node_configuration.os_name, 
+        node_configuration.start_date,
+        node_configuration.end_date, 
+        node_configuration.health_status, 
+        node_configuration.ip_address, 
+        node_image.image_name, 
+        node_image.image_tag, 
+        group_concat(node_configuration_package.package_id separator ',') as service , 
+        group_concat(node_package.package_name separator ',') as services 
+      FROM  
+        node_configuration 
+      JOIN 
+        node_configuration_package 
+      ON 
+        node_configuration_package.conf_id = node_configuration.conf_id
+      JOIN 
+        node_package 
+      ON 
+        node_package.package_id = node_configuration_package.package_id
+      LEFT JOIN 
+        node_image 
+      ON  
+        node_image.vm_name = node_configuration.vm_name 
+      WHERE 
+        node_configuration.node_id = ${node_id} 
+      AND 
+        node_configuration.end_date IS NULL 
+      GROUP BY 
+        start_date`;
+    
+    console.log("nodeNetquery====", nodeNetquery);
+    
       // let nodeNetquery =
       //   "SELECT node_configuration.node_id, node_configuration.conf_id, node_configuration.network_type, node_configuration.vm_type, node_configuration.vm_name, " +
       //   "node_configuration.os_type, node_configuration.honeypot_type, node_configuration.honeypot_profile, node_configuration.snapshot_name, node_configuration.honeypot_count, " +
@@ -2414,6 +2825,8 @@ async function getCurrentConfiguration(node_id) {
       //   "node_configuration.node_id =  " +
       //   node_id +
       //   " AND node_configuration.end_date IS NULL ";
+
+      // console.log("nodeNetquery====", nodeNetquery)
       dbConn.query(nodeNetquery, async (err, res) => {
         if(err){
           console.log(err);
@@ -2423,17 +2836,30 @@ async function getCurrentConfiguration(node_id) {
     }, 300);
   });
 }
-
 async function InsertNode(maxNode, service) {
   // console.log("service", service);
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      service.map((e) => {
-        // console.log("maxNode", maxNode, "service", e);
-        query = `insert into node_configuration_package(conf_id,package_id) values(${maxNode},${e})`;
-        dbConn.query(query, async (err, res) => {
-          resolve(res);
+      // Extract package IDs from the array of objects
+      const packageIds = service.map(item => item.key);
+
+      // Use Promise.all to wait for all insert queries to complete
+      Promise.all(packageIds.map(packageId => {
+        return new Promise((resolve, reject) => {
+          // Execute individual insert query for each package ID
+          const query = `insert into node_configuration_package(conf_id, package_id) values(${maxNode}, ${packageId})`;
+          dbConn.query(query, async (err, res) => {
+            if (err) {
+              reject(err); // Reject promise if there's an error
+            } else {
+              resolve(res); // Resolve promise if query succeeds
+            }
+          });
         });
+      })).then(results => {
+        resolve(results); // Resolve outer promise with results of all insert queries
+      }).catch(error => {
+        reject(error); // Reject outer promise if any insert query fails
       });
     });
   });
@@ -2542,6 +2968,8 @@ async function setNodeConfig(allConfs) {
       allConfs.map((conf, i) => {
         //  console.log("conf.ip_address---------",conf.ip_address)
         let nodeConf = `update node_network set status=1 where ip_address = '${conf.ip_address}' and node_id=${conf.node_id}`;
+
+        console.log("nodeConf--",nodeConf)
         dbConn.query(nodeConf, async (err, res) => {
           if (i == allConfs.length - 1) {
             resolve(res);
@@ -2564,7 +2992,8 @@ async function getNodeIpsData(node_id) {
 }
 
 async function createConfig(req, serv, conf_id, hptypeId) {
-  // console.log("req", req, "serv", serv);
+  console.log("req--------=======", req, "serv------========", serv);
+  console.log("conf_id===========", conf_id, "hptypeId==========", hptypeId);
   // console.log("hptypeId", hptypeId);
   // console.log("hptypeId", hptypeId[0].hp_id);
 
@@ -2665,22 +3094,48 @@ async function getMaxNode() {
     });
   });
 }
+
+// const service =[ { value: 'HTTP', key: 1 } ]
+// console.log(service.length) 
+
 async function getServiceList(service) {
-  // console.log("getservice---", service, " \t ", service.length);
+  console.log("getservice---", service, " \t ", service.length);
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      query =
-        "SELECT node_configuration_package.conf_id, Count(node_configuration_package.package_id) AS pkg_count FROM node_configuration_package WHERE node_configuration_package.package_id IN  (" +
-        service +
-        ") GROUP BY node_configuration_package.conf_id HAVING pkg_count =  " +
-        service.length +
-        "";
+      // Extract package IDs from the array of objects
+      const packageIds = service.map(item => item.key);
+      
+      // Construct the SQL query using the extracted package IDs
+      const query =
+        "SELECT node_configuration_package.conf_id, COUNT(node_configuration_package.package_id) AS pkg_count FROM node_configuration_package WHERE node_configuration_package.package_id IN (" +
+        packageIds.join(',') + // Join package IDs with commas
+        ") GROUP BY node_configuration_package.conf_id HAVING pkg_count = " +
+        service.length;
+console.log("query---=",query)
       dbConn.query(query, async (err, res) => {
         resolve(res);
       });
     });
   });
 }
+
+// getServiceList([ { value: 'HTTP', key: 1 } ])
+// async function getServiceList(service) {
+//   console.log("getservice---", service, " \t ", service.length);
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       query =
+//         "SELECT node_configuration_package.conf_id, Count(node_configuration_package.package_id) AS pkg_count FROM node_configuration_package WHERE node_configuration_package.package_id IN  (" +
+//         service +
+//         ") GROUP BY node_configuration_package.conf_id HAVING pkg_count =  " +
+//         service.length +
+//         "";
+//       dbConn.query(query, async (err, res) => {
+//         resolve(res);
+//       });
+//     });
+//   });
+// }
 
 // getServicename()
 
@@ -2730,7 +3185,7 @@ async function getXmlObject(allConfs, nodeNetdata, reqbody,service) {
     
         var obj = {
           UConfID: {
-            "#text": conf.conf_id,
+            "#text": conf.u_conf_id,
           },
           VmInfo: {
             VmType: {
@@ -2802,7 +3257,205 @@ async function getXmlObject(allConfs, nodeNetdata, reqbody,service) {
 
       // save file start
       // var dir = __dirname + "/BB_LOGS/honeypot_conf/" + reqbody.node_id + "/";
-      var dir = "/BB_LOGS/honeypot_conf/" + reqbody.node_id + "/";
+      console.log("first", reqbody.node_id)
+      var dir = "/BB_LOGS/honeypot_confs/" + reqbody.node_id + "/";
+      console.log("dIR====",dir)
+      if (!fs.existsSync(dir)) {
+        fs.promises.mkdir(dir, { recursive: true });
+      }
+
+      setTimeout(() => {
+        fs.writeFile(dir + "Honeypot.xml", document.toString(), (err) => {
+          if (err) console.log(err);
+          else {
+            console.log("File written successfully\n");
+          }
+        });
+      }, 100);
+      //   save file end
+
+      resolve(obj);
+    }, 300);
+  });
+}
+
+
+//////////////////////////////////////////////////////////////////////
+async function getMaxNode() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      query =
+        "SELECT Max(node_configuration_package.conf_id) AS conf_id FROM node_configuration_package";
+      dbConn.query(query, async (err, res) => {
+        resolve(res);
+      });
+    });
+  });
+}
+
+// async function getServiceList(service) {
+//   console.log("getservice---", service, " \t ", service.length);
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       // Extract package IDs from the array of objects
+//       const packageIds = service.map(item => item.key);
+      
+//       // Construct the SQL query using the extracted package IDs
+//       const query =
+//         "SELECT node_configuration_package.conf_id, COUNT(node_configuration_package.package_id) AS pkg_count FROM node_configuration_package WHERE node_configuration_package.package_id IN (" +
+//         packageIds.join(',') + // Join package IDs with commas
+//         ") GROUP BY node_configuration_package.conf_id HAVING pkg_count = " +
+//         service.length;
+
+//       dbConn.query(query, async (err, res) => {
+//         resolve(res);
+//       });
+//     });
+//   });
+// }
+
+// async function getServiceList(service) {
+//   console.log("getservice---", service, " \t ", service.length);
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       query =
+//         "SELECT node_configuration_package.conf_id, Count(node_configuration_package.package_id) AS pkg_count FROM node_configuration_package WHERE node_configuration_package.package_id IN  (" +
+//         service +
+//         ") GROUP BY node_configuration_package.conf_id HAVING pkg_count =  " +
+//         service.length +
+//         "";
+//       dbConn.query(query, async (err, res) => {
+//         resolve(res);
+//       });
+//     });
+//   });
+// }
+
+// getServicename()
+
+async function getServices(service) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      query =
+        "SELECT node_configuration_package.conf_id, Count(node_configuration_package.package_id) AS pkg_count FROM node_configuration_package GROUP BY node_configuration_package.conf_id HAVING pkg_count =" +
+        service.length;
+      dbConn.query(query, async (err, res) => {
+        resolve(res);
+      });
+    });
+  });
+}
+
+async function getXmlObject(allConfs, nodeNetdata, reqbody,service) {
+  console.log("====================allconf=============",allConfs);
+  var static_ip = "";
+  var netmask = "";
+  var gateway = "";
+  var dns = "";
+
+  nodeNetdata.map((e) => {
+    if (e.type == "static_ip") {
+      static_ip = e.ip_address;
+    }
+    if (e.type == "netmask") {
+      netmask = e.ip_address;
+    }
+    if (e.type == "gateway") {
+      gateway = e.ip_address;
+    }
+    if (e.type == "dns") {
+      dns = e.ip_address;
+    }
+  });
+
+  return new Promise((resolve, reject) => {
+
+    setTimeout(() => {
+      let honeypot = [];
+      for (let conf of allConfs) {
+        console.log(config?.Xml_Repo)
+        console.log(conf?.image_name)
+        console.log(conf?.image_tag)
+    
+        var obj = {
+          UConfID: {
+            "#text": conf.u_conf_id,
+          },
+          VmInfo: {
+            VmType: {
+              "#text": conf.vm_type,
+            },
+            VmName: {
+              "#text": conf.vm_name,
+            },
+            OsType: {
+              "#text": conf.os_type,
+            },
+            HoneypotType: {
+              // "#text": conf.honeypot_type,
+              "#text": 'PHP',
+            },
+            HoneypotName: {
+              "#text": conf.snapshot_name,
+            },
+            SnapshotName: {
+              "#text": conf.snapshot_name,
+            },
+            ContainerCount: {
+              "#text": conf.honeypot_count,
+            },
+            repo: {
+              "#text":
+                config.Xml_Repo + "/" + conf.image_name + ':' + conf.image_tag
+            },
+          },
+          Network: {
+            NetworkType: {
+              "#text": conf.network_type,
+            },
+            IPAddress: {
+              "#text": conf.ip_address,
+            },
+            Netmask: {
+              "#text": netmask,
+            },
+            Gateway: {
+              "#text": gateway,
+            },
+            DNS: {
+              "#text": dns,
+            },
+          },
+          Profile: {
+            "#text": conf.honeypot_profile,
+          },
+          ServiceInfo: {
+            ServiceName: conf.services.split(',').map(service => ({ "#text": service })),
+          },
+          // ServiceInfo: {
+          //   ServiceName: {
+          //     "#text": conf.services,
+          //   },
+          // },
+        };
+        honeypot.push(obj);
+      }
+      var newObj = {
+        DHS: {
+          Honeypot: honeypot,
+        },
+      };
+      var finalDocument = newObj;
+      var builder = require("xmlbuilder");
+      var document = builder.create(finalDocument).end({ pretty: true });
+
+      // save file start
+      console.log("2ND", reqbody.node_id)
+
+      // var dir = __dirname + "/BB_LOGS/honeypot_conf/" + reqbody.node_id + "/";
+      var dir = "/BB_LOGS/honeypot_confs/" + reqbody.node_id + "/";
+      console.log("dR====",dir)
+
       if (!fs.existsSync(dir)) {
         fs.promises.mkdir(dir, { recursive: true });
       }
@@ -4044,7 +4697,7 @@ async function getXmlObjectHiHp(allConfs, nodeNetdata, reqbody,service, hpName) 
       for (let conf of allConfs) {
         var obj = {
           UConfID: {
-            "#text": conf.conf_id,
+            "#text": conf.u_conf_id,
           },
           VmInfo: {
             VmType: {
@@ -4115,7 +4768,7 @@ async function getXmlObjectHiHp(allConfs, nodeNetdata, reqbody,service, hpName) 
       var document = builder.create(finalDocument).end({ pretty: true });
 
       // save file start
-      var dir = "/BB_LOGS/honeypot_conf/" + reqbody.node_id + "/";
+      var dir = "/BB_LOGS/honeypot_confs/" + reqbody.node_id + "/";
       if (!fs.existsSync(dir)) {
         fs.promises.mkdir(dir, { recursive: true });
       }
@@ -4136,3 +4789,4 @@ async function getXmlObjectHiHp(allConfs, nodeNetdata, reqbody,service, hpName) 
 }
 
 module.exports = NodeModel;
+

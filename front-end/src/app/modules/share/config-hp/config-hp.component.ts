@@ -278,7 +278,7 @@ console.log('Hardware:', this.node_hardware);
     this.nodeForm.get('profile').setValue(profile);
     
     let url = environment.getImageName;
-    this.restServ.post(url, { name: evt.name, hard: this.node_hardware }, {}).subscribe(res => {
+    this.restServ.post(url, { profile_name: evt.profile_name, hard: this.node_hardware }, {}).subscribe(res => {
         this.hp_image = res;
         this.hp_services = [];
         // console.log(res[0].os_name)
