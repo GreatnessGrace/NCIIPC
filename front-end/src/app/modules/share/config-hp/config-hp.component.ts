@@ -91,6 +91,7 @@ export class ConfigHpComponent implements OnInit {
     this.nodeForm = this.fb.group({
       hp_type: [''],
       os_type: [''],
+      os_name: [''],
       node_id: [this.data.Object],
       os_ver_type: ['', ],
       vm_type: [''],
@@ -280,7 +281,15 @@ console.log('Hardware:', this.node_hardware);
     this.restServ.post(url, { name: evt.name, hard: this.node_hardware }, {}).subscribe(res => {
         this.hp_image = res;
         this.hp_services = [];
-        
+        // console.log(res[0].os_name)
+        this.nodeForm.get('os_type').setValue(res[0].os_type);
+        this.nodeForm.get('os_name').setValue(res[0].os_name);
+        this.nodeForm.get('vm_type').setValue(res[0].vm_type);
+        this.nodeForm.get('vm_name').setValue(res[0].vm_name);
+        // this.nodeForm.os_name = res[0].os_name
+        // this.nodeForm.os_type = res[0].os_type
+        // this.nodeForm.vm_name = res[0].vm_name
+        // this.nodeForm.vm_type = res[0].vm_type
         // Extract all profile IDs from the response
         const profiles = res.map((item: { profile: any; }) => item.profile);
         
