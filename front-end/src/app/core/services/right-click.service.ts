@@ -8,7 +8,7 @@ export class RightClickService {
   constructor(private notiserv : NotificationService) { }
   handleRightClick(event: MouseEvent): void {
     event.preventDefault();
-    this.notiserv.tinyAlert("Right-click is disabled")
+    // this.notiserv.tinyAlert("Right-click is disabled")
   // alert("Right-click is disabled")
   }
 }
