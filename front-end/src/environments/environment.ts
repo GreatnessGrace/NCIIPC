@@ -221,5 +221,12 @@ export const environment = {
     statesList: API_URL + '/honeypot/statesList',
     citiesList: API_URL + '/honeypot/citiesList',
     addCity: API_URL + '/honeypot/addCity',
+
+    // hyperlinks
+    adar:"http://192.168.8.1:4200/",
+    enum:"http://192.168.8.1:4200/",
+    ews:"http://192.168.8.1:4200/",
+    pae:"http://192.168.8.1:4200/",
+    ir:"http://192.168.8.1:4200/"
   
 };

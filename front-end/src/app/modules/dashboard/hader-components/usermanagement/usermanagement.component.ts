@@ -219,7 +219,7 @@ export class UsermanagementComponent implements OnInit {
   adduser() {
     let dialogRef = this.dialog.open(AddUserComponent);
     dialogRef.afterClosed().subscribe(res => {
-      console.log(res)
+      // console.log(res)
       this.getUsers()
     })
   }

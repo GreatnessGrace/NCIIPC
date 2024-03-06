@@ -29,6 +29,7 @@ ahp_bool:Boolean=false;
   currentComponent: any;
   username:any;
   notificationCount = 0;
+  adar = environment.adar
   assetPath = environment.assetPath;
   @Input() countData?: number;
   constructor(private router: Router,

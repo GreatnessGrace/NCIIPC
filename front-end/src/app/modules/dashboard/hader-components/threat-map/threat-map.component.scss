@@ -11,7 +11,7 @@
 #threat-map {
     height: 400px;
     width: 97%;
-    border: 2px solid black;
+    border: 2px solid white;
 }
 
 .h30{
@@ -65,11 +65,24 @@
             opacity: 0.0;
         }
     }
+
+    .fadeOut {
+        animation: fadeOutText 2s ease 1s forwards;
+      }
+  
+      @keyframes fadeOutText {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+    }
 }
 
 .table th {
-    color: #000000;
-    background-color: #e7e7e7;
+    color: #fdb927;
+    background-color: black;
     border: none;
     padding-bottom: 20px;
     font-size: large;
@@ -79,8 +92,8 @@
 }
 
 .table td {
-    color: black;
-    background-color: #fff;
+    color: white;
+    background-color: #181F32;
     padding: 10px;
     font-size: 15px;
     border: none;
@@ -113,9 +126,55 @@
   }
 
    .mat-sort-header {
-    color: #000000 !important;
+    color: #fdb927 !important;
     font-size: unset;
 }
 .map-frame{
     height: fit-content !important;
+}
+
+::ng-deep {
+    .legend {
+        line-height: 18px;
+        color: #555;
+        background: white;
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        padding: 6px 8px;
+    }
+
+    .legend i {
+        width: 18px;
+        height: 18px;
+        float: left;
+        margin-right: 8px;
+        opacity: 0.7;
+    }
+    .table-sec{
+        height: 250px;
+        overflow-y: auto;
+        margin-bottom: 10px;
+        // padding: 0.5rem;
+        // padding-top:0px ;
+        padding: 5px;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+    .imgg{
+        height:18px;
+        width:34px;
+    }
+    .map-popup {
+        padding: 6px 8px;
+        font: 14px/16px Arial, Helvetica, sans-serif;
+        background: white;
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+    }
+
+    .map-popup p {
+        margin: 0 0 5px;
+        color: #777;
+    }
 }
