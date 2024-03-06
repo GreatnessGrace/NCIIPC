@@ -8,6 +8,7 @@ import { RestService } from 'src/app/core/services/rest.service';
 import { environment } from 'src/environments/environment';
 import { AESEncryptDecryptService } from 'src/app/common/aesencrypt-decrypt.service';
 import { minLengthAsyncValidator } from 'src/app/common/validator';
+import { RightClickService } from 'src/app/core/services/right-click.service';
 
 @Component({
   selector: 'app-changepassword',
@@ -24,10 +25,13 @@ export class ChangepasswordComponent implements OnInit {
   formSubmitted = false;
 
   constructor(private fb: FormBuilder,private router: Router, private cryptServ:AESEncryptDecryptService, private restServ:RestService,
-     private notiService:NotificationService, public dialogRef: MatDialogRef<ChangepasswordComponent>) { 
+     private notiService:NotificationService, public dialogRef: MatDialogRef<ChangepasswordComponent>, private rightClickService: RightClickService) { 
 
       this.initSignupForm();
 
+  }
+  onRightClick(event: MouseEvent): void {
+    this.rightClickService.handleRightClick(event);
   }
   ngOnInit(): void {
   }

@@ -86,9 +86,13 @@ export class ReportDownloadComponent implements OnInit {
     private notiServ: NotificationService,
     private fb: FormBuilder,
     private sharedService: SharedService,
-    private cookServ:CookiestorageService) {
+    private cookServ:CookiestorageService,
+    private rightClickService: RightClickService
+    ) {
   }
-
+  onRightClick(event: MouseEvent): void {
+    this.rightClickService.handleRightClick(event);
+  }
   isDropdownDisabled = false;
   assetPath = environment.assetPath;
   dateFilterArray = dateFilters;

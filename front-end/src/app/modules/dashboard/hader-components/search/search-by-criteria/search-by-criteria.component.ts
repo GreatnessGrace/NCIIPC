@@ -10,6 +10,7 @@ import { ThreatJsonDataComponent } from 'src/app/modules/share/threat-json-data/
 import { MatSort } from '@angular/material/sort';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { RightClickService } from 'src/app/core/services/right-click.service';
 @Component({
   selector: 'app-search-by-criteria',
   templateUrl: './search-by-criteria.component.html',
@@ -78,7 +79,8 @@ export class SearchByCriteriaComponent implements OnInit {
   constructor(private restServ: RestService, private notiServ: NotificationService,
     private fb: FormBuilder,
     private actRoute: ActivatedRoute,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private rightClickService: RightClickService
   ) {
     this.selectedtype = this.actRoute.snapshot.queryParams['type'];
     this.selectedeventTypeValue = this.actRoute.snapshot.queryParams['data'];
@@ -86,6 +88,10 @@ export class SearchByCriteriaComponent implements OnInit {
 
   }
 
+  onRightClick(event: MouseEvent): void {
+    this.rightClickService.handleRightClick(event);
+  }
+  
   ngOnInit(): void {
     this.displayedColumnsJson = this.displayedColumnsData.map((x: any) => x.columnVal)
     this.initSignupForm();

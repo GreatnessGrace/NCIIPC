@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 import { NodeHealthComponent } from 'src/app/modules/share/node-health/node-health.component';
 import { DataService } from 'src/app/common/data.service';
 import { ConfigHihpComponent } from 'src/app/modules/share/config-hihp/config-hihp.component';
+import { RightClickService } from 'src/app/core/services/right-click.service';
 
 
 @Component({
@@ -66,8 +67,10 @@ export class NodeDetailsComponent implements OnInit {
   @ViewChild('nodeSort') nodeSort!: MatSort;
   honeypotData: any = [];
 
-
-  constructor(private restServ: RestService,private download: DownloadService, public dialog: MatDialog, private notiServ: NotificationService,private dataService:DataService) { }
+  onRightClick(event: MouseEvent): void {
+    this.rightClickService.handleRightClick(event);
+  }
+  constructor(private restServ: RestService,private download: DownloadService, public dialog: MatDialog, private notiServ: NotificationService,private dataService:DataService,private rightClickService: RightClickService) { }
 
   ngOnInit(): void {
     // this.nodeMangementService.getNodeDetails().subscribe(res => {

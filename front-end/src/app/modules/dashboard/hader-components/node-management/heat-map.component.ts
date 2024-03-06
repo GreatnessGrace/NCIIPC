@@ -11,6 +11,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription, forkJoin } from 'rxjs';
 import { SharedService } from 'src/app/common/shared.service';
 import { dateFilters } from 'src/app/utils/global.constants';
+import { RightClickService } from 'src/app/core/services/right-click.service';
 @Component({
   selector: 'app-heat-map',
   templateUrl: './heat-map.component.html',
@@ -73,10 +74,15 @@ export class HeatMapComponent {
     public mapService: MapserviceService,
     public fb: FormBuilder,
     private restServ: RestService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private rightClickService: RightClickService
+
 
   ) { this.initChipsForm(); }
-
+  
+  onRightClick(event: MouseEvent): void {
+    this.rightClickService.handleRightClick(event);
+  }
   initChipsForm() {
 
     this.chipsForm = this.fb.group({
@@ -90,6 +96,7 @@ export class HeatMapComponent {
     });
   }
   ngOnInit() {
+
     this.getDevices();
     this.pieChartData = []
     let endDate = moment().valueOf();

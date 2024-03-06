@@ -9,6 +9,7 @@ import { FormControl } from '@angular/forms';
 import { ThreatJsonDataComponent } from 'src/app/modules/share/threat-json-data/threat-json-data.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ProfileDataComponent } from 'src/app/modules/share/profile-data/profile-data.component';
+import { RightClickService } from 'src/app/core/services/right-click.service';
 
 @Component({
   selector: 'app-hp-stats',
@@ -258,8 +259,10 @@ export class HpStatsComponent implements OnInit {
   uniqueScada: any;
   uniqueVul: any;
   uniqueProtocols: any;
-  constructor(private restServ: RestService, public dialog: MatDialog) { }
-
+  constructor(private restServ: RestService, public dialog: MatDialog, private rightClickService: RightClickService) { }
+  onRightClick(event: MouseEvent): void {
+    this.rightClickService.handleRightClick(event);
+  }
   ngOnInit(): void {
     
     let url = environment.snapCount

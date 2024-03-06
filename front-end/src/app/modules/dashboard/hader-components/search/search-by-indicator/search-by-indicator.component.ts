@@ -4,6 +4,7 @@ import { NotificationService } from 'src/app/core/services/notification.service'
 import { environment } from 'src/environments/environment';
 import { RestService } from 'src/app/core/services/rest.service';
 import { Subscription } from 'rxjs';
+import { RightClickService } from 'src/app/core/services/right-click.service';
 
 @Component({
   selector: 'app-search-by-indicator',
@@ -30,14 +31,18 @@ export class SearchByIndicatorComponent implements OnInit {
   constructor(
     public fb: FormBuilder,
     private notiServ: NotificationService,
-    private restServ: RestService
+    private restServ: RestService,
+    private rightClickService: RightClickService
   ) { }
-
+  onRightClick(event: MouseEvent): void {
+    this.rightClickService.handleRightClick(event);
+  }
+  
   @HostListener('window:selectedEvent', ['$event']) onselectedEvent(el: any) {
     this.infoData = el.detail
     this.display = "block";
   }
-
+  
   ngOnInit(): void {
     this.initForm();
   }

@@ -3,6 +3,7 @@ import { FormArray, FormControl, FormGroup, Validators, FormBuilder } from '@ang
 import { environment } from 'src/environments/environment';
 import { RestService } from 'src/app/core/services/rest.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
+import { RightClickService } from 'src/app/core/services/right-click.service';
 
 @Component({
   selector: 'app-hp-blueprint',
@@ -32,7 +33,8 @@ export class HpBlueprintComponent implements OnInit {
   virtualLabel: any = "Docker Image ID"
   searchloaderxl: boolean = false;
   isLoading: boolean = false;
-  constructor(private fb: FormBuilder, private restServ: RestService, private notiServ: NotificationService) {
+  constructor(private fb: FormBuilder, private restServ: RestService, private notiServ: NotificationService, private rightClickService: RightClickService) 
+  {
     this.blueprintForm = this.fb.group({
       vm_type: new FormControl('docker', [Validators.required, Validators.pattern("^[a-zA-Z ]+$")]),
       base_system: new FormControl(null, [Validators.required, Validators.pattern("^[a-zA-Z/ ]+$")]),
@@ -52,6 +54,9 @@ export class HpBlueprintComponent implements OnInit {
     })
   }
 
+  onRightClick(event: MouseEvent): void {
+    this.rightClickService.handleRightClick(event);
+  }
 
   ngOnInit(): void {
     

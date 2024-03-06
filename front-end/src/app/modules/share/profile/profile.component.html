@@ -1,4 +1,4 @@
-<div class="profile-div">
+<div class="profile-div" (contextmenu)="onRightClick($event)">
     <form  [formGroup]="profileForm">
         <h2 class="panel-title">
             <i class="fa fa-user colo"></i><b><input class="inp1" type="text" matInput formControlName="name"></b><span class="error" *ngIf="f.errors">&nbsp;Full Name is Required</span>
