@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from 'src/app/core/services/login.service';
@@ -9,9 +9,10 @@ import { RestService } from 'src/app/core/services/rest.service';
 import { environment } from 'src/environments/environment';
 import { AdminNotificationsService } from 'src/app/core/services/admin-notifications.service';
 import { SessionstorageService } from 'src/app/common/sessionstorage.service';
-
 import { Subscription } from 'rxjs';
-import { error } from 'console';
+import { CookiestorageService } from 'src/app/common/cookiestorage.service';
+import { RightClickService } from 'src/app/core/services/right-click.service';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -21,6 +22,9 @@ export class HeaderComponent implements OnInit {
   getLogoutData! : Subscription
   notiServCount! : Subscription
 logoutCheck : Boolean = false
+url_bool:Boolean=false;
+detail_bool:Boolean=false;
+ahp_bool:Boolean=false;
   userType: any;
   currentComponent: any;
   username:any;
@@ -34,7 +38,11 @@ logoutCheck : Boolean = false
     public dialog: MatDialog,
     private restServ:RestService,
     private adminService: AdminNotificationsService,
-    private sessServ:SessionstorageService
+    private sessServ:SessionstorageService,
+    private cookServ:CookiestorageService,
+    private cdRef: ChangeDetectorRef,
+    private rightClickService: RightClickService
+
     ) { }
 
   ngOnInit(): void {
@@ -47,7 +55,9 @@ logoutCheck : Boolean = false
     this.getName()
     this.getNotificationCount();
   }
-
+  onRightClick(event: MouseEvent): void {
+    this.rightClickService.handleRightClick(event);
+  }
   navigation(path?: any) {
     this.router.navigate([`/dashboard/${path}`])
   }
@@ -57,7 +67,8 @@ logoutCheck : Boolean = false
     this.logoutCheck = true
     let url = environment.logOut;
   this.restServ.getnew(url,{},{}).subscribe(res => {
-        this.sessServ.logout();
+        // this.sessServ.logout();
+        this.cookServ.logout();
         this.notiService.showSuccess(res.message)
       
     },
@@ -71,8 +82,32 @@ logoutCheck : Boolean = false
 
   getName(){
     this.username = this.loginService.getUser().name;
-    // console.log('ss',this.username);
+  
   }
+  toggleurl(i:any){
+    this.url_bool=i;
+    this.detail_bool=!i;
+    this.ahp_bool=!i;
+  }
+
+  toggledetail(i:any){
+    this.detail_bool=i;
+    this.url_bool=!i;
+    this.ahp_bool=!i;
+  }
+
+  toggleahp(i:any){
+    this.ahp_bool=i;
+    this.url_bool=!i;
+    this.detail_bool=!i;
+  }
+
+  toggle(){
+    this.ahp_bool=false;
+    this.url_bool=false;
+    this.detail_bool=false;
+  }
+
 
   changePassword(){
     // this.router.navigate(['/change-password']);
@@ -91,8 +126,13 @@ logoutCheck : Boolean = false
     let dialogRef = this.dialog.open(ProfileComponent,{
       // data: dataToSend
     } );
-    
+    dialogRef.afterClosed().subscribe(res=>{
+      this.getName();
+    })
+   
+   this.cdRef.detectChanges(); 
   }
+
 
   getNotificationCount() {
    this.notiServCount = this.adminService.getNotificationCount().subscribe((resp) => {

@@ -1,15 +1,14 @@
-import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse,HttpClientModule} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse, HttpClientModule } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { throwError } from 'rxjs/internal/observable/throwError';
-import { TimeoutError } from 'rxjs';
+import { Observable, TimeoutError } from 'rxjs';
 // import { catchError } from 'rxjs/internal/operators/catchError';
 import { catchError, map } from 'rxjs/operators';
 // import { SessionstorageService } from './sessionstorage.service';
 import { NotificationService } from './notification.service';
 import { Location } from '@angular/common';
 import { environment } from 'src/environments/environment';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,22 +18,22 @@ export class RestService {
   constructor(private http: HttpClient, private router: Router, private notificationService: NotificationService, private location: Location) { }
 
   getUserIp() {
-     return this.http.get<any>('http://api.ipify.org/?format=json&callback=JSONP_CALLBACK', {headers:{skip:"true"}});
+    return this.http.get<any>('http://api.ipify.org/?format=json&callback=JSONP_CALLBACK', { headers: { skip: "true" } });
   }
 
-  getnew(url:any,data:any,headers:any){
+  getnew(url: any, data: any, headers: any) {
     var headersObj = new HttpHeaders();
-    if(headers.contentType){
+    if (headers.contentType) {
       headersObj = headersObj.set('content-type', headers.contentType);
-    } else{
+    } else {
       headersObj.append('Content-Type', 'application/json');
     }
     let options = {
-      params: (data != null && data.params != null) ?  new HttpParams({ fromObject: data.params }) : {},
-      headers : headersObj
+      params: (data != null && data.params != null) ? new HttpParams({ fromObject: data.params }) : {},
+      headers: headersObj
     };
 
-    return this.http.get<any>(url,options).pipe(
+    return this.http.get<any>(url, options).pipe(
       map((res) => {
         return res;
       }),
@@ -42,18 +41,18 @@ export class RestService {
     )
   }
 
-  get(url:any,data:any,headers:any){
+  get(url: any, data: any, headers: any) {
     var headersObj = new HttpHeaders();
-    if(headers.contentType){
+    if (headers.contentType) {
       headersObj = headersObj.set('content-type', headers.contentType);
-    } else{
+    } else {
       headersObj.append('Content-Type', 'application/json');
     }
     let options = {
-      params: (data != null && data.params != null) ?  new HttpParams({ fromObject: data.params }) : {},
-      headers : headersObj
+      params: (data != null && data.params != null) ? new HttpParams({ fromObject: data.params }) : {},
+      headers: headersObj
     };
-    return this.http.get<any>(url,options).pipe(
+    return this.http.get<any>(url, options).pipe(
       map((res) => {
         return res;
       }),
@@ -63,6 +62,7 @@ export class RestService {
         if (err.status == 400) {
           localStorage.removeItem('Token')
           localStorage.removeItem('userType')
+          document.cookie="Token=; expires=Thu, 18 Dec 1970 12:00:00 UTC";
         }
         return throwError(err);
       })
@@ -70,9 +70,9 @@ export class RestService {
   }
   delete(url: any, data: any, headers: any) {
     var headersObj = new HttpHeaders();
-    if(headers.contentType){
+    if (headers.contentType) {
       headersObj = headersObj.set('content-type', headers.contentType);
-    } else{
+    } else {
       headersObj.append('Content-Type', 'application/json');
     }
     let options = {
@@ -85,9 +85,9 @@ export class RestService {
   }
   put(url: any, data: any, headers: any) {
     var headersObj = new HttpHeaders();
-    if(headers.contentType){
+    if (headers.contentType) {
       headersObj = headersObj.set('content-type', headers.contentType);
-    } else{
+    } else {
       headersObj.append('Content-Type', 'application/json');
     }
 
@@ -97,27 +97,27 @@ export class RestService {
   }
 
 
-  postLogin= (url:any, data:any)=>{
+  postLogin = (url: any, data: any) => {
     var headersObj = new HttpHeaders();
-      headersObj.append('Content-Type', 'application/json');
-    return this.http.post(url, data, {headers : headersObj, observe : 'response'}).pipe(
+    headersObj.append('Content-Type', 'application/json');
+    return this.http.post(url, data, { headers: headersObj, observe: 'response' }).pipe(
       catchError(this.handleError)
     );
   }
 
-  post= (url:any, data:any, headers : any)=>{
+  post = (url: any, data: any, headers: any) => {
     var headersObj = new HttpHeaders();
-    if(headers.contentType){
+    if (headers.contentType) {
       headersObj = headersObj.set('content-type', headers.contentType);
-    } else{
+    } else {
       headersObj.append('Content-Type', 'application/json');
     }
-    return this.http.post<any>(url, data, {headers : headersObj}).pipe(
+    return this.http.post<any>(url, data, { headers: headersObj }).pipe(
       map((res) => {
         return res;
       }),
       catchError((err) => {
-        console.log('err.status',err.status)
+        console.log('err.status', err.status)
         this.handleError(err);
         if (err.status == 400) {
           this.notificationService.showError(err.error.details)
@@ -128,62 +128,104 @@ export class RestService {
       })
     )
   }
-  postForget(url:any, data:any, headers : any){
+
+  postpdf = (url: any, data: any, headers: any) => {
     var headersObj = new HttpHeaders();
-    if(headers.contentType){
+    // if(headers.contentType){
+    //   headersObj = headersObj.set('content-type', headers.contentType);
+    // } else{
+    headersObj.append('responseType', 'blob');
+    // }
+
+
+    return this.http.post(url, data, { responseType: 'blob' });
+    // return this.http.post<any>(url, data, {headers : headersObj}).pipe(
+    //   map((res) => {
+    //     return res;
+    //   }),
+    //   catchError((err) => {
+    //     console.log('err.status',err.status)
+    //     this.handleError(err);
+    //     if (err.status == 400) {
+    //       this.notificationService.showError(err.error.details)
+    //       // localStorage.removeItem('Token')
+    //       // localStorage.removeItem('userType')
+    //     }
+    //     return throwError(err);
+    // })
+    // )
+  }
+  postForget(url: any, data: any, headers: any) {
+    var headersObj = new HttpHeaders();
+    if (headers.contentType) {
       headersObj = headersObj.set('content-type', headers.contentType);
-    } else{
+    } else {
       headersObj.append('Content-Type', 'application/json');
     }
 
-    return this.http.post(url, data, {headers : headersObj, observe : 'response'})
-    ;
+    return this.http.post(url, data, { headers: headersObj, observe: 'response' })
+      ;
   }
 
-  handleError = (error: HttpErrorResponse) =>{
+  handleError = (error: HttpErrorResponse) => {
     // console.log('error',error);
     if (error instanceof TimeoutError) {
       this.notificationService.showWarning("Api failed to get data. Automatic timout.");
-   }
+    }
 
     if (error.status === 401) {
-      if(error.error.details){
-      this.notificationService.showError(error.error.details);
+      if (error.error.details) {
+        this.notificationService.showError(error.error.details);
       }
       console.log('An 401 error occurred:', error.error);
       localStorage.removeItem('Token')
-      localStorage.removeItem('userType')
+      localStorage.removeItem('userType');
+      document.cookie="Token=; expires=Thu, 18 Dec 1970 12:00:00 UTC";
       this.router.navigate(['login']);
 
-    }else if (error.status === 403) {
+    } else if (error.status === 403) {
       // this.messageService.sendMessage('refreshJwtToken',{});
       console.log('An error occurred:', error.error ? error.error : error.message);
-    //  this.sessionStorage.signOut();
-    //   if (this.router.url !== "/login") {
-    //     window.location.reload();
-    //   }
-    }else if (error.status === 0) {
+      //  this.sessionStorage.signOut();
+      //   if (this.router.url !== "/login") {
+      //     window.location.reload();
+      //   }
+    } else if (error.status === 0) {
       console.log('An error occurred:', error.error);
-    } else {
+    }
+    else if (error.status === 504) {
+      this.notificationService.showError("Elasticsearch cluster is down!");
+    }
+    else {
       console.log(`Backend returned code ${error.status}, body was: `, error.error);
-      if(error && error.error && error.error.message){
+      if (error && error.error && error.error.message) {
         this.notificationService.showError("Some Error Occoured ");
       }
     }
-    return throwError(()=>new Error('Something bad happened; please try again later.'));
+
+    return throwError(() => new Error('Something bad happened; please try again later.'));
   }
 
 
   getFile(downloadFileUrl: any) {
     // console.log('downloadFileUrl',downloadFileUrl);
-    
+
     let fileUrl = environment.filePath + '?filePath=' + downloadFileUrl;
     return this.http.get(fileUrl, { responseType: 'blob' });
   }
 
+
+  getpdfFile(downloadFileUrl: any) {
+    // console.log('downloadFileUrl',downloadFileUrl);
+
+    let fileUrl = downloadFileUrl;
+    return this.http.get(fileUrl, { responseType: 'blob' });
+  }
+
+
   downloadFile(filename: string) {
-    console.log('filename',environment.API_URL + '/download?filename=' + filename);
-    
+    console.log('filename', environment.API_URL + '/download?filename=' + filename);
+
     return this.http.get(environment.API_URL + '/download?filename=' + filename, {
       responseType: 'arraybuffer'
     });
@@ -203,31 +245,41 @@ export class RestService {
   //   window.URL.revokeObjectURL(url);
 
   // }
-
-  postpdf = (url: any, data: any, headers: any) => {
-    var headersObj = new HttpHeaders();
-    // if(headers.contentType){
-    //   headersObj = headersObj.set('content-type', headers.contentType);
-    // } else{
-    headersObj.append('responseType', 'blob');
-    // }
-
-
-    return this.http.post(url, data, { responseType: 'blob' });
-   
+  // environment.API_URL + '/download?filename='
+  getYaraData(md5: string): Observable<any> {
+    const params = new HttpParams().set('md5', md5);
+    return this.http.get<any>(environment.getYaraData, { params });
   }
 
-getYaraData(md5: string): Observable<any> {
-  const params = new HttpParams().set('md5', md5);
-  return this.http.get<any>(environment.getYaraData, { params });
+
+  getMlData(md5: string): Observable<any> {
+    const params = new HttpParams().set('md5', md5);
+    return this.http.get<any>(environment.getMlData, { params });
+  }
+
+
+  getData(dynamicPart: string, headers: any): Observable<any> {
+    const apiUrl = `164.164.32.10:5001/v2/nscs_repo_rasp_cdac_hp_iot/tags/list`;
+
+    console.log("api", apiUrl);
+
+    let headersObj = new HttpHeaders();
+    if (headers.contentType) {
+      headersObj = headersObj.set('Content-Type', headers.contentType);
+    } else {
+      headersObj = headersObj.set('Content-Type', 'application/json');
+    }
+
+    // Apply custom headers
+    if (headers) {
+      for (const key of Object.keys(headers)) {
+        headersObj = headersObj.set(key, headers[key]);
+      }
+    }
+
+    const options = { headers: headersObj };
+
+    return this.http.get(apiUrl, options);
+  }
+
 }
-
-
-getMlData(md5: string): Observable<any> {
-  const params = new HttpParams().set('md5', md5);
-  return this.http.get<any>(environment.getMlData, { params });
-}
-
-}
-
-

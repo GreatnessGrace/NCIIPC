@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SessionstorageService } from './app/common/sessionstorage.service';
+import { CookiestorageService } from './app/common/cookiestorage.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,6 +12,7 @@ export class RoleGuard implements CanActivate {
   constructor(
     private router: Router,
     private localstorage: SessionstorageService,
+    private cookServ:CookiestorageService
   ) {}
   
   canActivate(
@@ -23,7 +25,9 @@ export class RoleGuard implements CanActivate {
 
     // console.log("route.data['role']",route.data['role']);
     
-    let isLoggedIn = this.localstorage.getUser().role;
+    // let isLoggedIn = this.localstorage.getUser().role;
+    let isLoggedIn = this.cookServ.getUser()?.role;
+    
     var size = Object.keys(isLoggedIn).length;
     if (
       !isLoggedIn.user_type &&
@@ -32,18 +36,22 @@ export class RoleGuard implements CanActivate {
     ) {
       return true;
     } else if (size > 0) {
-      this.loginRole = this.localstorage.getUser()?.role;
+      // this.loginRole = this.localstorage.getUser()?.role;
+      this.loginRole = this.cookServ.getUser()?.role;
       
-      if (route.data['role'] && route.data['role'] != this.loginRole) {
 
-        // this.router.navigate(['/login']);
-        return true;
-      } else {
-        this.router.navigate(['/login']);
+//       console.log('User Role:', this.loginRole);
+// console.log('Route Data Role:', route.data['role']);
+      if (route.data['role'] && route.data['role'].includes(this.loginRole)) {
+        this.router.navigate(['/']);
         return false;
+        // this.router.navigate(['/login']);
+       
+      } else {
+        return true;
       }
     } else {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/']);
     }
     return true;
   }

@@ -13,6 +13,9 @@ import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { FormControl } from '@angular/forms';
 import { LoginService } from 'src/app/core/services/login.service';
 import { Subscription } from 'rxjs';
+import { CookiestorageService } from 'src/app/common/cookiestorage.service';
+import { RightClickService } from 'src/app/core/services/right-click.service';
+
 @Component({
   selector: 'app-report-download',
   templateUrl: './report-download.component.html',
@@ -77,12 +80,13 @@ export class ReportDownloadComponent implements OnInit {
     'action'
   ];
   dataSource!: MatTableDataSource<any>;
-  constructor(private loginService: LoginService, 
-    private download: DownloadService, 
-    private restServ: RestService, 
-    private notiServ: NotificationService, 
-    private fb: FormBuilder, 
-    private sharedService: SharedService) { 
+  constructor(private loginService: LoginService,
+    private download: DownloadService,
+    private restServ: RestService,
+    private notiServ: NotificationService,
+    private fb: FormBuilder,
+    private sharedService: SharedService,
+    private cookServ:CookiestorageService) {
   }
 
   isDropdownDisabled = false;
@@ -91,6 +95,7 @@ export class ReportDownloadComponent implements OnInit {
   reportDownloadForm: any = FormGroup;
 
   ngOnInit(): void {
+
 
     this.initSignupForm();
     this.dropdownList = [];
@@ -110,7 +115,8 @@ export class ReportDownloadComponent implements OnInit {
         organization_type: "organization.keyword"
       })
       this.userState = !this.userState;
-      this.isDropdownDisabled = true;
+            // Changes suggested by Anil Sir
+      // this.isDropdownDisabled = true;
       this.getCriteriatype("organization.keyword")
     } else {
       this.userType = false;
@@ -119,6 +125,9 @@ export class ReportDownloadComponent implements OnInit {
   }
 
   initSignupForm() {
+    const firebasetoken = this.cookServ.getFireToken();
+    console.log("firebasetoken : ",firebasetoken);
+    //localStorage.getItem('firebasetoken')
     this.reportDownloadForm = this.fb.group({
       organization_type: ['', [Validators.required]],
       organization_typeName: [''],
@@ -126,6 +135,7 @@ export class ReportDownloadComponent implements OnInit {
       start_date: ['', [Validators.required]],
       date_filter: [''],
       end_date: ['', [Validators.required]],
+      firebasetoken: [firebasetoken],
     });
   }
 
@@ -164,15 +174,19 @@ export class ReportDownloadComponent implements OnInit {
     this.getGenCsvData = this.restServ.post(environment.generateCsvReport, row, {}).subscribe(res => {
       this.togLoader(i, 'hide')
       this.csvDataToDownload = res.data.hits.hits;
+      var newData:any = []
+      res.data.hits.hits.map((e:any)=>{
+newData.push(e._source)
+      })
       if (this.csvDataToDownload.length > 0) {
-        this.downloadJson(row, res)
+        this.downloadJson(row, newData)
 
       } else {
         this.notiServ.showInfo("No Data found");
       }
 
     });
-  
+
   }
 
   downloadJson(row: any, res: any) {
@@ -222,7 +236,7 @@ export class ReportDownloadComponent implements OnInit {
     let url = environment.reportGenerateList;
     this.ReportGenData = true
 
-     this.restServ.get(url, {}, {}).subscribe(res => {
+    this.restServ.get(url, {}, {}).subscribe(res => {
       this.reportData = res.data;
       this.dataSource = new MatTableDataSource(this.reportData)
       this.searchloaderxl = false;
@@ -271,7 +285,7 @@ export class ReportDownloadComponent implements OnInit {
       this.getReportList();
       this.searchloader = false;
       this.log_id = res.id
-  
+
     })
   }
 
@@ -326,7 +340,7 @@ export class ReportDownloadComponent implements OnInit {
     if (this.OrgValData) {
       this.getOrgValData.unsubscribe();
     }
-   
+
     if (this.GenCsvData) {
       this.getGenCsvData.unsubscribe();
     }

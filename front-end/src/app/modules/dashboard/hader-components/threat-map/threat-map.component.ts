@@ -10,8 +10,9 @@ import { environment } from 'src/environments/environment';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { CookiestorageService } from 'src/app/common/cookiestorage.service';
 declare const Messaging: any;
-
+import { RightClickService } from 'src/app/core/services/right-click.service';
 @Component({
   selector: 'app-threat-map',
   templateUrl: './threat-map.component.html',
@@ -19,7 +20,7 @@ declare const Messaging: any;
 })
 
 export class ThreatMapComponent {
-  getAllNodesData! : Subscription
+  getAllNodesData!: Subscription
 
   private map: any;
   private client: any;
@@ -31,16 +32,24 @@ export class ThreatMapComponent {
   attackData: any = [];
   assetPath = environment.assetPath;
   @ViewChild('paginator') paginator!: MatPaginator;
-  displayedColumns: string[] = ['timpstamp', 'src_ip', 'src_country', 'dest_ip', 'src_port', 'dest_port', 'node_name', 'att_type'];
-  srcCountryFilter =  new FormControl('');
+  displayedColumns: string[] =
+    ['timpstamp',
+      'src_country',
+      'src_ip',
+      'dest_ip',
+      'src_port',
+      'dest_port',
+      'node_name',
+      'att_type'];
+  srcCountryFilter = new FormControl('');
   orgNameFilter = new FormControl('');
   ipFilter = new FormControl('');
   filterValues = {
     src_country: '',
-    node_name:'',
-    dest_ip:''
-  
- };
+    node_name: '',
+    dest_ip: ''
+
+  };
   private initMap(): void {
     this.map = L.map('threat-map', {
       center: [23.076090, 81.000],
@@ -50,58 +59,92 @@ export class ThreatMapComponent {
 
     let mapControls = L;
     mapControls.control.attribution({ prefix: false });
-    const tiles = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + environment.openMapToken , {
+    const tiles = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + environment.openMapToken, {
       maxZoom: 18,
       // id: 'mapbox/traffic-night-v2',
-      id: 'mapbox/streets-v11',
+      id: 'mapbox/satellite-streets-v11',
       tileSize: 512,
-      minZoom: 3.5,
+      minZoom: 3,
       zoomOffset: -1
     });
     tiles.addTo(this.map);
     this.mapService.addKashmirBorderLineToMap(this.map, '#000')
+    let mapControl: any = L;
+    var legend: any = mapControl.control({ position: 'bottomright' });
+    legend.onAdd = (map: any) => {
+      var div = L.DomUtil.create('div', 'info legend'),
+        grades = ["Command Execution", "Bruteforce", "Binary Drop","Attack Log", "URL Redirection","Classified Malware","Unclassified Binary"],
+        gcolor = ["#c30101","#ff8503","#feb204","#ffd22b","#e9d700","#f8ed62","#fff9ae"],
+        labels = [];
+      for (var i = 0; i < grades.length; i++) {
+        div.innerHTML +=
+          '<i style="background:'+gcolor[i]+'"></i> ' +
+          grades[i] + '<br>';
+      }
+      return div;
+    };
+    legend.addTo(this.map);
   }
 
 
   constructor(
     public mapService: MapserviceService,
     private restServ: RestService,
-    private notiServ: NotificationService
-  ) { 
+    private notiServ: NotificationService,
+    private cookServ:CookiestorageService,
+    private rightClickService: RightClickService
+
+  ) {
 
     this.getAllNodes();
   }
-
+  onRightClick(event: MouseEvent): void {
+    this.rightClickService.handleRightClick(event);
+  }
   ngAfterViewInit(): void {
     this.connectActiveMQ();
     this.initMap();
     this.srcCountryFilter.valueChanges
-    .subscribe(
-      src_country => {        
-        this.filterValues.src_country = src_country;
-        this.threatData.filter = JSON.stringify(this.filterValues);
-      }
-    )
+      .subscribe(
+        src_country => {
+          this.filterValues.src_country = src_country;
+          this.threatData.filter = JSON.stringify(this.filterValues);
+        }
+      )
     this.orgNameFilter.valueChanges
-    .subscribe(
-      node_name => {        
-        this.filterValues.node_name = node_name;
-        this.threatData.filter = JSON.stringify(this.filterValues);
-      }
-    )
+      .subscribe(
+        node_name => {
+          this.filterValues.node_name = node_name;
+          this.threatData.filter = JSON.stringify(this.filterValues);
+        }
+      )
     this.ipFilter.valueChanges
-    .subscribe(
-      dest_ip => {        
-        this.filterValues.dest_ip = dest_ip;
-        this.threatData.filter = JSON.stringify(this.filterValues);
-      }
-    )
+      .subscribe(
+        dest_ip => {
+          this.filterValues.dest_ip = dest_ip;
+          this.threatData.filter = JSON.stringify(this.filterValues);
+        }
+      )
   }
 
   addAnimatedLine(attackData: any, color: string) {
     let latlngs = [];
-    this.circleMark(attackData.node_lat, attackData.node_lng, attackData.node_name, "#FF9966");
-    this.circleMark(attackData.lat, attackData.lng, attackData.node_name, "#FF9966");
+    let grades = ["command_execution", "bruteforce", "binary_drop","attack_log", "url_redirection","classified_malware","unclassified_binary"]
+    let gcolor = ["#c30101","#ff8503","#feb204","#ffd22b","#e9d700","#f8ed62","#fff9ae"]
+    let clr = 1
+    for (var i = 0; i < grades.length; i++) {
+      clr = 1
+      if(attackData.att_type == grades[i]){
+        clr = 0
+        this.circleMark(attackData.node_lat, attackData.node_lng, attackData.node_name, gcolor[i]);
+        this.endcircleMark(attackData.lat, attackData.lng, attackData.src_country,gcolor[i]);
+        break;
+      }
+    }
+ if (clr == 1){
+    this.circleMark(attackData.node_lat, attackData.node_lng, attackData.node_name, "purple");
+    this.endcircleMark(attackData.lat, attackData.lng, attackData.src_country,"purple");
+ }
 
     let latlng1: any = [attackData.lat, attackData.lng],
       latlng2 = [attackData.node_lat, attackData.node_lng];
@@ -119,12 +162,39 @@ export class ThreatMapComponent {
     let midpointY = +test1 + +latlng1[0];
     let midpointLatLng = [midpointY, midpointX];
     latlngs.push(latlng1, midpointLatLng, latlng2);
-    let pathOptions: any = {
-      color: 'red',
-      weight: 2,
-      lineCap: 'round',
-      animate: { duration: 2000, iterations: 1 },
+    // console.log("attackData",attackData)
+    let pathOptions: any
+    for (var i = 0; i < grades.length; i++) {
+      clr = 1
+      if(attackData.att_type == grades[i]){
+        clr = 0
+        pathOptions = {
+          color: gcolor[i],
+          weight: 2,
+          lineCap: gcolor[i],
+          animate: { duration: 1000, iterations: 1 }
+          // animate: { duration: 2000, iterations: 1 },
+        }
+        break;
+      }
     }
+    if(clr == 1){
+      pathOptions = {
+        color:"purple",
+        weight: 2,
+        lineCap: "purple",
+        animate: { duration: 1000, iterations: 1 }
+        // animate: { duration: 2000, iterations: 1 },
+      }
+    }
+   
+    // let pathOptions: any = {
+    //   color: 'red',
+    //   weight: 2,
+    //   lineCap: 'round',
+    //   animate: { duration: 1000, iterations: 1 }
+    //   // animate: { duration: 2000, iterations: 1 },
+    // }
     let curvedPath = L.curve(
       [
         'M', latlng1,
@@ -138,21 +208,21 @@ export class ThreatMapComponent {
       this.attackData = this.attackData.slice(0, 100);
     }
 
-    if(this.attackData?.length > 0){
+    if (this.attackData?.length > 0) {
 
-    this.threatData = new MatTableDataSource(this.attackData)
-    
-    this.threatData.paginator = this.paginator;
-    this.threatData.sort = this.sortdashThreat ;
-    this.threatData.filterPredicate = this.createFilter();
-    this.threatData.sortingDataAccessor = (item, property) => {
-      switch (property) {
-        case 'timpstamp':
-          return new Date(item.timpstamp).getTime()
-        default:
-          return item[property]
+      this.threatData = new MatTableDataSource(this.attackData)
+
+      this.threatData.paginator = this.paginator;
+      this.threatData.sort = this.sortdashThreat;
+      this.threatData.filterPredicate = this.createFilter();
+      this.threatData.sortingDataAccessor = (item, property) => {
+        switch (property) {
+          case 'timpstamp':
+            return new Date(item.timpstamp).getTime()
+          default:
+            return item[property]
+        }
       }
-    }
     }
   }
 
@@ -160,9 +230,9 @@ export class ThreatMapComponent {
     el.removeFrom(this.map);
   }
 
-  circleMark(lat: any, long: any, place: string, color: string) {
+  circleMark(lat: any, long: any, place: string,color: string) {
     const icon = L.divIcon({
-      html: `<div class="ringring"></div><div class="circle"></div>`,
+      html: `<div class="ringring" style="border: 3px solid ${color};"></div><div class="circle" style="background-color:${color}"></div>`,
       className: 'ring-container'
     })
 
@@ -179,16 +249,34 @@ export class ThreatMapComponent {
       marker.removeFrom(this.map);
     }, 2000);
   }
+  endcircleMark(lat: any, long: any,src_country:any,color: string) {
+    const icon = L.divIcon({
+      html: `<div class="ringring" style="border: 3px solid ${color};"></div><div class="circle" style="background-color:${color}"></div><h2 class="fadeOut">${src_country}</h2>`,
+      className: 'ring-container'
+    })
 
+    const ll = L.latLng(lat, long)
+
+    const marker = L.marker(ll, {
+      icon: icon,
+      title: src_country
+    })
+
+    marker.addTo(this.map)
+
+    setTimeout(() => {
+      marker.removeFrom(this.map);
+    }, 2000);
+  }
   connectActiveMQ() {
-    let host = environment.threat_mapIP
-    let port = environment.threat_mapPort;// new port added for secure web socket connection - Rohan 14 June 2016
+    let host = environment.threatmapIP
+    let port = environment.threatmapPort;// new port added for secure web socket connection - Rohan 14 June 2016
     //var port ='61614'; // enable this port and comment above port if site in not using HTTPS
-    let token: any = localStorage.getItem('Token');
+    // let token: any = localStorage.getItem('Token');
+    let token:any =this.cookServ.getToken();
     let newStr = token.replace(/-/g, "");
     let tokenId = newStr.slice(-7);
     let clientId = 'IN' + tokenId + Date.now();
-    // console.log(clientId, '=================');
     this.destination = 'NodeAttackData';
     this.client = new Messaging.Client(host, Number(port), clientId);
     this.client.onConnect = this.onConnect.bind(this);
@@ -210,26 +298,25 @@ export class ThreatMapComponent {
   };
 
   onFailure(failure: any) {
-    // console.log(failure);
-this.notiServ.showInfo("You might not see Real time attacks due to some issue!")
+    this.notiServ.showInfo("You might not see Real time attacks due to some issue!")
   }
 
   onMessageArrived(message: any) {
-    
+
     let recievedPayload = message.payloadString;
     let payload = JSON.parse(recievedPayload);
 
-    
-    if(this.allNodes.includes(parseInt(payload.AttackData[0].node))){
-        if (this.nodeTemp != "ALL") {
-          if (payload.AttackData[0].node == this.nodeTemp && payload.AttackData.length) {
-            setTimeout(() => { this.addAnimatedLine(payload.AttackData[0], "#FF9966"); }, 0);
-          }
-        } else {
-          if (payload.AttackData && payload.AttackData.length) {
-            setTimeout(() => { this.addAnimatedLine(payload.AttackData[0], "#FF9966"); }, 0);
-          }
+
+    if (this.allNodes.includes(parseInt(payload.AttackData[0].node))) {
+      if (this.nodeTemp != "ALL") {
+        if (payload.AttackData[0].node == this.nodeTemp && payload.AttackData.length) {
+          setTimeout(() => { this.addAnimatedLine(payload.AttackData[0], " #87CEEB"); }, 0);
         }
+      } else {
+        if (payload.AttackData && payload.AttackData.length) {
+          setTimeout(() => { this.addAnimatedLine(payload.AttackData[0], "#FF9966"); }, 0);
+        }
+      }
     }
   }
 
@@ -242,29 +329,29 @@ this.notiServ.showInfo("You might not see Real time attacks due to some issue!")
   }
 
   createFilter(): (data: any, filter: string) => boolean {
-    let filterFunction = function(data:any, filter:any): boolean {
+    let filterFunction = function (data: any, filter: any): boolean {
       let searchTerms = JSON.parse(filter);
 
-        return data.src_country.toString().toLowerCase().indexOf(searchTerms.src_country) !== -1
-      && data.node_name.toString().toLowerCase().indexOf(searchTerms.node_name) !== -1
-        && data.dest_ip.toString().toLowerCase().indexOf(searchTerms.dest_ip) !== -1
+      return data.src_country.toString().toLowerCase().indexOf(searchTerms.src_country.toLowerCase()) !== -1
+        && data.node_name.toString().toLowerCase().indexOf(searchTerms.node_name.toLowerCase()) !== -1
+        && data.dest_ip.toString().toLowerCase().indexOf(searchTerms.dest_ip.toLowerCase()) !== -1
 
 
     }
     return filterFunction;
   }
 
-  getAllNodes(){
-    this.getAllNodesData=this.restServ.get(environment.getAllNodes,{},{}).subscribe(res => {
-      this.allNodes = res.map((e:any)=>{
+  getAllNodes() {
+    this.getAllNodesData = this.restServ.get(environment.getAllNodes, {}, {}).subscribe(res => {
+      this.allNodes = res.map((e: any) => {
         return e.id;
       });
     })
   }
 
-  ngOnDestroy(): void{
-    if(this.getAllNodesData){
-    this.getAllNodesData.unsubscribe();
+  ngOnDestroy(): void {
+    if (this.getAllNodesData) {
+      this.getAllNodesData.unsubscribe();
     }
 
   }

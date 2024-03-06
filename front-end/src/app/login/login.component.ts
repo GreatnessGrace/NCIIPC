@@ -12,8 +12,8 @@ import { SessionstorageService } from '../common/sessionstorage.service';
 import { Subscription } from 'rxjs';
 import { AESEncryptDecryptService } from '../common/aesencrypt-decrypt.service';
 import { minLengthAsyncValidator } from '../common/validator';
-
-
+import { CookiestorageService } from '../common/cookiestorage.service';
+import { RightClickService } from '../core/services/right-click.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -38,7 +38,9 @@ showpw:Boolean=true
     private notiService: NotificationService, 
     private restServ: RestService, 
     private sessServ:SessionstorageService,
-    private cryptServ:AESEncryptDecryptService
+    private cryptServ:AESEncryptDecryptService,
+    private cookServ:CookiestorageService,
+    private rightClickService: RightClickService
     ) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
@@ -53,7 +55,9 @@ showpw:Boolean=true
     this.captchaStatus = false;
     this.getUserIp();
   }
-
+  onRightClick(event: MouseEvent): void {
+    this.rightClickService.handleRightClick(event);
+  }
 
   get f() {
     return this.loginForm.controls;
@@ -78,21 +82,30 @@ showpw:Boolean=true
     this.loginSubmitted = true;
     this.loading = true;
     
-
-   
     this.loginService.login(this.loginForm.value).pipe(timeout(20000)).subscribe(res => {
       if (!res.userType) {
+        localStorage.clear();
         this.loading = false;
         if (res.message == "Logged Successfully!!") {
-          this.sessServ.saveUser(res.user);
-          this.sessServ.saveToken(res.accessToken);
-          this.sessServ.saveSessTime();
+          // this.sessServ.saveUser(res.user);
+          this.cookServ.saveUser(res.user);
+          // this.sessServ.saveToken(res.accessToken);
+          this.cookServ.saveToken(res.accessToken);
+          // this.sessServ.saveSessTime();
+          this.cookServ.saveSessTime();
           this.notiService.showSuccess(res.message);
-         this.router.navigate(['/dashboard']);
+          if(res.user.role == "user" && res.user.registered == 0){
+            this.router.navigate(['register']);
+          }
+          else{
+            this.router.navigate(['dashboard']);
+          }
+        
         }
         else {
           this.loading = false;
           this.notiService.showError(res.message)
+          grecaptcha.reset();
           this.loginForm.reset()
           document.getElementById("orgPassword")?.setAttribute('type','password');
           document.getElementById("Password")?.setAttribute('type','hidden')
@@ -111,17 +124,20 @@ showpw:Boolean=true
             if(typeof(error.error) == 'string'){
               this.notiService.showError(error.error);
               this.loginForm.reset()
+              grecaptcha.reset();
               document.getElementById("orgPassword")?.setAttribute('type','password');
               document.getElementById("Password")?.setAttribute('type','hidden')
             } else {
               this.notiService.showError("Error in Connecting to Database.");
               this.loginForm.reset()
+              grecaptcha.reset();
               document.getElementById("orgPassword")?.setAttribute('type','password');
               document.getElementById("Password")?.setAttribute('type','hidden')
             }
       } else {
       this.notiService.showError("Error in Connecting to Database.");
       this.loginForm.reset()
+      grecaptcha.reset();
       document.getElementById("orgPassword")?.setAttribute('type','password');
       document.getElementById("Password")?.setAttribute('type','hidden')
       }

@@ -5,6 +5,7 @@ import { catchError, map,tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { RestService } from './rest.service';
 import { SessionstorageService } from 'src/app/common/sessionstorage.service';
+import { CookiestorageService } from 'src/app/common/cookiestorage.service';
 
 const USER_KEY = 'auth-user';
 @Injectable({
@@ -12,7 +13,10 @@ const USER_KEY = 'auth-user';
 })
 export class LoginService {
   public uname:any;
-  constructor(public http: HttpClient,private restServ:RestService,private sessServ:SessionstorageService) {
+  constructor(public http: HttpClient,private restServ:RestService,
+    private sessServ:SessionstorageService,
+    private cookServ:CookiestorageService,
+  ) {
  
    }
 
@@ -94,8 +98,9 @@ export class LoginService {
 
 
   public saveUser(user: any): void {
-    window.localStorage.removeItem(USER_KEY);
-    window.localStorage.setItem(USER_KEY, JSON.stringify(user));
+    // window.localStorage.removeItem(USER_KEY);
+    // window.localStorage.setItem(USER_KEY, JSON.stringify(user));
+    this.cookServ.saveUser(user);
   }
   public getUser(): any {
     // const user = window.localStorage.getItem(USER_KEY);
@@ -103,7 +108,8 @@ export class LoginService {
     //   return JSON.parse(user);
     // }
     // return {};
-   return this.sessServ.getUser();
+  //  return this.sessServ.getUser();
+   return this.cookServ.getUser();
   }
 
   getPendingList(){
@@ -127,6 +133,7 @@ export class LoginService {
         if (err.status == 400) {
           localStorage.removeItem('Token')
           localStorage.removeItem('userType')
+          document.cookie="Token=; expires=Thu, 18 Dec 1970 12:00:00 UTC";
         }
         return throwError(err);
       })
@@ -139,6 +146,7 @@ export class LoginService {
       // console.log("logout user", res);
       return res; 
     });
+    
   }
 
 

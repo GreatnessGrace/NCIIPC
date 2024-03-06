@@ -9,12 +9,14 @@ export const environment = {
   recoverUrl : '/#/recoverpassword',
   assetPath: 'assets',
   recaptchasiteKey : "6LeZaHImAAAAAOJaHVFOfRbOY9G8FvDtwGmyQjx2",
-  threat_mapIP :'164.164.32.25',
-  threat_mapPort :'61615',
+  threatmapIP :'192.168.8.160',
+  threatmapPort :'61615',
   //sign up component 
   createUser: API_URL + '/api/v1/users/createUser',
   
-
+  editProfile: API_URL + '/api/v1/users/editProfile',
+  getuser: API_URL + '/api/v1/users/getuserList/',
+  
   // recover-password component
   recoverPassword: API_URL + '/api/v1/users/recoverPassword',
 
