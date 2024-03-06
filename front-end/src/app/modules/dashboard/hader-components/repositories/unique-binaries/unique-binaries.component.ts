@@ -17,7 +17,7 @@ import { Observable, Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { ThreatScoreComponent } from 'src/app/modules/share/threat-score/threat-score.component';
 import { HybridReportJsonDataComponent } from 'src/app/modules/share/hybrid-report-json-data/hybrid-report-json-data.component';
-
+import { RightClickService } from 'src/app/core/services/right-click.service';
 
 @Component({
   selector: 'app-unique-binaries',
@@ -44,7 +44,11 @@ export class UniqueBinariesComponent implements OnInit {
   };
 
   chipsType: any = [];
-  constructor(private restServ: RestService, private notiServ: NotificationService, private fb: FormBuilder, public dialog: MatDialog, private sharedService: SharedService) { }
+  constructor(private restServ: RestService, private notiServ: NotificationService, private fb: FormBuilder, public dialog: MatDialog, private sharedService: SharedService,
+    private rightClickService: RightClickService) { }
+    onRightClick(event: MouseEvent): void {
+      this.rightClickService.handleRightClick(event);
+    }
   uniqueBinaryForm: any = FormGroup;
 
   @ViewChild('sortBinarySql') sortBinarySql!: MatSort;

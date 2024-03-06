@@ -16,7 +16,7 @@ import { FormControl } from '@angular/forms';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { LoginService } from 'src/app/core/services/login.service';
 import { Subscription } from 'rxjs';
-
+import { RightClickService } from 'src/app/core/services/right-click.service';
 @Component({
   selector: 'app-threat-intel-events',
   templateUrl: './threat-intel-events.component.html',
@@ -78,7 +78,8 @@ export class ThreatIntelEventsComponent implements OnInit {
     private notiServ: NotificationService,
     private fb: FormBuilder,
     public dialog: MatDialog,
-    public sharedService: SharedService) { }
+    public sharedService: SharedService,
+    private rightClickService: RightClickService) { }
   currentDate = formatDate(new Date(), 'yyyy-MM-dd', 'en_US');
   organization: any = [];
   // showLoader = false;
@@ -149,7 +150,9 @@ export class ThreatIntelEventsComponent implements OnInit {
     city: '',
     country_long: ''
   };
-
+  onRightClick(event: MouseEvent): void {
+    this.rightClickService.handleRightClick(event);
+  }
   ngOnInit(): void {
     this.displayedColumnsJson = this.displayedColumnsData.map((x: any) => x.columnVal)
     this.initSignupForm();

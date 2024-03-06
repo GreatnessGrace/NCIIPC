@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-
+import { RightClickService } from 'src/app/core/services/right-click.service';
 @Component({
   selector: 'app-p-cap-binary',
   templateUrl: './p-cap-binary.component.html',
@@ -72,7 +72,8 @@ getSnort ! : Subscription
 
   constructor(   private restServ:RestService,
     private fb: FormBuilder,
-    public sharedService: SharedService) { }
+    public sharedService: SharedService,
+    private rightClickService: RightClickService) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -180,7 +181,9 @@ getSnort ! : Subscription
       pcap:[]
     });
   }
-
+  onRightClick(event: MouseEvent): void {
+    this.rightClickService.handleRightClick(event);
+  }
   orgValueChange(date:any,type:string){
 
 
