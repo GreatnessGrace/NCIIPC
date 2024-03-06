@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { RestService } from '../core/services/rest.service';
 import { AESEncryptDecryptService } from '../common/aesencrypt-decrypt.service';
 import { minLengthAsyncValidator } from '../common/validator';
-
+import { RightClickService } from '../core/services/right-click.service';
 
 @Component({
   selector: 'app-signup',
@@ -16,6 +16,8 @@ import { minLengthAsyncValidator } from '../common/validator';
 })
 export class SignupComponent implements OnInit {
   signUpForm: any = FormGroup;
+  Invaild:boolean=false;
+  cInvaild:boolean=false;
   signupSubmitted = false;
   assetPath = environment.assetPath;
   captchaStatus = false;
@@ -28,7 +30,8 @@ export class SignupComponent implements OnInit {
     private cryptServ: AESEncryptDecryptService, 
     private signupService: SignupService, 
     private restServ: RestService,
-    private notiService: NotificationService)
+    private notiService: NotificationService,
+    private rightClickService: RightClickService)
      {
     this.initSignupForm();
   }
@@ -37,14 +40,24 @@ export class SignupComponent implements OnInit {
     this.captchaStatus = true;
     this.signUpForm?.get('capcha_token')?.setValue(captchaResponse);
   }
+  onRightClick(event: MouseEvent): void {
+    this.rightClickService.handleRightClick(event);
+  }
   encConfirmPassword(e: any) {
-
+    this.cInvaild=false;
     if (e.target.value.length == 0){
       this.signUpForm.controls['cpassword'].reset()
       document.getElementById("encCpassword")?.setAttribute('type','hidden');
       document.getElementById("cpassword")?.setAttribute('type','password');
     }
 else{
+  let reg = new RegExp(
+    "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$%^&*()!#]).*$"
+  );
+
+  if (!reg.test(e.target.value)) {
+    this.cInvaild=true
+  }
       let enc = this.cryptServ.encrypt(this.signUpForm.get('cpassword')?.value);
       this.signUpForm.get('cpassword')?.setValue(enc);
 
@@ -55,13 +68,20 @@ else{
     }
   }
   myEncryption(e: any) {
-
+    this.Invaild=false;
     if (e.target.value.length == 0){
       this.signUpForm.controls['orgPassword'].reset()
       document.getElementById("Password")?.setAttribute('type','hidden');
       document.getElementById("orgPassword")?.setAttribute('type','password');
     }
 else{
+  let reg = new RegExp(
+    "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$%^&*()!#]).*$"
+  );
+
+  if (!reg.test(e.target.value)) {
+    this.Invaild=true;
+  }
       let enc = this.cryptServ.encrypt(this.signUpForm.get('orgPassword')?.value);
       this.signUpForm.get('orgPassword')?.setValue(enc);
 
@@ -134,13 +154,13 @@ else{
     // }
     else {
       this.signupService.signUp(this.signUpForm.value).subscribe(res => {
-        // console.log("===", res)
+       
         if (res["body"].status == 1) {
           this.notiService.showSuccess(res["body"].message);
           this.router.navigate([''])
         }
         else {
-          // console.log("===", res)
+      
           this.router.navigate(['/signup'])
           this.notiService.showError(res["body"].message)
           this.signUpForm.reset();
