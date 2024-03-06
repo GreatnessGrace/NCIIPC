@@ -6,6 +6,7 @@ import { RestService } from 'src/app/core/services/rest.service';
 import { environment } from 'src/environments/environment';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { RightClickService } from 'src/app/core/services/right-click.service';
 
 @Component({
   selector: 'app-honeypot-details',
@@ -58,7 +59,11 @@ export class HoneypotDetailsComponent implements OnInit {
     ip_address:'',
     health_status:''
   };
-  constructor(private restServ:RestService) {
+  constructor(private restServ:RestService, private rightClickService: RightClickService
+    ) {
+  }
+  onRightClick(event: MouseEvent): void {
+    this.rightClickService.handleRightClick(event);
   }
   ngOnInit(): void {
     this.getHoneypotDetails()

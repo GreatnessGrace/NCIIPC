@@ -4,6 +4,7 @@ import { RestService } from 'src/app/core/services/rest.service';
 import { environment } from 'src/environments/environment';
 import { LoginService } from 'src/app/core/services/login.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
+import { RightClickService } from 'src/app/core/services/right-click.service';
 
 @Component({
   selector: 'app-hp-config',
@@ -20,7 +21,9 @@ export class HpConfigComponent implements OnInit {
   ifOther = true
   isSpecialCondition: boolean = false; 
 
-  constructor(private fb: FormBuilder, private restServ: RestService, public loginService: LoginService, private notiserv: NotificationService) {
+  constructor(private fb: FormBuilder, private restServ: RestService, public loginService: LoginService, private notiserv: NotificationService, private rightClickService: RightClickService
+    )
+     {
     this.configForm = this.fb.group({
       email: [this.loginService.getUser().email],
       node_location: new FormControl("", [Validators.required, Validators.pattern("^[a-zA-Z\\-\\_\\s]+$")]),
@@ -61,7 +64,9 @@ subnet: new FormControl("", [
     
   
   }
-
+  onRightClick(event: MouseEvent): void {
+    this.rightClickService.handleRightClick(event);
+  }
 
   ngOnInit(): void {
 

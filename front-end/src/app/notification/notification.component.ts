@@ -4,6 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
+import { RightClickService } from '../core/services/right-click.service';
 
 @Component({
   selector: 'app-notification',
@@ -29,9 +30,11 @@ export class NotificationComponent {
       'updated_by',
       'action_performed'];
   constructor(
-    private adminNotif: AdminNotificationsService
+    private adminNotif: AdminNotificationsService, private rightClickService: RightClickService
   ) { }
-
+  onRightClick(event: MouseEvent): void {
+    this.rightClickService.handleRightClick(event);
+  }
   ngOnInit() {
     this.markNoti = this.adminNotif.markNotificationRead().subscribe((resp: any) => {
       if (resp && resp.data) {

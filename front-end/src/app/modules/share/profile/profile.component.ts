@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SessionstorageService } from 'src/app/common/sessionstorage.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { CookiestorageService } from 'src/app/common/cookiestorage.service';
+import { RightClickService } from 'src/app/core/services/right-click.service';
 
 @Component({
   selector: 'app-profile',
@@ -41,14 +42,17 @@ export class ProfileComponent {
     private sessServ: SessionstorageService,
     private cookServ:CookiestorageService,
     private notify: NotificationService,
-    private restServ: RestService) {
+    private restServ: RestService,
+     private rightClickService: RightClickService) {
     this.profileForm = this.fb.group({
       user_id: [this.loginService.getUser().user_id],
       name: [this.loginService.getUser().name,[Validators.required, Validators.pattern("^[a-zA-Z0-9 ]+$")]],
       email: [this.loginService.getUser().email,[Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]]
     })
   }
-
+  onRightClick(event: MouseEvent): void {
+    this.rightClickService.handleRightClick(event);
+  }
   get f(){
     return this.profileForm.controls['name'];
   }

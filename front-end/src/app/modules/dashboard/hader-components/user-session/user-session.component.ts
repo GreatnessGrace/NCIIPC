@@ -6,6 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { RightClickService } from 'src/app/core/services/right-click.service';
 
 @Component({
   selector: 'app-user-session',
@@ -39,9 +40,11 @@ export class UserSessionComponent implements OnInit {
   @ViewChild('paginatorSession') paginatorSession!: MatPaginator;
   @ViewChild('sortSession') sortSession!: MatSort;
 
-constructor(private restServ: RestService){}
+constructor(private restServ: RestService, private rightClickService: RightClickService){}
 
-
+onRightClick(event: MouseEvent): void {
+  this.rightClickService.handleRightClick(event);
+}
   ngOnInit(): void {
 this.getUserSession()
 

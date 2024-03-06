@@ -13,6 +13,7 @@ import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { RightClickService } from 'src/app/core/services/right-click.service';
 @Component({
   selector: 'app-usermanagement',
   templateUrl: './usermanagement.component.html',
@@ -88,8 +89,10 @@ export class UsermanagementComponent implements OnInit {
   // @ViewChild(MatSort)
   // sort!: MatSort;
   constructor(private loginService: LoginService, public router: Router, public dialog: MatDialog,
-    private notiServ: NotificationService, private restServ: RestService) { }
-
+    private notiServ: NotificationService, private restServ: RestService, private rightClickService: RightClickService) { }
+    onRightClick(event: MouseEvent): void {
+      this.rightClickService.handleRightClick(event);
+    }
   ngOnInit(): void {
     this.userType = this.loginService.getUser().role;
     if (this.userType === 'admin') {
