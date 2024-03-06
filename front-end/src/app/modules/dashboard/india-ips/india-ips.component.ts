@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog'
 import { ViewavComponent } from '../../share/viewav/viewav.component';
-
+import { RightClickService } from 'src/app/core/services/right-click.service';
 @Component({
   selector: 'app-india-ips',
   templateUrl: './india-ips.component.html',
@@ -86,9 +86,12 @@ export class IndiaIpsComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     public sharedService: SharedService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private rightClickService: RightClickService
   ) { }
-
+  onRightClick(event: MouseEvent): void {
+    this.rightClickService.handleRightClick(event);
+  }
   ngOnInit(): void {
     this.initSignupForm();
     this.getAllcountries();

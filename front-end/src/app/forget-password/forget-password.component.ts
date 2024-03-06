@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { NotificationService } from '../core/services/notification.service';
 import { environment } from 'src/environments/environment';
 import { RestService } from '../core/services/rest.service'; 
-
+import { RightClickService } from '../core/services/right-click.service';
 @Component({
   selector: 'app-forget-password',
   templateUrl: './forget-password.component.html',
@@ -22,7 +22,8 @@ export class ForgetPasswordComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private notiServ: NotificationService, private restServ: RestService,
     public router: Router, 
-    private fb: FormBuilder) 
+    private fb: FormBuilder,
+    private rightClickService: RightClickService) 
     {
 
       this.initSignupForm();
@@ -38,7 +39,9 @@ export class ForgetPasswordComponent implements OnInit {
 
     });
   }
-
+  onRightClick(event: MouseEvent): void {
+    this.rightClickService.handleRightClick(event);
+  }
 
   getUserIp() {
     this.restServ.getUserIp().subscribe(res=>{
