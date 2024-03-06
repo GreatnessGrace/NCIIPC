@@ -30,6 +30,10 @@ ahp_bool:Boolean=false;
   username:any;
   notificationCount = 0;
   adar = environment.adar
+  ews = environment.ews
+  pae = environment.pae
+  enum = environment.enum
+  ir = environment.ir
   assetPath = environment.assetPath;
   @Input() countData?: number;
   constructor(private router: Router,
