@@ -1,6 +1,6 @@
 
 
-const API_URL = "http://localhost:5000";
+const API_URL = "http://localhost:4200";
 
 export const environment = {
   production: false, 
@@ -213,6 +213,7 @@ export const environment = {
   profileImage: API_URL + '/honeypot/profileImage',
   timeGraph: API_URL + '/honeypot/timeGraph',
   honeyotDeviceType: API_URL + '/honeyotDeviceType',
+  deployedHoneyotDeviceType: API_URL + '/deployedHoneyotDeviceType',
 
   // node registration
   configData: API_URL + '/honeypot/configData',
@@ -229,4 +230,9 @@ export const environment = {
     pae:"http://192.168.8.4:4200/",
     ir:"http://192.168.8.5:4200/"
   
+
+      //profileEdit
+  editProfile: API_URL + '/api/v1/users/editProfile',
+  getuser: API_URL + '/api/v1/users/getuserList/',
+
 };

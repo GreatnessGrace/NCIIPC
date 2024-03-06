@@ -996,3 +996,25 @@ exports.getMitreAttack = (req, res) => {
         }
     })
 }
+
+
+exports.editProfile = (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      var extractedErrors = errors.array({ onlyFirstError: true });
+      return res.status(400).json({
+        status: 400,
+        data: null,
+        message: extractedErrors[0].msg,
+        error: true,
+      });
+    }
+    UserModel.editProfile(req, (err, result) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(result);
+      }
+    });
+  };
+  

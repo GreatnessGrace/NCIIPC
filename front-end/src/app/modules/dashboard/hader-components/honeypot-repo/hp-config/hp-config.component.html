@@ -3,8 +3,8 @@
     <div class="formbold-main-wrapper">
         <div class="formbold-form-wrapper">
             <form #config="ngForm" [formGroup]="configForm" 
-          >
-            <!-- (ngSubmit)="onSubmit(config.value)" -->
+          
+             (ngSubmit)="onSubmit(config.value)" >
                 <div class="formbold-mb-3 row">
                     <div class="col-xl-4">
                         <label for="node_location" class="formbold-form-label"> Node Location<span

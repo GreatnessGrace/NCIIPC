@@ -106,7 +106,6 @@ export class ProfileComponent {
   }
 
 
-
   getAllNodes() {
     this.getAllNodesData = this.restServ.get(environment.getAllNodes, {}, {}).subscribe(res => {
       this.allNodes = res;

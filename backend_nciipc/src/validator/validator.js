@@ -93,6 +93,23 @@ const validation = {
             .isLength({ min: 8 }).withMessage('Password must be at least 8 characters.')
             .isLength({ max: 100 }).withMessage('Password may not be greater than 100 characters.'),
     ],
+    PROFILE: [
+        check("name")
+          .notEmpty()
+          .withMessage("Please enter your name.")
+          .isLength({ max: 40 })
+          .withMessage("name may not be greater than 40 characters.")
+          .matches(/^[a-zA-Z0-9 ]+$/i)
+          .withMessage("name can't contain special characters"),
+    
+        check("email")
+          .notEmpty()
+          .withMessage("Please enter your email.")
+          .isLength({ max: 40 })
+          .withMessage("Email may not be greater than 40 characters.")
+          .matches(/^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i)
+          .withMessage("Please enter a valid email address"),
+      ],
 }
 
 module.exports = validation;

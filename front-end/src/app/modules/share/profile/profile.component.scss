@@ -22,3 +22,12 @@ table th{
 .vt{
     vertical-align: top;
 }
+
+input{
+    border: none !important;
+    // color: black;
+    // caret-color: #fff;
+    border-bottom: 0.5px solid darkgray !important;
+    background-color: transparent !important;
+    width: 300px;
+}

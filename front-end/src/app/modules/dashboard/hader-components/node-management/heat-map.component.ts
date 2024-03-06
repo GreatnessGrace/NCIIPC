@@ -705,7 +705,7 @@ this.getHoneypotType()
 
 
   getDevices() {
-    let url = environment.honeyotDeviceType;
+    let url = environment.deployedHoneyotDeviceType;
     this.gethoneypotDeviceType = this.restServ.post(url, {}, {}).subscribe(response => {
       if (response?.MQTTBroker?.[0]?.device_count > 0 || response?.database?.[0]?.device_count > 0 || response?.server?.[0]?.device_count > 0 || response?.Printer?.[0]?.device_count > 0 || response?.plc?.[0]?.device_count > 0 || response?.Router?.[0]?.device_count > 0 || response?.IPCamera?.[0]?.device_count > 0) {
         const transformedData: any[] = [];

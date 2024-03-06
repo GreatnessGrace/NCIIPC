@@ -538,6 +538,16 @@ exports.honeypotDeviceType = (req, res) => {
   });
 };
 
+exports.deployedHoneyotDeviceType = (req, res) => {
+  NodeModel.deployedHoneyotDeviceType(req, (err, data) => {
+    if (err) {
+      return res.send(err);
+    } else {
+      return res.send(data);
+    }
+  });
+};
+
 exports.deployedHoneypotCategory = (req, res) => {
   NodeModel.deployedHoneypotCategory(req, (err, data) => {
     if (err) {

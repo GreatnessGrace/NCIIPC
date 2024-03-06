@@ -89,22 +89,24 @@ export class ConfigHpComponent implements OnInit {
 
   initNodeForm() {
     this.nodeForm = this.fb.group({
-      hp_type: ['', [Validators.required]],
-      os_type: ['', [Validators.required]],
+      hp_type: [''],
+      os_type: [''],
+      os_name: [''],
       node_id: [this.data.Object],
-      os_ver_type: ['', [Validators.required]],
+      os_ver_type: ['', ],
       vm_type: [''],
-      vm_name: ['', [Validators.required]],
-      snapshot_id: ['', [Validators.required]],
-      honeypot_cat: ['', [Validators.required]],
-      device_type: ['', [Validators.required]],
-      device_name: ['', [Validators.required]],
-      profile: ['', [Validators.required]],
-      image: ['', [Validators.required]],
-      hp_services: [[], [Validators.required]],
-      network_type: ['', [Validators.required]],
-      number_of_honeypot: ['', [Validators.required]],
-      hp_profile: ['', [Validators.required]],
+      vm_name: [''],
+     snapshot_id: ['', [Validators.required]],
+     honeypot_cat: ['', [Validators.required]],
+     device_type: ['', [Validators.required]],
+     device_name: ['', [Validators.required]],
+  profile: ['', ],
+     image: ['', [Validators.required]],
+    //  image: [''],
+     hp_services: [[], [Validators.required]],
+     network_type: ['', [Validators.required]],
+     number_of_honeypot: ['', [Validators.required]],
+      hp_profile: ['', ],
     });
   }
 
@@ -276,10 +278,18 @@ console.log('Hardware:', this.node_hardware);
     this.nodeForm.get('profile').setValue(profile);
     
     let url = environment.getImageName;
-    this.restServ.post(url, { name: evt.name, hard: this.node_hardware }, {}).subscribe(res => {
+    this.restServ.post(url, { profile_name: evt.profile_name, hard: this.node_hardware }, {}).subscribe(res => {
         this.hp_image = res;
         this.hp_services = [];
-        
+        // console.log(res[0].os_name)
+        this.nodeForm.get('os_type').setValue(res[0].os_type);
+        this.nodeForm.get('os_name').setValue(res[0].os_name);
+        this.nodeForm.get('vm_type').setValue(res[0].vm_type);
+        this.nodeForm.get('vm_name').setValue(res[0].vm_name);
+        // this.nodeForm.os_name = res[0].os_name
+        // this.nodeForm.os_type = res[0].os_type
+        // this.nodeForm.vm_name = res[0].vm_name
+        // this.nodeForm.vm_type = res[0].vm_type
         // Extract all profile IDs from the response
         const profiles = res.map((item: { profile: any; }) => item.profile);
         
@@ -348,21 +358,22 @@ isDuplicate(imageName: string): boolean {
     
   }
   saveConfiguration() {
-    if (!this.nodeForm.invalid) {
+    if (!this.nodeForm.invalid) 
+    {
       this.searchloaderxl = true
       // console.log(this.nodeForm.value);
 
-      // this.restServ.post(environment.saveHoneypotConfig, this.nodeForm?.value, {}).subscribe(res => {
-      //   if (res.status == 1) {
-      //     this.searchloaderxl = false;
-      //     this.notiServ.showSuccess(res.message);
-      //     this.dialogRef.close("success");
-      //   }
-      //   else {
-      //     this.searchloaderxl = false;
-      //     this.notiServ.showError("Something went wrong. Try again !!!")
-      //   }
-      // });
+      this.restServ.post(environment.saveHoneypotConfig, this.nodeForm?.value, {}).subscribe(res => {
+        if (res.status == 1) {
+          this.searchloaderxl = false;
+          this.notiServ.showSuccess(res.message);
+          this.dialogRef.close("success");
+        }
+        else {
+          this.searchloaderxl = false;
+          this.notiServ.showError("Something went wrong. Try again !!!")
+        }
+      });
     }
   }
 
