@@ -80,11 +80,11 @@ app.get('*', function(req, res){
     res.status(404).send('Page Not Found');
   });
 
-const options = {
-    key: fs.readFileSync("server.key"),
-    cert: fs.readFileSync("server.cert"),
-    ciphers: "ECDHE-RSA-AES256-GCM-SHA384:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!SRP:!CAMELLIA:HIGH:!AES128"
-};
+// const options = {
+//     key: fs.readFileSync("server.key"),
+//     cert: fs.readFileSync("server.cert"),
+//     ciphers: "ECDHE-RSA-AES256-GCM-SHA384:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!SRP:!CAMELLIA:HIGH:!AES128"
+// };
 
 // const options = {
 //   key: fs.readFileSync("/etc/ssl/server.key"),
@@ -92,6 +92,11 @@ const options = {
 //   ciphers: "ECDHE-RSA-AES256-GCM-SHA384:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!SRP:!CAMELLIA:HIGH:!AES128"
 // };
 
+const options = {
+  key: fs.readFileSync("/etc/ssl/192.168.100.53-key.pem"),
+  cert: fs.readFileSync("/etc/ssl/192.168.100.53-cert.pem"),
+  ciphers: "ECDHE-RSA-AES256-GCM-SHA384:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!SRP:!CAMELLIA:HIGH:!AES128"
+};
 
 const scheduledFunctions = require('./src/schedulers/node-cron');
 scheduledFunctions.initScheduledJobs();
@@ -103,9 +108,9 @@ app.listen(port, () => {
 });
 
 // uncomment below at production
-//  https.createServer(options, app).listen(port, () => {
-//      secureOptions: constants.SSL_OP_NO_TLSv1 | constants.SSL_OP_NO_TLSv1_1
-//  });
+ https.createServer(options, app).listen(port, () => {
+     secureOptions: constants.SSL_OP_NO_TLSv1 | constants.SSL_OP_NO_TLSv1_1
+ });
 
 
 

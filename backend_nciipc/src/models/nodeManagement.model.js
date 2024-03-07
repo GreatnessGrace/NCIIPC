@@ -4058,7 +4058,7 @@ NodeModel.honeypotDeviceType = async (req, result) => {
   INNER JOIN node_snapshot AS ns ON ns.snapshot_id = nshp.snapshot_id
   INNER JOIN node_image AS ni ON ni.image_id = ns.image_id
   WHERE
-      ni.status = 0 AND rdt.row_num <= 10
+      rdt.row_num <= 10
   GROUP BY
       ndp.device_type,
       ndp.device_name
@@ -4070,7 +4070,7 @@ NodeModel.honeypotDeviceType = async (req, result) => {
         if (err) {
           return result(err, null);
         }
-
+// console.log("Respones---=", res)
         const organizedData = res.reduce((acc, row) => {
           const { device_type, device_name, device_count } = row;
           if (!acc[device_type]) {
