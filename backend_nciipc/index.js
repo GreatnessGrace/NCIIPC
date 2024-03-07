@@ -103,9 +103,9 @@ scheduledFunctions.initScheduledJobs();
 
 // listen to the port
 //comment below at time of production
-app.listen(port, () => {
-   secureOptions: constants.SSL_OP_NO_TLSv1 | constants.SSL_OP_NO_TLSv1_1
-});
+// app.listen(port, () => {
+//    secureOptions: constants.SSL_OP_NO_TLSv1 | constants.SSL_OP_NO_TLSv1_1
+// });
 
 // uncomment below at production
  https.createServer(options, app).listen(port, () => {
