@@ -10,7 +10,7 @@ export const environment = {
   production: true,
   openMapToken: 'pk.eyJ1IjoiaGpvaG4xMjMiLCJhIjoiY2xma3FjcXAxMGQ5azQ2czRmNnAzMHV2cSJ9.JvHcg6FFTSFr1UFPmjwJ6g',
   API_URL: API_URL,
-  recoverUrl : '/NCIIPC/#/recoverpassword',
+  recoverUrl : '/NPTHRS/#/recoverpassword',
   assetPath: 'assets',
   recaptchasiteKey:"6LdPQkQpAAAAABYsRznW84g1BOB5W1Q1t4ahlj1m",
   // recaptchasiteKey : "6LeZaHImAAAAAOJaHVFOfRbOY9G8FvDtwGmyQjx2",
