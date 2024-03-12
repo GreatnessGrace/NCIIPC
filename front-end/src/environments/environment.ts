@@ -230,9 +230,4 @@ export const environment = {
     pae:"http://192.168.8.4:4200/",
     ir:"http://192.168.8.5:4200/"
   
-
-      //profileEdit
-  editProfile: API_URL + '/api/v1/users/editProfile',
-  getuser: API_URL + '/api/v1/users/getuserList/',
-
 };
