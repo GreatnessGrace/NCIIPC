@@ -75,10 +75,10 @@ showpw:Boolean=true
   }
   login() {
 
-    if(!this.captchaStatus || this.captchaStatus == false){
-      this.notiService.showInfo("Please verify capcha");
-      return  ;
-    }
+    // if(!this.captchaStatus || this.captchaStatus == false){
+    //   this.notiService.showInfo("Please verify capcha");
+    //   return  ;
+    // }
     this.loginSubmitted = true;
     this.loading = true;
     
