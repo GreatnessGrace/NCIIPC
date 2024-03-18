@@ -385,6 +385,7 @@ exports.nodeDetail = (async (req, res) => {
             SELECT
             n.node_id,
             n.node_location,
+            n.node_sensor_hp_type,
             n.email_address,
             n.last_up_time,
             n.node_reg_date,
@@ -392,6 +393,7 @@ exports.nodeDetail = (async (req, res) => {
             n.network_type,
             n.node_status,
             n.node_ip,
+            n.base_ip,
             node_location.sector,
             node_location.city,
             node_location.state,
