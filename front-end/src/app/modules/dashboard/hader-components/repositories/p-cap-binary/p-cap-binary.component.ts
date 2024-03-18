@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-p-cap-binary',
@@ -23,12 +24,20 @@ getSnort ! : Subscription
   startDate : any;
   endDate : any;
   searchloaderxs = true
-  searchloaderxl = true
+  searchloaderxl = false
   showSnort = true
+  showBinary = true
   dataSource!: MatTableDataSource<any>;
   @ViewChild('paginatorEvent') paginatorEvent!: MatPaginator;
   @ViewChild('sort') sort!: MatSort
-
+  dataSourceBinary!: MatTableDataSource<any>;
+  @ViewChild('paginatorBinary') paginatorBinary!: MatPaginator;
+  @ViewChild('sortBinary') sortBinary!: MatSort
+  displayedColumnsBinary=[
+    'id',
+    'key',
+    'download'
+  ]
   displayedColumns= [
     'id',
     'node_id',
@@ -56,6 +65,7 @@ getSnort ! : Subscription
   protocolFilter= new FormControl('');
   data_formatFilter= new FormControl('');
   data_versionFilter= new FormControl('');
+  binFilter= new FormControl('');
   filterValues = {
     node_id: '',
     vul_name:'',
@@ -67,7 +77,8 @@ getSnort ! : Subscription
     protocol:'',
     basescore:'',
     data_format:'',
-    data_version:''
+    data_version:'',
+    key:''
   };
 
   constructor(   private restServ:RestService,
@@ -76,8 +87,15 @@ getSnort ! : Subscription
 
   ngOnInit(): void {
     this.initForm();
-    this.getAllBinary();
-    this.getSnortData()
+    // this.getAllBinary();
+    // this.getSnortData()
+    this.binFilter.valueChanges
+    .subscribe(
+      key => {
+        this.filterValues.key = key;
+        this.dataSourceBinary.filter = JSON.stringify(this.filterValues);
+      }
+    )
 
     this.nodeFilter.valueChanges
     .subscribe(
@@ -191,56 +209,74 @@ getSnort ! : Subscription
       // this.pcapForm.patchValue({['end_date']:date.value});
     }
 
-    this.getAllBinary();
-    this.getSnortData()
+    // this.getAllBinary();
+    // this.getSnortData()
   }
 
   getAllBinary(){
-    this.searchloaderxs = true
+    this.searchloaderxl = true
+    this.showBinary = true
+    this.showSnort = true
         this.getAllBinaryData=this.restServ.post(environment.getBinary,this.pcapForm.value,{}).subscribe(res=>{
-          this.searchloaderxs = false
+          // this.searchloaderxs = false
+          this.searchloaderxl = false
+          this.showBinary = false
         this.Binaries = res.data.buckets;
+        // console.log("res.data.buckets",res.data.buckets)
+        this.dataSourceBinary = new MatTableDataSource(res.data.buckets)
+        this.dataSourceBinary.paginator = this.paginatorBinary
+        this.dataSourceBinary.sort = this.sortBinary
+        this.dataSourceBinary.filterPredicate = this.createFilterBinary();
     });
   }
 
-getSnortData(){
-  this.searchloaderxl = true
-  this.showSnort = true
-this.getSnort = this.restServ.post(environment.getSnort,this.pcapForm.value,{}).subscribe(res=>{
-  this.searchloaderxl = false
-  this.dataSource = new MatTableDataSource(res.data.hits.hits)
-  this.dataSource.paginator = this.paginatorEvent;
-  this.showSnort = false
-  this.dataSource.sortingDataAccessor = (item, property) => {
-    switch (property) {
-      case 'node_id': return item._source.node_id;
-      case 'vul_name': return item._source.event_data.vul_name;
-      case 'severity': return item._source.event_data.nvd_reference.severity;
-      case 'local_ip': return item._source.event_data.local_ip;
-      case 'remote_port': return item._source.event_data.remote_port;
-      case 'remote_ip': return item._source.event_data.remote_ip;
-      case 'local_port': return item._source.event_data.local_port;
-      case 'basescore': return item._source.event_data.nvd_reference.basescore ;
-      case 'protocol': return item._source.event_data.protocol ;
-      case 'data_version': return item._source.event_data.nvd_reference.data_version;
-      case 'data_format': return item._source.event_data.nvd_reference.data_format;
-      default: return item[property];
-    }
-  };
-  this.dataSource.sort = this.sort;
-  this.dataSource.filterPredicate = this.createFilter();
-})
-}
+// getSnortData(){
+//   this.showBinary = true
+//   this.searchloaderxl = true
+//   this.showSnort = true
+// this.getSnort = this.restServ.post(environment.getSnort,this.pcapForm.value,{}).subscribe(res=>{
+//   // console.log("res.data.hits.hits",res.data.hits.hits.length)
+//   this.searchloaderxl = false
+//   if(res.data.hits.hits.length == 0){
+//     this.showSnort = true
+//   }
+//   else{
+//     this.dataSource = new MatTableDataSource(res.data.hits.hits)
+//     this.dataSource.paginator = this.paginatorEvent;
+//     this.showSnort = false
+//     this.dataSource.sortingDataAccessor = (item, property) => {
+//       switch (property) {
+//         case 'node_id': return item._source.node_id;
+//         case 'vul_name': return item._source.event_data.vul_name;
+//         case 'severity': return item._source.event_data.nvd_reference.severity;
+//         case 'local_ip': return item._source.event_data.local_ip;
+//         case 'remote_port': return item._source.event_data.remote_port;
+//         case 'remote_ip': return item._source.event_data.remote_ip;
+//         case 'local_port': return item._source.event_data.local_port;
+//         case 'basescore': return item._source.event_data.nvd_reference.basescore ;
+//         case 'protocol': return item._source.event_data.protocol ;
+//         case 'data_version': return item._source.event_data.nvd_reference.data_version;
+//         case 'data_format': return item._source.event_data.nvd_reference.data_format;
+//         default: return item[property];
+//       }
+//     };
+//     this.dataSource.sort = this.sort;
+//     this.dataSource.filterPredicate = this.createFilter();
+//   }
+ 
+// })
+// }
 
   getBinaryPcap(event:any){
-   var time = this.Binaries.filter((e:any)=>{
-      if(e.key == event.target.value){
-        return e;
-      }
-    });
-
-    let date = new Date(time[0].hits.hits.hits[0]._source.event_timestamp);
-    let node = time[0].hits.hits.hits[0]._source.node_id;
+    console.log("event",event)
+   var time =event
+    // this.Binaries.filter((e:any)=>{
+    //   if(e.key == event.target.value){
+    //     return e;
+    //   }
+    // });
+    let date = new Date(time.hits.hits.hits[0]._source.event_timestamp);
+    let node = time.hits.hits.hits[0]._source.node_id;
    
     var month:any = (date.getMonth()+1);
 
@@ -279,13 +315,36 @@ this.getSnort = this.restServ.post(environment.getSnort,this.pcapForm.value,{}).
 
       }
     // const filePath = '/BB_LOGS/pcap/61_pcap/pcap/2023/02/01/02.30/cdac_hp_1/';
+// console.log("dataToSend",dataToSend)
+Swal.fire({
+  title: 'Are you sure?',
+  text: 'This process is irreversible.',
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonText: 'Yes, go ahead.',
+  cancelButtonText: 'No, let me think',
+}).then((result) => {
+  console.log("result",result)
+  if (result.isConfirmed) {
+        this.getBinPcapData = this.restServ.post(environment.getBinaryPcap,dataToSend,{}).subscribe(res=>{
+console.log("Response",res.message)
+if(res.message == 'File Not Found') {
+  Swal.fire('Alert!', 'No Pcap file found.', 'error');
 
-
-    this.getBinPcapData = this.restServ.post(environment.getBinaryPcap,dataToSend,{}).subscribe(res=>{
-
-      var dynPath = res.data;
-      this.downloadFile(dynPath)
+}
+else {
+  var dynPath = res.data;
+  this.downloadFile(dynPath)
+  Swal.fire('Completed!', 'Pcap file downloaded successfully.', 'success');
+}
+ 
   });
+
+  } else if (result.dismiss === Swal.DismissReason.cancel) {
+    Swal.fire('Cancelled', '', 'error');
+  }
+});
+
   
   }
 
@@ -311,7 +370,7 @@ this.restServ.post(environment.getNodePcap,{path:path},{}).subscribe(res=>{
       
     }, (err) => {
       if (err.status == 404) {
-        
+        console.log("No file Found")
       }
     })
   }
@@ -319,7 +378,6 @@ this.restServ.post(environment.getNodePcap,{path:path},{}).subscribe(res=>{
   createFilter(): (data: any, filter: string) => boolean {
     let filterFunction = function(data:any, filter:any): boolean {
       let searchTerms = JSON.parse(filter);
-      
         return data._source.node_id.toString().toLowerCase().indexOf(searchTerms.node_id.toLowerCase()) !== -1
         && data._source.event_data.vul_name.toString().toLowerCase().indexOf(searchTerms.vul_name.toLowerCase()) !== -1
         && data._source.event_data.nvd_reference.severity.toString().toLowerCase().indexOf(searchTerms.severity.toLowerCase()) !== -1
@@ -331,10 +389,17 @@ this.restServ.post(environment.getNodePcap,{path:path},{}).subscribe(res=>{
         && data._source.event_data.nvd_reference.basescore.toString().toLowerCase().indexOf(searchTerms.basescore.toLowerCase()) !== -1
         && data._source.event_data.nvd_reference.data_format.toString().toLowerCase().indexOf(searchTerms.data_format.toLowerCase()) !== -1
         && data._source.event_data.nvd_reference.data_version.toString().toLowerCase().indexOf(searchTerms.data_version.toLowerCase()) !== -1
+        && data.key.toString().toLowerCase().indexOf(searchTerms.key.toLowerCase()) !== -1
     }
     return filterFunction;
   }
-
+  createFilterBinary(): (data: any, filter: string) => boolean {
+    let filterFunction = function(data:any, filter:any): boolean {
+      let searchTerms = JSON.parse(filter);
+        return data.key.toString().toLowerCase().indexOf(searchTerms.key.toLowerCase()) !== -1
+    }
+    return filterFunction;
+  }
   ngOnDestroy(): void{
     if(this.getAllBinaryData){
       this.getAllBinaryData.unsubscribe();

@@ -73,13 +73,22 @@ ElasticModel.getBinaryPcap = async (req, response) => {
     } = req.body
 
 
-    var fileExist = "";
-    fileExist = checkFileExist(partialPath + day, hours);
-    if (fileExist == '') {
-        day -= 1;
-        fileExist = checkFileExist(partialPath + day, hours);
+   var fileExist = checkFileExist(partialPath + day, hours);
+    // console.log("---",fileExist)
+    if(!fileExist){
+        console.log("In if")
+        return response(null, {
+            status: 0,
+            message: "File Not Found"
+        })  
     }
+else{
+    // console.log("In else")
 
+    // if (fileExist == '') {
+    //     day -= 1;
+    //     fileExist = checkFileExist(partialPath + day, hours);
+    // }
     console.log('finalPath', fileExist);
     let finalPath = partialPath + day + '/' + fileExist + '/' + 'cdac_hp_2/log';
     console.log('finalPath', finalPath);
@@ -88,7 +97,7 @@ ElasticModel.getBinaryPcap = async (req, response) => {
         data: finalPath + '.zip',
         message: "Here is your finding result!!"
     })
-
+}
 }
 
 ElasticModel.downloadbinary = async (req, response) => {
@@ -126,28 +135,51 @@ function checkBinaryFileExist(filePath) {
     }
   }
 
+  
 function checkFileExist(filePath, hour) {
-    let hourArr = [];
-    fs.readdirSync(filePath).forEach(file => {
+    try {
+        let hourArr = [];
+        fs.readdirSync(filePath).forEach(file => {
+            if (hour >= file) {
+                hourArr.push(file);
+            }
+        });
 
-        if (hour >= file) {
-            hourArr.push(file);
+        if (hourArr.length > 0) {
+            hourArr.sort();
+            hour = hourArr.pop();
+        } else {
+            hour = '';
         }
 
-    });
-
-
-
-    if (hourArr.length > 0) {
-        hourArr.sort();
-        hour = hourArr.pop();
-    } else {
-        hour = '';
-        // checkFileExist(filePath);
+        return hour;
+    } catch (error) {
+        console.error('Error reading directory:', error.message);
+        return false; // Return empty string to indicate file not found
     }
-
-    return hour;
 }
+
+// function checkFileExist(filePath, hour) {
+//     let hourArr = [];
+//     fs.readdirSync(filePath).forEach(file => {
+
+//         if (hour >= file) {
+//             hourArr.push(file);
+//         }
+
+//     });
+
+
+
+//     if (hourArr.length > 0) {
+//         hourArr.sort();
+//         hour = hourArr.pop();
+//     } else {
+//         hour = '';
+//     }
+
+//     return hour;
+// }
 
 async function zipDirectory(sourceDir, outPath) {
 
