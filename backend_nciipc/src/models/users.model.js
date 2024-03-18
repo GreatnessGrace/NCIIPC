@@ -273,7 +273,7 @@ Users.addUser = async (req, result) => {
             username,
             token: "I am not having token",
             role,
-            user_status: user_status 
+            user_status: user_status || 'active'
         }
 
         await dbConn.query(sql, post, async (err, dbresult) => {
@@ -375,12 +375,12 @@ Users.addUser = async (req, result) => {
 
 Users.loginUser = async (req, result) => {
 
-    let getCapstatus = await fetchcapchaStatus(req.body.capcha_token,req.body.ip);
-        if(getCapstatus.data.success != true){
-            return  result({
-                message: 'Capcha verification failed! Please try again.'
-            })
-        }
+    // let getCapstatus = await fetchcapchaStatus(req.body.capcha_token,req.body.ip);
+    //     if(getCapstatus.data.success != true){
+    //         return  result({
+    //             message: 'Capcha verification failed! Please try again.'
+    //         })
+    //     }
     date = new Date()
     hotDetails = os.networkInterfaces()
     // console.log('hotDetails',hotDetails);
