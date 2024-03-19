@@ -511,7 +511,7 @@ exports.getConfigDetails = (async (req, res) => {
     nv.vulnerabilities
 FROM  
     node_configuration AS nc
-    LEFT JOIN node_image AS ni ON ni.node_id = nc.node_id AND ni.vm_name = nc.vm_name
+    LEFT JOIN node_image AS ni ON ni.vm_name = nc.vm_name
     LEFT JOIN (
         SELECT 
             ncp.conf_id, GROUP_CONCAT(np.package_name ORDER BY np.package_name ASC SEPARATOR ',') AS services

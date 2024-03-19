@@ -323,9 +323,10 @@ async function updateNodeNetwork(allConfs){
 async function updateNodeConf(allConfs){
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-           
+        //    console.log("--==allConfs",allConfs)
                 allConfs.map((conf,i)=>{
-                
+                    // console.log("Ip_______________",conf.ip_address)
+                    // console.log("conf_______________",conf.u_conf_id)
             let nodeConf = `UPDATE node_configuration set ip_address = '${conf.ip_address}' where u_conf_id =  ${conf.u_conf_id}`;
                  dbConn.query(nodeConf, async (err,res) => {
                    
@@ -350,7 +351,9 @@ PermissionModel.delteHoneypot = async (req, result) => {
         conf_id,
         u_conf_id,
         vm_name,
-        os_name
+        os_name,
+        image_name,
+        image_tag,
     } = req.body
 
 
@@ -381,13 +384,16 @@ PermissionModel.delteHoneypot = async (req, result) => {
 
     // generate n save xml file
     let saveXml = await getXmlObject(allConfs,nodeNetdata,req.body);
-
+// console.log("saved--------------------------", saveXml)
     // var allConfsJson=JSON.parse(JSON.stringify(allConfs))
     //update Node Conf
     let updateNodeCon = await updateNodeConf(allConfs);
+    // console.log("updateNodeCon--------------------------", updateNodeCon)
+
      //update Node Network
     let updateNodeNet = await updateNodeNetwork(allConfs);
-    
+    // console.log("updateNodeNet--------------------------", updateNodeNet)
+
     if(updateNodeNet){
         return result( {
             status : 1,
@@ -406,7 +412,7 @@ async function getAllDeployedConf(node_id){
             + "node_configuration.os_type, node_configuration.honeypot_type, node_configuration.honeypot_profile, node_configuration.snapshot_name, node_configuration.honeypot_count, "
             + "node_configuration.u_conf_id, node_configuration.os_name, node_configuration.start_date,node_configuration.end_date, node_configuration.health_status, node_configuration.ip_address, "
             + "node_image.image_name, node_image.image_tag "
-            + "FROM  node_configuration Left Join node_image ON node_image.node_id = node_configuration.node_id AND node_image.vm_name = node_configuration.vm_name "
+            + "FROM  node_configuration Left Join node_image ON node_image.vm_name = node_configuration.vm_name "
             + "WHERE " + "node_configuration.node_id =  " + node_id + " AND node_configuration.end_date IS NULL ";
               dbConn.query(nodeNetquery, async (err,res) => {
                 resolve(res)
@@ -455,6 +461,7 @@ async function getXmlObject(allConfs,nodeNetdata,reqbody){
     var netmask = '';
     var gateway = '';
     var dns = '';
+    // console.log("services-------",reqbody.services)
 
     nodeNetdata.map((e)=>{
         if(e.type == 'static_ip'){
@@ -477,13 +484,14 @@ async function getXmlObject(allConfs,nodeNetdata,reqbody){
         setTimeout(() => {
             let honeypot = [];
             for(let conf of allConfs){
-
-            
+//                 console.log("conf--------", conf)
+// console.log("image name", conf.image_name)
+// console.log("image tag", conf.image_tag)
             var obj = {
                
                    
                         UConfID:{
-                            '#text':conf.conf_id
+                            '#text':conf.u_conf_id
                         },
                         VmInfo:{
                             VmType:{
@@ -496,7 +504,8 @@ async function getXmlObject(allConfs,nodeNetdata,reqbody){
                                 '#text':conf.os_type
                             },
                             HoneypotType:{
-                                '#text':conf.honeypot_type
+                                // '#text':conf.honeypot_type,
+                                "#text": 'PHP',
                             },
                             HoneypotName:{
                                 '#text':conf.snapshot_name
@@ -531,13 +540,15 @@ async function getXmlObject(allConfs,nodeNetdata,reqbody){
                     Profile:{
                         '#text':reqbody.honeypot_profile
                     },
-                    ServiceInfo:{
-                        ServiceName:{
-                            '#text':reqbody.services
-                        }
-                    }
+                    // ServiceInfo:{
+                    //     ServiceName:{
+                    //         '#text':reqbody.services
+                    //     }
+                    // }
                   
-                
+                    ServiceInfo: {
+                        ServiceName: reqbody.services.split(',').map(service => ({ "#text": service })),
+                      },
               };
               honeypot.push(obj);
             }
@@ -550,9 +561,10 @@ async function getXmlObject(allConfs,nodeNetdata,reqbody){
             var finalDocument = newObj;
                 var builder = require('xmlbuilder');
                 var document = builder.create(finalDocument).end({ pretty: true});
+    //   var dir = __dirname + "/BB_LOGS/honeypot_conf/" + reqbody.node_id + "/";
 
                 // save file start
-                var dir ='/BB_LOGS/honeypot_conf/'+reqbody.node_id+'/';
+                var dir ='/BB_LOGS/honeypot_confs/'+reqbody.node_id+'/';
                 if (!fs.existsSync(dir)) {
                     fs.promises.mkdir(dir, { recursive: true });
                 }
